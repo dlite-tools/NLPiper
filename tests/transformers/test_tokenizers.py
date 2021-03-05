@@ -8,6 +8,6 @@ class TestBasicTokenizer:
         ('Test to this test', ['Test', 'to', 'this', 'test']),
         ('numbers 123 and symbols "#$%', ['numbers', '123', 'and', 'symbols', '"#$%']),
     ])
-    def test_remove_punctuation(self, inputs, results):
+    def test_tokenizer(self, inputs, results):
         t = BasicTokenizer()
         assert t(inputs) == results
