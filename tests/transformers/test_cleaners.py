@@ -1,6 +1,7 @@
 import pytest
 
 from nlpiper.transformers.cleaners import RemovePunctuation, RemoveUrl, RemoveEmail, RemoveNumber
+from nlpiper.core.document import Document
 
 
 class TestRemovePunctuation:
@@ -10,7 +11,11 @@ class TestRemovePunctuation:
     ])
     def test_remove_punctuation(self, inputs, results):
         r = RemovePunctuation()
-        assert r(inputs) == results
+        doc = Document(inputs)
+        doc.cleaned = results
+
+        assert r(inputs) == doc
+        assert r(Document(inputs)) == doc
 
 
 class TestRemoveUrl:
@@ -24,7 +29,11 @@ class TestRemoveUrl:
     ])
     def test_remove_url(self, inputs, results):
         r = RemoveUrl()
-        assert r(inputs) == results
+        doc = Document(inputs)
+        doc.cleaned = results
+
+        assert r(inputs) == doc
+        assert r(Document(inputs)) == doc
 
 
 class TestRemoveEmail:
@@ -35,7 +44,11 @@ class TestRemoveEmail:
     ])
     def test_remove_email(self, inputs, results):
         r = RemoveEmail()
-        assert r(inputs) == results
+        doc = Document(inputs)
+        doc.cleaned = results
+
+        assert r(inputs) == doc
+        assert r(Document(inputs)) == doc
 
 
 class TestNumbers:
@@ -46,4 +59,8 @@ class TestNumbers:
     ])
     def test_remove_number(self, inputs, results):
         r = RemoveNumber()
-        assert r(inputs) == results
+        doc = Document(inputs)
+        doc.cleaned = results
+
+        assert r(inputs) == doc
+        assert r(Document(inputs)) == doc

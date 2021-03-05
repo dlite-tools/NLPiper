@@ -2,7 +2,9 @@
 
 import re
 from string import punctuation
+from typing import Union
 
+from nlpiper.core.document import Document
 
 __all__ = ["RemoveEmail", "RemoveNumber", "RemoveUrl", "RemovePunctuation"]
 
@@ -13,64 +15,101 @@ class Cleaner:
     def __init__(self, **kwargs):
         self.log = kwargs
 
-    def __call__(self, text: str) -> str:
+    def __call__(self, text: Union[str, Document]) -> Document:
         pass
 
 
 class RemoveUrl(Cleaner):
     """Remove URLs."""
 
-    def __call__(self, text: str) -> str:
+    def __call__(self, text: Union[str, Document]) -> Document:
         """Remove text URLs.
 
         Args:
-            text (str): text to be cleaned.
+            text (Union[str, Document]): text to be cleaned.
 
-        Returns: str
+        Returns: Document
         """
-        text = re.sub(r"http\S+", "", text)
-        text = re.sub(r"www\S+", "", text)
-        return text
+        if isinstance(text, str):
+            doc = Document(text)
+        else:
+            doc = text
+
+        if doc.cleaned is None:
+            doc.cleaned = doc.text
+
+        doc.cleaned = re.sub(r"http\S+", "", doc.cleaned)
+        doc.cleaned = re.sub(r"www\S+", "", doc.cleaned)
+
+        return doc
 
 
 class RemoveEmail(Cleaner):
     """Remove Emails."""
 
-    def __call__(self, text: str) -> str:
+    def __call__(self, text: Union[str, Document]) -> Document:
         """Remove text Emails.
 
         Args:
-            text (str): text to be cleaned.
+            text (Union[str, Document]): text to be cleaned.
 
-        Returns: str
+        Returns: Document
         """
-        return re.sub(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", "", text)
+        if isinstance(text, str):
+            doc = Document(text)
+        else:
+            doc = text
+
+        if doc.cleaned is None:
+            doc.cleaned = doc.text
+
+        doc.cleaned = re.sub(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", "", doc.cleaned)
+
+        return doc
 
 
 class RemoveNumber(Cleaner):
     """Remove Numbers."""
 
-    def __call__(self, text: str) -> str:
+    def __call__(self, text: Union[str, Document]) -> Document:
         """Remove text Numbers.
 
         Args:
-            text (str): text to be cleaned.
+            text (Union[str, Document]): text to be cleaned.
 
-        Returns: str
+        Returns: Document
         """
-        return re.sub(r'[0-9]+', '', text)
+        if isinstance(text, str):
+            doc = Document(text)
+        else:
+            doc = text
+
+        if doc.cleaned is None:
+            doc.cleaned = doc.text
+
+        doc.cleaned = re.sub(r'[0-9]+', '', doc.cleaned)
+        return doc
 
 
 class RemovePunctuation(Cleaner):
     """Remove Punctuation."""
 
-    def __call__(self, text: str) -> str:
+    def __call__(self, text: Union[str, Document]) -> Document:
         """Remove Punctuation from text.
 
         Args:
-            text (str): text to be cleaned.
+            text (Union[str, Document]): text to be cleaned.
 
-        Returns: str
+        Returns: Document
 
         """
-        return text.translate(str.maketrans('', '', punctuation))
+        if isinstance(text, str):
+            doc = Document(text)
+        else:
+            doc = text
+
+        if doc.cleaned is None:
+            doc.cleaned = doc.text
+
+        doc.cleaned = doc.cleaned.translate(str.maketrans('', '', punctuation))
+        return doc
