@@ -3,6 +3,8 @@
 from typing import Any, List, Union
 from collections import OrderedDict
 
+from nlpiper.core.document import Document
+
 
 class Compose:
     """Pipeline for process text."""
@@ -22,13 +24,13 @@ class Compose:
             d[str(transform.__class__)] = transform.log
         return d
 
-    def __call__(self, text: Union[str, List[str]]) -> Union[str, List[str]]:
+    def __call__(self, text: Union[str, List[List[str]], Document]) -> Document:
         """Process Text.
 
         Args:
-            text (Union[str, List[str]]): Text to be processed.
+            text (Union[str, List[List[str]], Document]): Text to be processed.
 
-        Returns: Union[str, List[str]]
+        Returns: Document
         """
         for t in self.transforms:
             text = t(text)

@@ -4,6 +4,7 @@ import pytest
 
 from nlpiper.transformers import cleaners, normalizers, tokenizers
 from nlpiper.transformers.composition import Compose
+from nlpiper.core.document import Document, Token
 
 
 class TestCompose:
@@ -15,16 +16,19 @@ class TestCompose:
     def test_w_cleaners(self, inputs, results):
         crn = cleaners.RemoveNumber()
         nrp = cleaners.RemovePunctuation()
+        doc = Document(inputs)
+        doc.cleaned = results
 
         pipe = Compose([crn, nrp])
 
-        assert pipe(inputs) == results
+        assert pipe(inputs) == doc
+        assert pipe(Document(inputs)) == doc
         assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.cleaners.RemoveNumber'>", {}),
                                         ("<class 'nlpiper.transformers.cleaners.RemovePunctuation'>", {})])
 
     @pytest.mark.parametrize('inputs,results', [
-        (['TEST.%$#"#'], ['test']),
-        ([r'!"Te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t'], ['test']),
+        ([['TEST.%$#"#']], [['test']]),
+        ([[r'!"Te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t']], [['test']]),
     ])
     def test_w_normalizers(self, inputs, results):
         nct = normalizers.CaseTokens()
@@ -32,13 +36,24 @@ class TestCompose:
 
         pipe = Compose([nct, nrp])
 
-        assert pipe(inputs) == results
+        phrases = [" ".join(phrase) for phrase in inputs]
+        doc = Document(" ".join(phrases))
+        doc.phrases = phrases
+        doc.tokens = [[Token(token) for token in phrase] for phrase in inputs]
+        input_doc = doc
+
+        for phrase, phrase_result in zip(doc.tokens, results):
+            for token, result in zip(phrase, phrase_result):
+                token.processed = result
+
+        assert pipe(inputs) == doc
+        assert pipe(input_doc) == doc
         assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.normalizers.CaseTokens'>", {'mode': 'lower'}),
                                         ("<class 'nlpiper.transformers.normalizers.RemovePunctuation'>", {})])
 
     @pytest.mark.parametrize('inputs,results', [
-        ('T2E1ST.%$#"# test', ['test', 'test']),
-        (r'!"t2e""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t', ['test']),
+        ('T2E1ST.%$#"# test', [['test', 'test']]),
+        (r'!"t2e""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t', [['test']]),
     ])
     def test_w_cleaner_tokenizer_normalizers(self, inputs, results):
         crn = cleaners.RemoveNumber()
@@ -48,7 +63,17 @@ class TestCompose:
 
         pipe = Compose([crn, t, nct, nrp])
 
-        assert pipe(inputs) == results
+        doc = crn(inputs)
+        doc.tokens = [[Token(token) for token in doc.cleaned.split()]]
+        input_doc = doc
+
+        for phrase, phrase_result in zip(doc.tokens, results):
+            for token, result in zip(phrase, phrase_result):
+                token.processed = result
+
+        assert pipe(inputs) == doc
+        assert pipe(input_doc) == doc
+
         assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.cleaners.RemoveNumber'>", {}),
                                         ("<class 'nlpiper.transformers.tokenizers.BasicTokenizer'>", {}),
                                         ("<class 'nlpiper.transformers.normalizers.CaseTokens'>", {'mode': 'lower'}),
