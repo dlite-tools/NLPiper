@@ -4,12 +4,12 @@ from nlpiper.transformers.tokenizers import BasicTokenizer
 from nlpiper.core.document import Document, Token
 
 
-class TestRemovePunctuation:
+class TestBasicTokenizer:
     @pytest.mark.parametrize('inputs,results', [
         ('Test to this test', ['Test', 'to', 'this', 'test']),
         ('numbers 123 and symbols "#$%', ['numbers', '123', 'and', 'symbols', '"#$%']),
     ])
-    def test_remove_punctuation(self, inputs, results):
+    def test_tokenizer(self, inputs, results):
         t = BasicTokenizer()
         input_doc = Document(inputs)
 
