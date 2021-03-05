@@ -14,7 +14,7 @@ class Normalizer:
     def __init__(self, **kwargs):
         self.log = kwargs
 
-    def __call__(self, tokens: Union[List[str], Document]) -> Document:
+    def __call__(self, tokens: Union[List[List[str]], Document]) -> Document:
         pass
 
 
@@ -22,7 +22,7 @@ class CaseTokens(Normalizer):
     """Lower tokens."""
 
     def __init__(self, mode='lower'):
-        """
+        """Lower tokens.
 
         Args:
             mode (str): Mode can be ```'lower'``` or ```'upper'```, lowering or upper casing the letters respectively.
@@ -35,7 +35,7 @@ class CaseTokens(Normalizer):
         """Lower Tokens.
 
         Args:
-            tokens (List[str]): List of tokens to be normalized.
+            tokens (Union[List[List[str]], Document]): List of tokens to be normalized.
 
         Returns: Document
         """
@@ -64,7 +64,7 @@ class RemovePunctuation(Normalizer):
         """Remove punctuation.
 
         Args:
-            tokens (List[str]): List of tokens to be normalized.
+            tokens (Union[List[List[str]], Document]): List of tokens to be normalized.
 
         Returns: List[str]
         """
