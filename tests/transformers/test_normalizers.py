@@ -1,16 +1,29 @@
 import pytest
 
 from nlpiper.transformers.normalizers import CaseTokens, RemovePunctuation
+from nlpiper.core.document import Document, Token
 
 
 class TestCaseTokens:
     @pytest.mark.parametrize('mode,inputs,results', [
-        ('lower', ['TEST'], ['test']),
-        ('upper', ['test'], ['TEST']),
+        ('lower', [['TEST']], [['test']]),
+        ('upper', [['test']], [['TEST']]),
     ])
     def test_modes(self, mode, inputs, results):
         c = CaseTokens(mode)
-        assert c(inputs) == results
+
+        phrases = [" ".join(phrase) for phrase in inputs]
+        doc = Document(" ".join(phrases))
+        doc.phrases = phrases
+        doc.tokens = [[Token(token) for token in phrase] for phrase in inputs]
+        input_doc = doc
+
+        for phrase, phrase_result in zip(doc.tokens, results):
+            for token, result in zip(phrase, phrase_result):
+                token.processed = result
+
+        assert c(inputs) == doc
+        assert c(input_doc) == doc
 
     @pytest.mark.parametrize('mode', [1, 'other'])
     def test_non_existent_mode(self, mode):
@@ -20,9 +33,21 @@ class TestCaseTokens:
 
 class TestRemovePunctuation:
     @pytest.mark.parametrize('inputs,results', [
-        (['TEST.%$#"#'], ['TEST']),
-        ([r'!"te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t'], ['test']),
+        ([['TEST.%$#"#']], [['TEST']]),
+        ([[r'!"te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t']], [['test']]),
     ])
     def test_remove_punctuation(self, inputs, results):
         r = RemovePunctuation()
-        assert r(inputs) == results
+
+        phrases = [" ".join(phrase) for phrase in inputs]
+        doc = Document(" ".join(phrases))
+        doc.phrases = phrases
+        doc.tokens = [[Token(token) for token in phrase] for phrase in inputs]
+        input_doc = doc
+
+        for phrase, phrase_result in zip(doc.tokens, results):
+            for token, result in zip(phrase, phrase_result):
+                token.processed = result
+
+        assert r(inputs) == doc
+        assert r(input_doc) == doc
