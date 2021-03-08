@@ -16,7 +16,7 @@ class Cleaner:
         self.log = kwargs
 
     def __call__(self, text: Union[str, Document]) -> Document:
-        pass
+        raise NotImplementedError
 
 
 class RemoveUrl(Cleaner):

@@ -15,7 +15,7 @@ class Normalizer:
         self.log = kwargs
 
     def __call__(self, tokens: Union[List[List[str]], Document]) -> Document:
-        pass
+        raise NotImplementedError
 
 
 class CaseTokens(Normalizer):
