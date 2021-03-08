@@ -1,6 +1,6 @@
 """Compose Module."""
 
-from typing import Any, List, Union
+from typing import Callable, List, Union
 from collections import OrderedDict
 
 from nlpiper.core.document import Document
@@ -9,7 +9,7 @@ from nlpiper.core.document import Document
 class Compose:
     """Pipeline for process text."""
 
-    def __init__(self, transforms: List[Any]) -> None:
+    def __init__(self, transforms: List[Callable]) -> None:
         """Pipeline for process text.
 
         Args:
