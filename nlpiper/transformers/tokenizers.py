@@ -55,6 +55,7 @@ class MosesTokenizer(Tokenizer):
         """SacreMoses tokenizer.
 
         Args:
+            *args: See the docs at https://github.com/alvations/sacremoses for more information.
             **kwargs: See the docs at https://github.com/alvations/sacremoses for more information.
         """
         super().__init__(*args, **kwargs)
