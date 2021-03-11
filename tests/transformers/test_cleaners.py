@@ -84,7 +84,7 @@ class TestRemoveHTML:
     @pytest.mark.parametrize('inputs,results', [
         ('<html><title>TEST</title>', 'TEST'),
         ('<p class="title"><b>test 12 test</b></p>', 'test 12 test'),
-        ('test123test', 'test123test'),
+        ('<?xml version="1.0" encoding="UTF-8"?><note><body>test123test</body></note>', 'test123test'),
     ])
     def test_remove_html(self, inputs, results):
         pytest.importorskip('bs4')
