@@ -46,7 +46,10 @@ class BasicTokenizer(Tokenizer):
 
 
 class MosesTokenizer(Tokenizer):
-    """SacreMoses tokenizer."""
+    """SacreMoses tokenizer.
+
+    Transformer to tokenize text using Sacremoses, https://github.com/alvations/sacremoses
+    """
 
     def __init__(self, *args, **kwargs):
         """SacreMoses tokenizer.
