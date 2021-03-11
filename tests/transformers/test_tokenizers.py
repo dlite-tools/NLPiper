@@ -51,11 +51,16 @@ class TestMosesTokenizer:
         doc = Document(inputs)
         doc.tokens = [[Token(token) for token in results]]
 
+        # Given a string as input
         assert t(inputs) == doc
+
+        # Given a Document as input
         assert t(input_doc) == doc
 
         input_doc.phrases = [inputs]
         doc.phrases = [inputs]
+
+        # Given a Document with phrases as input
         assert t(input_doc) == doc
 
     def test_log(self):
