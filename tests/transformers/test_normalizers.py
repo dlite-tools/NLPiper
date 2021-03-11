@@ -24,6 +24,7 @@ class TestCaseTokens:
 
         assert c(inputs) == doc
         assert c(input_doc) == doc
+        assert c.log == {"mode": mode}
 
     @pytest.mark.parametrize('mode', [1, 'other'])
     def test_non_existent_mode(self, mode):

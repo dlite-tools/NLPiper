@@ -58,6 +58,13 @@ class TestMosesTokenizer:
         doc.phrases = [inputs]
         assert t(input_doc) == doc
 
+    def test_log(self):
+        t = MosesTokenizer(lang="en")
+        assert t.log == {"lang": "en"}
+
+        t = MosesTokenizer("en")
+        assert t.log == {"args": ["en"]}
+
     @pytest.mark.usefixtures('hide_available_pkg')
     def test_if_no_package(self):
         with pytest.raises(ModuleNotFoundError):
