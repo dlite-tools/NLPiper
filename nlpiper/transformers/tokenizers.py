@@ -10,8 +10,9 @@ __all__ = ["BasicTokenizer", "MosesTokenizer"]
 class Tokenizer:
     """Abstract class to Tokenizers."""
 
-    def __init__(self, **kwargs):
-        self.log = kwargs
+    def __init__(self, *args, **kwargs):
+        args = {"args": list(args)} if len(args) != 0 else {}
+        self.log = {**kwargs, **args}
 
     def __call__(self, text: Union[str, Document]) -> Document:
         raise NotImplementedError
@@ -47,16 +48,16 @@ class BasicTokenizer(Tokenizer):
 class MosesTokenizer(Tokenizer):
     """SacreMoses tokenizer."""
 
-    def __init__(self, **kwargs):
+    def __init__(self, *args, **kwargs):
         """SacreMoses tokenizer.
 
         Args:
             **kwargs: See the docs at https://github.com/alvations/sacremoses for more information.
         """
-        super().__init__(**kwargs)
+        super().__init__(*args, **kwargs)
         try:
             from sacremoses import MosesTokenizer
-            self.t = MosesTokenizer()
+            self.t = MosesTokenizer(*args, **kwargs)
 
         except ImportError:
             print("Please install SacreMoses. "

@@ -11,8 +11,9 @@ __all__ = ["CaseTokens", "RemovePunctuation"]
 class Normalizer:
     """Abstract class to Normalizers."""
 
-    def __init__(self, **kwargs):
-        self.log = kwargs
+    def __init__(self, *args, **kwargs):
+        args = {"args": list(args)} if len(args) != 0 else {}
+        self.log = {**kwargs, **args}
 
     def __call__(self, tokens: Union[List[List[str]], Document]) -> Document:
         raise NotImplementedError

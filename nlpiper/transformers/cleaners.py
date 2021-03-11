@@ -12,8 +12,9 @@ __all__ = ["RemoveEmail", "RemoveNumber", "RemoveUrl", "RemovePunctuation"]
 class Cleaner:
     """Abstract class to Cleaners."""
 
-    def __init__(self, **kwargs):
-        self.log = kwargs
+    def __init__(self, *args, **kwargs):
+        args = {"args": list(args)} if len(args) != 0 else {}
+        self.log = {**kwargs, **args}
 
     def __call__(self, text: Union[str, Document]) -> Document:
         raise NotImplementedError
