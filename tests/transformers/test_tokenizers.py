@@ -64,6 +64,7 @@ class TestMosesTokenizer:
         assert t(input_doc) == doc
 
     def test_log(self):
+        pytest.importorskip('sacremoses')
         t = MosesTokenizer(lang="en")
         assert t.log == {"lang": "en"}
 
