@@ -16,3 +16,6 @@ class TestBaseTransformer:
 
         base = Base(1, 'str', 3.0, a=1, b='str', c=3.0)
         assert repr(base) == "Base(1, 'str', 3.0, a=1, b='str', c=3.0)"
+
+        base = Base(**{'a': 2, 'b': 4, 'c': 10})
+        assert repr(base) == "Base(a=2, b=4, c=10)"
