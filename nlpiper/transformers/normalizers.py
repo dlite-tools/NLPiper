@@ -42,9 +42,9 @@ class CaseTokens(Normalizer):
         """
         if isinstance(tokens, list):
             phrases = [" ".join(phrase) for phrase in tokens]
-            doc = Document(" ".join(phrases))
+            doc = Document(text=" ".join(phrases))
             doc.phrases = phrases
-            doc.tokens = [[Token(token) for token in phrase] for phrase in tokens]
+            doc.tokens = [[Token(original=token) for token in phrase] for phrase in tokens]
         else:
             doc = tokens
 
@@ -71,9 +71,9 @@ class RemovePunctuation(Normalizer):
         """
         if isinstance(tokens, list):
             phrases = [" ".join(phrase) for phrase in tokens]
-            doc = Document(" ".join(phrases))
+            doc = Document(text=" ".join(phrases))
             doc.phrases = phrases
-            doc.tokens = [[Token(token) for token in phrase] for phrase in tokens]
+            doc.tokens = [[Token(original=token) for token in phrase] for phrase in tokens]
         else:
             doc = tokens
 

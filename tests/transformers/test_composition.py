@@ -16,13 +16,13 @@ class TestCompose:
     def test_w_cleaners(self, inputs, results):
         crn = cleaners.RemoveNumber()
         nrp = cleaners.RemovePunctuation()
-        doc = Document(inputs)
+        doc = Document(text=inputs)
         doc.cleaned = results
 
         pipe = Compose([crn, nrp])
 
         assert pipe(inputs) == doc
-        assert pipe(Document(inputs)) == doc
+        assert pipe(Document(text=inputs)) == doc
         assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.cleaners.RemoveNumber'>", {}),
                                         ("<class 'nlpiper.transformers.cleaners.RemovePunctuation'>", {})])
 
@@ -37,9 +37,9 @@ class TestCompose:
         pipe = Compose([nct, nrp])
 
         phrases = [" ".join(phrase) for phrase in inputs]
-        doc = Document(" ".join(phrases))
+        doc = Document(text=" ".join(phrases))
         doc.phrases = phrases
-        doc.tokens = [[Token(token) for token in phrase] for phrase in inputs]
+        doc.tokens = [[Token(original=token) for token in phrase] for phrase in inputs]
         input_doc = doc
 
         for phrase, phrase_result in zip(doc.tokens, results):
@@ -64,7 +64,7 @@ class TestCompose:
         pipe = Compose([crn, t, nct, nrp])
 
         doc = crn(inputs)
-        doc.tokens = [[Token(token) for token in doc.cleaned.split()]]
+        doc.tokens = [[Token(original=token) for token in doc.cleaned.split()]]
         input_doc = doc
 
         for phrase, phrase_result in zip(doc.tokens, results):

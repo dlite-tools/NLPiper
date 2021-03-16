@@ -32,7 +32,7 @@ class RemoveUrl(Cleaner):
         Returns: Document
         """
         if isinstance(text, str):
-            doc = Document(text)
+            doc = Document(text=text)
         else:
             doc = text
 
@@ -57,7 +57,7 @@ class RemoveEmail(Cleaner):
         Returns: Document
         """
         if isinstance(text, str):
-            doc = Document(text)
+            doc = Document(text=text)
         else:
             doc = text
 
@@ -81,7 +81,7 @@ class RemoveNumber(Cleaner):
         Returns: Document
         """
         if isinstance(text, str):
-            doc = Document(text)
+            doc = Document(text=text)
         else:
             doc = text
 
@@ -104,7 +104,7 @@ class RemovePunctuation(Cleaner):
         Returns: Document
         """
         if isinstance(text, str):
-            doc = Document(text)
+            doc = Document(text=text)
         else:
             doc = text
 
@@ -150,7 +150,7 @@ class RemoveHTML(Cleaner):
         Returns: Document
         """
         if isinstance(text, str):
-            doc = Document(text)
+            doc = Document(text=text)
         else:
             doc = text
 
