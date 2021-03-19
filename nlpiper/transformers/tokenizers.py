@@ -30,7 +30,7 @@ class BasicTokenizer(Tokenizer):
         Returns: Document
         """
         if isinstance(text, str):
-            doc = Document(text=text)
+            doc = Document(original=text)
         else:
             doc = text
 
@@ -38,7 +38,7 @@ class BasicTokenizer(Tokenizer):
             phrases = [phrase.split() if phrase is not None else [] for phrase in doc.phrases]
 
         else:
-            phrases = [doc.cleaned.split() if doc.cleaned is not None else doc.text.split()]
+            phrases = [doc.cleaned.split() if doc.cleaned is not None else doc.original.split()]
 
         doc.tokens = [[Token(original=token) for token in phrase] for phrase in phrases]
 
@@ -77,7 +77,7 @@ class MosesTokenizer(Tokenizer):
         Returns: Document
         """
         if isinstance(text, str):
-            doc = Document(text=text)
+            doc = Document(original=text)
         else:
             doc = text
 
@@ -85,7 +85,7 @@ class MosesTokenizer(Tokenizer):
             phrases = [self.t.tokenize(phrase) if phrase is not None else [] for phrase in doc.phrases]
 
         else:
-            phrases = [self.t.tokenize(doc.cleaned) if doc.cleaned is not None else self.t.tokenize(doc.text)]
+            phrases = [self.t.tokenize(doc.cleaned) if doc.cleaned is not None else self.t.tokenize(doc.original)]
 
         doc.tokens = [[Token(original=token) for token in phrase] for phrase in phrases]
 

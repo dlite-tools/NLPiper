@@ -25,9 +25,9 @@ class TestBasicTokenizer:
     ])
     def test_tokenizer(self, inputs, results):
         t = BasicTokenizer()
-        input_doc = Document(text=inputs)
+        input_doc = Document(original=inputs)
 
-        doc = Document(text=inputs)
+        doc = Document(original=inputs)
         doc.tokens = [[Token(original=token) for token in results]]
 
         assert t(inputs) == doc
@@ -46,9 +46,9 @@ class TestMosesTokenizer:
     def test_tokenizer(self, inputs, results):
         pytest.importorskip('sacremoses')
         t = MosesTokenizer()
-        input_doc = Document(text=inputs)
+        input_doc = Document(original=inputs)
 
-        doc = Document(text=inputs)
+        doc = Document(original=inputs)
         doc.tokens = [[Token(original=token) for token in results]]
 
         # Given a string as input

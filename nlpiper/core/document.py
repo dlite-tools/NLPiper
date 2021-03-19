@@ -11,7 +11,7 @@ class Token(BaseModel):
 
 
 class Document(BaseModel):
-    text: str
+    original: str
     cleaned: Optional[str] = None
     phrases: Optional[List[str]] = None
     tokens: Optional[List[List[Token]]] = None
