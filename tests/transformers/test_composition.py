@@ -3,7 +3,7 @@ from collections import OrderedDict
 import pytest
 
 from nlpiper.transformers import cleaners, normalizers, tokenizers
-from nlpiper.transformers.composition import Compose
+from nlpiper.core.composition import Compose
 from nlpiper.core.document import Document, Token
 
 
@@ -16,13 +16,13 @@ class TestCompose:
     def test_w_cleaners(self, inputs, results):
         crn = cleaners.RemoveNumber()
         nrp = cleaners.RemovePunctuation()
-        doc = Document(text=inputs)
+        doc = Document(original=inputs)
         doc.cleaned = results
 
         pipe = Compose([crn, nrp])
 
         assert pipe(inputs) == doc
-        assert pipe(Document(text=inputs)) == doc
+        assert pipe(Document(original=inputs)) == doc
         assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.cleaners.RemoveNumber'>", {}),
                                         ("<class 'nlpiper.transformers.cleaners.RemovePunctuation'>", {})])
 
@@ -37,7 +37,7 @@ class TestCompose:
         pipe = Compose([nct, nrp])
 
         phrases = [" ".join(phrase) for phrase in inputs]
-        doc = Document(text=" ".join(phrases))
+        doc = Document(original=" ".join(phrases))
         doc.phrases = phrases
         doc.tokens = [[Token(original=token) for token in phrase] for phrase in inputs]
         input_doc = doc
