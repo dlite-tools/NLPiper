@@ -2,7 +2,7 @@
 from nlpiper.core.document import Document
 
 
-class Base:
+class BaseTransformer:
     """Base class to all Transformers."""
 
     def __init__(self, *args, **kwargs):
