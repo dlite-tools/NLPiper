@@ -21,7 +21,6 @@ class TestCompose:
 
         pipe = Compose([crn, nrp])
 
-        assert pipe(inputs) == doc
         assert pipe(Document(original=inputs)) == doc
         assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.cleaners.RemoveNumber'>", {}),
                                         ("<class 'nlpiper.transformers.cleaners.RemovePunctuation'>", {})])
@@ -63,7 +62,7 @@ class TestCompose:
 
         pipe = Compose([crn, t, nct, nrp])
 
-        doc = crn(inputs)
+        doc = crn(Document(original=inputs))
         doc.tokens = [[Token(original=token) for token in doc.cleaned.split()]]
         input_doc = doc
 
@@ -71,7 +70,6 @@ class TestCompose:
             for token, result in zip(phrase, phrase_result):
                 token.processed = result
 
-        assert pipe(inputs) == doc
         assert pipe(input_doc) == doc
 
         assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.cleaners.RemoveNumber'>", {}),
