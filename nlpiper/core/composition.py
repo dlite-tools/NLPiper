@@ -1,37 +1,31 @@
 """Compose Module."""
 
-from typing import Callable, List, Union
-from collections import OrderedDict
+from typing import Callable, List
 
 from nlpiper.core.document import Document
+from nlpiper.logger import log
 
 
 class Compose:
-    """Pipeline for process text."""
+    """Pipeline for process document."""
 
-    def __init__(self, transforms: List[Callable]) -> None:
+    def __init__(self, transformers: List[Callable]) -> None:
         """Pipeline for process text.
 
         Args:
-            transforms (List[Any]): List of callable objects with implemented method ```__call__```.
+            transformers (List[Callable]): List of callable objects with implemented method ```__call__```.
         """
-        self.transforms = transforms
-        self.log = self._log()
+        self.transformers = transformers
+        log.info("[Created] Compose(%s)", ', '.join([repr(t) for t in transformers]))
 
-    def _log(self):
-        d = OrderedDict()
-        for transform in self.transforms:
-            d[str(transform.__class__)] = transform.log
-        return d
-
-    def __call__(self, text: Union[str, List[List[str]], Document]) -> Document:
-        """Process Text.
+    def __call__(self, doc: Document) -> Document:
+        """Process document with transformers pipeline.
 
         Args:
-            text (Union[str, List[List[str]], Document]): Text to be processed.
+            doc (Document): Document object to be processed.
 
         Returns: Document
         """
-        for t in self.transforms:
-            text = t(text)
-        return text
+        for t in self.transformers:
+            doc = t(doc)
+        return doc
