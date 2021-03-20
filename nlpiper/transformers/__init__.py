@@ -1,5 +1,6 @@
 """Transformers Module."""
 from nlpiper.core.document import Document
+from nlpiper.logger import log
 
 
 class BaseTransformer:
@@ -8,6 +9,7 @@ class BaseTransformer:
     def __init__(self, *args, **kwargs):
         self.args = args
         self.kwargs = kwargs
+        log.info("[Created] %s", repr(self))
 
     def __repr__(self) -> str:
         """Create a string representation including init params."""
