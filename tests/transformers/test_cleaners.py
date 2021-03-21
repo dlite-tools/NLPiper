@@ -18,25 +18,6 @@ def hide_available_pkg(monkeypatch):
     monkeypatch.setattr(builtins, '__import__', mocked_import)
 
 
-class TestRemovePunctuation:
-    @pytest.mark.parametrize('inputs,results', [
-        ('TEST.%$#"#', 'TEST'),
-        (r'!"te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t', 'test'),
-    ])
-    def test_remove_punctuation(self, inputs, results):
-        r = RemovePunctuation()
-        doc = Document(original=inputs)
-        doc.cleaned = results
-
-        assert r(Document(original=inputs)) == doc
-
-    @pytest.mark.parametrize('inputs', ["string", 2])
-    def test_with_invalid_document(self, inputs):
-        with pytest.raises(TypeError):
-            r = RemovePunctuation()
-            r(inputs)
-
-
 class TestRemoveUrl:
     @pytest.mark.parametrize('inputs,results', [
         ('TEST', 'TEST'),
@@ -97,6 +78,25 @@ class TestRemoveNumber:
     def test_with_invalid_document(self, inputs):
         with pytest.raises(TypeError):
             r = RemoveNumber()
+            r(inputs)
+
+
+class TestRemovePunctuation:
+    @pytest.mark.parametrize('inputs,results', [
+        ('TEST.%$#"#', 'TEST'),
+        (r'!"te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t', 'test'),
+    ])
+    def test_remove_punctuation(self, inputs, results):
+        r = RemovePunctuation()
+        doc = Document(original=inputs)
+        doc.cleaned = results
+
+        assert r(Document(original=inputs)) == doc
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        with pytest.raises(TypeError):
+            r = RemovePunctuation()
             r(inputs)
 
 
