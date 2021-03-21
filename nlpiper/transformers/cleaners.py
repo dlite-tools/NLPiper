@@ -62,11 +62,7 @@ class RemoveEmail(Cleaner):
 
         Returns: Document
         """
-        if not isinstance(doc, Document):
-            raise TypeError("Argument doc is not of type Document")
-
-        if doc.cleaned is None:
-            doc.cleaned = doc.original
+        super().validate_document(doc)
 
         doc.cleaned = re.sub(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", "", doc.cleaned)
 
