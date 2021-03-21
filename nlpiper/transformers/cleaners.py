@@ -16,7 +16,7 @@ class Cleaner(BaseTransformer):
         args = {"args": list(args)} if len(args) != 0 else {}
         self.log = {**kwargs, **args}
 
-    def validate_document(self, doc: Document):
+    def _validate_document(self, doc: Document):
         """Validate if document is ready to be processed.
 
         Args:
@@ -43,7 +43,7 @@ class RemoveUrl(Cleaner):
 
         Returns: Document
         """
-        super().validate_document(doc)
+        super()._validate_document(doc)
 
         doc.cleaned = re.sub(r"http\S+", "", doc.cleaned)
         doc.cleaned = re.sub(r"www\S+", "", doc.cleaned)
@@ -62,7 +62,7 @@ class RemoveEmail(Cleaner):
 
         Returns: Document
         """
-        super().validate_document(doc)
+        super()._validate_document(doc)
 
         doc.cleaned = re.sub(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", "", doc.cleaned)
 
@@ -80,7 +80,7 @@ class RemoveNumber(Cleaner):
 
         Returns: Document
         """
-        super().validate_document(doc)
+        super()._validate_document(doc)
 
         doc.cleaned = re.sub(r'[0-9]+', '', doc.cleaned)
         return doc
@@ -97,7 +97,7 @@ class RemovePunctuation(Cleaner):
 
         Returns: Document
         """
-        super().validate_document(doc)
+        super()._validate_document(doc)
 
         doc.cleaned = doc.cleaned.translate(str.maketrans('', '', punctuation))
         return doc
@@ -138,7 +138,7 @@ class RemoveHTML(Cleaner):
 
         Returns: Document
         """
-        super().validate_document(doc)
+        super()._validate_document(doc)
 
         doc.cleaned = self.c(doc.cleaned, features=self.features, *self.args, **self.kwargs).get_text()
         return doc
