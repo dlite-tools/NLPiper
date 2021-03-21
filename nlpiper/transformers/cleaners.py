@@ -16,9 +16,6 @@ class Cleaner(BaseTransformer):
         args = {"args": list(args)} if len(args) != 0 else {}
         self.log = {**kwargs, **args}
 
-    def __call__(self, doc: Document) -> Document:
-        raise NotImplementedError
-
 
 class RemoveUrl(Cleaner):
     """Remove URLs."""
