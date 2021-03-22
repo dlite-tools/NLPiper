@@ -16,13 +16,6 @@ class Compose:
             transforms (List[Any]): List of callable objects with implemented method ```__call__```.
         """
         self.transforms = transforms
-        self.log = self._log()
-
-    def _log(self):
-        d = OrderedDict()
-        for transform in self.transforms:
-            d[str(transform.__class__)] = transform.log
-        return d
 
     def __call__(self, text: Union[str, List[List[str]], Document]) -> Document:
         """Process Text.

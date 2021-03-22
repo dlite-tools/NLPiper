@@ -12,10 +12,6 @@ __all__ = ["RemoveUrl", "RemoveEmail", "RemoveNumber", "RemovePunctuation", "Rem
 class Cleaner(BaseTransformer):
     """Abstract class to Cleaners."""
 
-    def __init__(self, *args, **kwargs):
-        args = {"args": list(args)} if len(args) != 0 else {}
-        self.log = {**kwargs, **args}
-
     def _validate_document(self, doc: Document):
         """Validate if document is ready to be processed.
 

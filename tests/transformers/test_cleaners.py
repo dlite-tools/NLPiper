@@ -113,7 +113,6 @@ class TestRemoveHTML:
         doc.cleaned = results
 
         assert r(Document(original=inputs)) == doc
-        assert r.log == {"features": "html.parser"}
 
     @pytest.mark.parametrize('inputs', ["string", 2])
     def test_with_invalid_document(self, inputs):
