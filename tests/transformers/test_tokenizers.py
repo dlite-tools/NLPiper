@@ -32,6 +32,12 @@ class TestBasicTokenizer:
 
         assert t(input_doc) == doc
 
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        with pytest.raises(TypeError):
+            t = BasicTokenizer()
+            t(inputs)
+
 
 class TestMosesTokenizer:
     @pytest.mark.parametrize('inputs,results', [
@@ -54,6 +60,13 @@ class TestMosesTokenizer:
 
         # Given a Document with phrases as input
         assert t(input_doc) == doc
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        pytest.importorskip('sacremoses')
+        with pytest.raises(TypeError):
+            t = MosesTokenizer()
+            t(inputs)
 
     @pytest.mark.usefixtures('hide_available_pkg')
     def test_if_no_package(self):
