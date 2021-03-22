@@ -3,7 +3,6 @@
 from typing import Callable, List
 
 from nlpiper.core.document import Document
-from nlpiper.logger import log
 
 
 class Compose:
