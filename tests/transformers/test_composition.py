@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 import pytest
 
 from nlpiper.transformers import cleaners, normalizers, tokenizers
@@ -21,10 +19,7 @@ class TestCompose:
 
         pipe = Compose([crn, nrp])
 
-        assert pipe(inputs) == doc
         assert pipe(Document(original=inputs)) == doc
-        assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.cleaners.RemoveNumber'>", {}),
-                                        ("<class 'nlpiper.transformers.cleaners.RemovePunctuation'>", {})])
 
     @pytest.mark.parametrize('inputs,results', [
         ([['TEST.%$#"#']], [['test']]),
@@ -46,10 +41,7 @@ class TestCompose:
             for token, result in zip(phrase, phrase_result):
                 token.processed = result
 
-        assert pipe(inputs) == doc
         assert pipe(input_doc) == doc
-        assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.normalizers.CaseTokens'>", {'mode': 'lower'}),
-                                        ("<class 'nlpiper.transformers.normalizers.RemovePunctuation'>", {})])
 
     @pytest.mark.parametrize('inputs,results', [
         ('T2E1ST.%$#"# test', [['test', 'test']]),
@@ -71,10 +63,4 @@ class TestCompose:
             for token, result in zip(phrase, phrase_result):
                 token.processed = result
 
-        assert pipe(inputs) == doc
         assert pipe(input_doc) == doc
-
-        assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.cleaners.RemoveNumber'>", {}),
-                                        ("<class 'nlpiper.transformers.tokenizers.BasicTokenizer'>", {}),
-                                        ("<class 'nlpiper.transformers.normalizers.CaseTokens'>", {'mode': 'lower'}),
-                                        ("<class 'nlpiper.transformers.normalizers.RemovePunctuation'>", {})])
