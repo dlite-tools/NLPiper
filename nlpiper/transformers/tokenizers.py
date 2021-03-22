@@ -1,46 +1,47 @@
 """Tokenizer Module."""
 
-from typing import Union
-
 from nlpiper.core.document import Document, Token
+from nlpiper.transformers import BaseTransformer
 
 __all__ = ["BasicTokenizer", "MosesTokenizer"]
 
 
-class Tokenizer:
+class Tokenizer(BaseTransformer):
     """Abstract class to Tokenizers."""
 
-    def __init__(self, *args, **kwargs):
-        args = {"args": list(args)} if len(args) != 0 else {}
-        self.log = {**kwargs, **args}
+    def _validate_document(self, doc: Document):
+        """Validate if document is ready to be processed.
 
-    def __call__(self, text: Union[str, Document]) -> Document:
-        raise NotImplementedError
+        Args:
+            doc (Document): document to be tokenized.
+
+        Raises:
+            TypeError: if doc is not a Document.
+        """
+        if not isinstance(doc, Document):
+            raise TypeError("Argument doc is not of type Document")
+
+        if doc.cleaned is None:
+            doc.cleaned = doc.original
+
+        if doc.phrases is None:
+            doc.phrases = [doc.cleaned]
 
 
 class BasicTokenizer(Tokenizer):
-    """Basic tokenizer which tokenizes by splitting tokens by blank spaces."""
+    """Basic tokenizer which tokenizes a document by splitting tokens by its blank spaces."""
 
-    def __call__(self, text: Union[str, Document]) -> Document:
-        """Tokenize text to list of tokens.
+    def __call__(self, doc: Document) -> Document:
+        """Tokenize the document in a list of tokens.
 
         Args:
-            text (Union[str, Document]): Text to be tokenized.
+            doc (Document): Text to be tokenized.
 
         Returns: Document
         """
-        if isinstance(text, str):
-            doc = Document(original=text)
-        else:
-            doc = text
+        super()._validate_document(doc)
 
-        if doc.phrases:
-            phrases = [phrase.split() if phrase is not None else [] for phrase in doc.phrases]
-
-        else:
-            phrases = [doc.cleaned.split() if doc.cleaned is not None else doc.original.split()]
-
-        doc.tokens = [[Token(original=token) for token in phrase] for phrase in phrases]
+        doc.tokens = [[Token(original=token) for token in phrase.split()] for phrase in doc.phrases]
 
         return doc
 
@@ -48,7 +49,7 @@ class BasicTokenizer(Tokenizer):
 class MosesTokenizer(Tokenizer):
     """SacreMoses tokenizer.
 
-    Transformer to tokenize text using Sacremoses, https://github.com/alvations/sacremoses
+    Transformer to tokenize a Document using Sacremoses, https://github.com/alvations/sacremoses
     """
 
     def __init__(self, *args, **kwargs):
@@ -68,25 +69,16 @@ class MosesTokenizer(Tokenizer):
                   "See the docs at https://github.com/alvations/sacremoses for more information.")
             raise
 
-    def __call__(self, text: Union[str, Document]) -> Document:
-        """Tokenize text to list of tokens.
+    def __call__(self, doc: Document) -> Document:
+        """Tokenize the document in a list of tokens.
 
         Args:
-            text (Union[str, Document]): Text to be tokenized.
+            doc (Document): Document to be tokenized.
 
         Returns: Document
         """
-        if isinstance(text, str):
-            doc = Document(original=text)
-        else:
-            doc = text
+        super()._validate_document(doc)
 
-        if doc.phrases:
-            phrases = [self.t.tokenize(phrase) if phrase is not None else [] for phrase in doc.phrases]
-
-        else:
-            phrases = [self.t.tokenize(doc.cleaned) if doc.cleaned is not None else self.t.tokenize(doc.original)]
-
-        doc.tokens = [[Token(original=token) for token in phrase] for phrase in phrases]
+        doc.tokens = [[Token(original=token) for token in self.t.tokenize(phrase)] for phrase in doc.phrases]
 
         return doc
