@@ -1,5 +1,3 @@
-from collections import OrderedDict
-
 import pytest
 
 from nlpiper.transformers import cleaners, normalizers, tokenizers
@@ -43,7 +41,6 @@ class TestCompose:
             for token, result in zip(phrase, phrase_result):
                 token.processed = result
 
-        assert pipe(inputs) == doc
         assert pipe(input_doc) == doc
 
     @pytest.mark.parametrize('inputs,results', [
