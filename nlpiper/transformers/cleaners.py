@@ -2,42 +2,44 @@
 
 import re
 from string import punctuation
-from typing import Union
 
 from nlpiper.core.document import Document
+from nlpiper.transformers import BaseTransformer
 
-__all__ = ["RemoveEmail", "RemoveNumber", "RemoveUrl", "RemovePunctuation"]
+__all__ = ["RemoveUrl", "RemoveEmail", "RemoveNumber", "RemovePunctuation", "RemoveHTML"]
 
 
-class Cleaner:
+class Cleaner(BaseTransformer):
     """Abstract class to Cleaners."""
 
-    def __init__(self, *args, **kwargs):
-        args = {"args": list(args)} if len(args) != 0 else {}
-        self.log = {**kwargs, **args}
+    def _validate_document(self, doc: Document):
+        """Validate if document is ready to be processed.
 
-    def __call__(self, text: Union[str, Document]) -> Document:
-        raise NotImplementedError
+        Args:
+            doc (Document): document to be cleaned.
+
+        Raises:
+            TypeError: if doc is not a Document.
+        """
+        if not isinstance(doc, Document):
+            raise TypeError("Argument doc is not of type Document")
+
+        if doc.cleaned is None:
+            doc.cleaned = doc.original
 
 
 class RemoveUrl(Cleaner):
     """Remove URLs."""
 
-    def __call__(self, text: Union[str, Document]) -> Document:
-        """Remove text URLs.
+    def __call__(self, doc: Document) -> Document:
+        """Remove URLs from a document.
 
         Args:
-            text (Union[str, Document]): text to be cleaned.
+            doc (Document): document to be cleaned.
 
         Returns: Document
         """
-        if isinstance(text, str):
-            doc = Document(original=text)
-        else:
-            doc = text
-
-        if doc.cleaned is None:
-            doc.cleaned = doc.original
+        super()._validate_document(doc)
 
         doc.cleaned = re.sub(r"http\S+", "", doc.cleaned)
         doc.cleaned = re.sub(r"www\S+", "", doc.cleaned)
@@ -48,21 +50,15 @@ class RemoveUrl(Cleaner):
 class RemoveEmail(Cleaner):
     """Remove Emails."""
 
-    def __call__(self, text: Union[str, Document]) -> Document:
-        """Remove text Emails.
+    def __call__(self, doc: Document) -> Document:
+        """Remove emails from a document.
 
         Args:
-            text (Union[str, Document]): text to be cleaned.
+            doc (Document): document to be cleaned.
 
         Returns: Document
         """
-        if isinstance(text, str):
-            doc = Document(original=text)
-        else:
-            doc = text
-
-        if doc.cleaned is None:
-            doc.cleaned = doc.original
+        super()._validate_document(doc)
 
         doc.cleaned = re.sub(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", "", doc.cleaned)
 
@@ -72,21 +68,15 @@ class RemoveEmail(Cleaner):
 class RemoveNumber(Cleaner):
     """Remove Numbers."""
 
-    def __call__(self, text: Union[str, Document]) -> Document:
-        """Remove text Numbers.
+    def __call__(self, doc: Document) -> Document:
+        """Remove numbers from a document.
 
         Args:
-            text (Union[str, Document]): text to be cleaned.
+            doc (Document): document to be cleaned.
 
         Returns: Document
         """
-        if isinstance(text, str):
-            doc = Document(original=text)
-        else:
-            doc = text
-
-        if doc.cleaned is None:
-            doc.cleaned = doc.original
+        super()._validate_document(doc)
 
         doc.cleaned = re.sub(r'[0-9]+', '', doc.cleaned)
         return doc
@@ -95,21 +85,15 @@ class RemoveNumber(Cleaner):
 class RemovePunctuation(Cleaner):
     """Remove Punctuation."""
 
-    def __call__(self, text: Union[str, Document]) -> Document:
-        """Remove Punctuation from text.
+    def __call__(self, doc: Document) -> Document:
+        """Remove punctuation from a document.
 
         Args:
-            text (Union[str, Document]): text to be cleaned.
+            doc (Document): document to be cleaned.
 
         Returns: Document
         """
-        if isinstance(text, str):
-            doc = Document(original=text)
-        else:
-            doc = text
-
-        if doc.cleaned is None:
-            doc.cleaned = doc.original
+        super()._validate_document(doc)
 
         doc.cleaned = doc.cleaned.translate(str.maketrans('', '', punctuation))
         return doc
@@ -124,7 +108,8 @@ class RemoveHTML(Cleaner):
         Args:
             features (str): Parser used to remove HTML and XML, which could be used the following parsers:
             ```"html.parser"```, ```"lxml"```, ```"lxml-xml"```, ```"xml"```,  ```"html5lib"```,
-             for more information about the parser go to: https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser
+             for more information about the parser
+             go to: https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser
             *args: See the docs at https://www.crummy.com/software/BeautifulSoup/bs4/doc/ for more information.
             **kwargs: See the docs at https://www.crummy.com/software/BeautifulSoup/bs4/doc/ for more information.
         """
@@ -141,21 +126,15 @@ class RemoveHTML(Cleaner):
                   "See the docs at https://www.crummy.com/software/BeautifulSoup/ for more information.")
             raise
 
-    def __call__(self, text: Union[str, Document]) -> Document:
-        """Remove HTML and XML from text.
+    def __call__(self, doc: Document) -> Document:
+        """Remove HTML and XML from the document.
 
         Args:
-            text (Union[str, Document]): text to be cleaned.
+            doc (Document): document to be cleaned.
 
         Returns: Document
         """
-        if isinstance(text, str):
-            doc = Document(original=text)
-        else:
-            doc = text
-
-        if doc.cleaned is None:
-            doc.cleaned = doc.original
+        super()._validate_document(doc)
 
         doc.cleaned = self.c(doc.cleaned, features=self.features, *self.args, **self.kwargs).get_text()
         return doc

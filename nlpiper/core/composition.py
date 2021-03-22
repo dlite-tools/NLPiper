@@ -16,7 +16,6 @@ class Compose:
             transformers (List[Callable]): List of callable objects with implemented method ```__call__```.
         """
         self.transformers = transformers
-        log.info("[Created] Compose(%s)", ', '.join([repr(t) for t in transformers]))
 
     def __call__(self, doc: Document) -> Document:
         """Process document with transformers pipeline.
