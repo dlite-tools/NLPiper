@@ -27,14 +27,9 @@ class TestBasicTokenizer:
         t = BasicTokenizer()
         input_doc = Document(original=inputs)
 
-        doc = Document(original=inputs)
+        doc = Document(original=inputs, cleaned=inputs, phrases=[inputs])
         doc.tokens = [[Token(original=token) for token in results]]
 
-        assert t(inputs) == doc
-        assert t(input_doc) == doc
-
-        input_doc.phrases = [inputs]
-        doc.phrases = [inputs]
         assert t(input_doc) == doc
 
 
@@ -48,11 +43,8 @@ class TestMosesTokenizer:
         t = MosesTokenizer()
         input_doc = Document(original=inputs)
 
-        doc = Document(original=inputs)
+        doc = Document(original=inputs, cleaned=inputs, phrases=[inputs])
         doc.tokens = [[Token(original=token) for token in results]]
-
-        # Given a string as input
-        assert t(inputs) == doc
 
         # Given a Document as input
         assert t(input_doc) == doc
@@ -62,14 +54,6 @@ class TestMosesTokenizer:
 
         # Given a Document with phrases as input
         assert t(input_doc) == doc
-
-    def test_log(self):
-        pytest.importorskip('sacremoses')
-        t = MosesTokenizer(lang="en")
-        assert t.log == {"lang": "en"}
-
-        t = MosesTokenizer("en")
-        assert t.log == {"args": ["en"]}
 
     @pytest.mark.usefixtures('hide_available_pkg')
     def test_if_no_package(self):
