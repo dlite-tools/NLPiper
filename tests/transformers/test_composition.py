@@ -19,7 +19,6 @@ class TestCompose:
 
         pipe = Compose([crn, nrp])
 
-        assert pipe(inputs) == doc
         assert pipe(Document(original=inputs)) == doc
 
     @pytest.mark.parametrize('inputs,results', [
@@ -65,5 +64,4 @@ class TestCompose:
             for token, result in zip(phrase, phrase_result):
                 token.processed = result
 
-        assert pipe(inputs) == doc
         assert pipe(input_doc) == doc
