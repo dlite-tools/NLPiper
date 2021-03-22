@@ -4,6 +4,9 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+sacremoses = "*"
+bs4 = "*"
+pydantic = "*"
 
 [dev-packages]
 pytest = "*"

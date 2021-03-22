@@ -1,18 +1,17 @@
-from dataclasses import dataclass
 from typing import List, Optional
 
+from pydantic import BaseModel
 
-@dataclass
-class Token:
+
+class Token(BaseModel):
     original: str
     processed: Optional[str] = None
     lemma: Optional[str] = None
     stem: Optional[str] = None
 
 
-@dataclass
-class Document:
-    text: str
+class Document(BaseModel):
+    original: str
     cleaned: Optional[str] = None
     phrases: Optional[List[str]] = None
     tokens: Optional[List[List[Token]]] = None

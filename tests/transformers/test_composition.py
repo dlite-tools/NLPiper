@@ -1,9 +1,7 @@
-from collections import OrderedDict
-
 import pytest
 
 from nlpiper.transformers import cleaners, normalizers, tokenizers
-from nlpiper.transformers.composition import Compose
+from nlpiper.core.composition import Compose
 from nlpiper.core.document import Document, Token
 
 
@@ -16,15 +14,12 @@ class TestCompose:
     def test_w_cleaners(self, inputs, results):
         crn = cleaners.RemoveNumber()
         nrp = cleaners.RemovePunctuation()
-        doc = Document(inputs)
+        doc = Document(original=inputs)
         doc.cleaned = results
 
         pipe = Compose([crn, nrp])
 
-        assert pipe(inputs) == doc
-        assert pipe(Document(inputs)) == doc
-        assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.cleaners.RemoveNumber'>", {}),
-                                        ("<class 'nlpiper.transformers.cleaners.RemovePunctuation'>", {})])
+        assert pipe(Document(original=inputs)) == doc
 
     @pytest.mark.parametrize('inputs,results', [
         ([['TEST.%$#"#']], [['test']]),
@@ -37,19 +32,16 @@ class TestCompose:
         pipe = Compose([nct, nrp])
 
         phrases = [" ".join(phrase) for phrase in inputs]
-        doc = Document(" ".join(phrases))
+        doc = Document(original=" ".join(phrases))
         doc.phrases = phrases
-        doc.tokens = [[Token(token) for token in phrase] for phrase in inputs]
+        doc.tokens = [[Token(original=token) for token in phrase] for phrase in inputs]
         input_doc = doc
 
         for phrase, phrase_result in zip(doc.tokens, results):
             for token, result in zip(phrase, phrase_result):
                 token.processed = result
 
-        assert pipe(inputs) == doc
         assert pipe(input_doc) == doc
-        assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.normalizers.CaseTokens'>", {'mode': 'lower'}),
-                                        ("<class 'nlpiper.transformers.normalizers.RemovePunctuation'>", {})])
 
     @pytest.mark.parametrize('inputs,results', [
         ('T2E1ST.%$#"# test', [['test', 'test']]),
@@ -64,17 +56,11 @@ class TestCompose:
         pipe = Compose([crn, t, nct, nrp])
 
         doc = crn(inputs)
-        doc.tokens = [[Token(token) for token in doc.cleaned.split()]]
+        doc.tokens = [[Token(original=token) for token in doc.cleaned.split()]]
         input_doc = doc
 
         for phrase, phrase_result in zip(doc.tokens, results):
             for token, result in zip(phrase, phrase_result):
                 token.processed = result
 
-        assert pipe(inputs) == doc
         assert pipe(input_doc) == doc
-
-        assert pipe.log == OrderedDict([("<class 'nlpiper.transformers.cleaners.RemoveNumber'>", {}),
-                                        ("<class 'nlpiper.transformers.tokenizers.BasicTokenizer'>", {}),
-                                        ("<class 'nlpiper.transformers.normalizers.CaseTokens'>", {'mode': 'lower'}),
-                                        ("<class 'nlpiper.transformers.normalizers.RemovePunctuation'>", {})])

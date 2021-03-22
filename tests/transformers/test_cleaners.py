@@ -25,11 +25,11 @@ class TestRemovePunctuation:
     ])
     def test_remove_punctuation(self, inputs, results):
         r = RemovePunctuation()
-        doc = Document(inputs)
+        doc = Document(original=inputs)
         doc.cleaned = results
 
         assert r(inputs) == doc
-        assert r(Document(inputs)) == doc
+        assert r(Document(original=inputs)) == doc
 
 
 class TestRemoveUrl:
@@ -43,11 +43,11 @@ class TestRemoveUrl:
     ])
     def test_remove_url(self, inputs, results):
         r = RemoveUrl()
-        doc = Document(inputs)
+        doc = Document(original=inputs)
         doc.cleaned = results
 
         assert r(inputs) == doc
-        assert r(Document(inputs)) == doc
+        assert r(Document(original=inputs)) == doc
 
 
 class TestRemoveEmail:
@@ -58,11 +58,11 @@ class TestRemoveEmail:
     ])
     def test_remove_email(self, inputs, results):
         r = RemoveEmail()
-        doc = Document(inputs)
+        doc = Document(original=inputs)
         doc.cleaned = results
 
         assert r(inputs) == doc
-        assert r(Document(inputs)) == doc
+        assert r(Document(original=inputs)) == doc
 
 
 class TestRemoveNumber:
@@ -73,11 +73,11 @@ class TestRemoveNumber:
     ])
     def test_remove_number(self, inputs, results):
         r = RemoveNumber()
-        doc = Document(inputs)
+        doc = Document(original=inputs)
         doc.cleaned = results
 
         assert r(inputs) == doc
-        assert r(Document(inputs)) == doc
+        assert r(Document(original=inputs)) == doc
 
 
 class TestRemoveHTML:
@@ -89,11 +89,11 @@ class TestRemoveHTML:
     def test_remove_html(self, inputs, results):
         pytest.importorskip('bs4')
         r = RemoveHTML()
-        doc = Document(inputs)
+        doc = Document(original=inputs)
         doc.cleaned = results
 
         assert r(inputs) == doc
-        assert r(Document(inputs)) == doc
+        assert r(Document(original=inputs)) == doc
         assert r.log == {"features": "html.parser"}
 
     @pytest.mark.usefixtures('hide_available_pkg')

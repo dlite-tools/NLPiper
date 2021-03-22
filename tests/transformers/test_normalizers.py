@@ -13,9 +13,9 @@ class TestCaseTokens:
         c = CaseTokens(mode)
 
         phrases = [" ".join(phrase) for phrase in inputs]
-        doc = Document(" ".join(phrases))
+        doc = Document(original=" ".join(phrases))
         doc.phrases = phrases
-        doc.tokens = [[Token(token) for token in phrase] for phrase in inputs]
+        doc.tokens = [[Token(original=token) for token in phrase] for phrase in inputs]
         input_doc = doc
 
         for phrase, phrase_result in zip(doc.tokens, results):
@@ -41,9 +41,9 @@ class TestRemovePunctuation:
         r = RemovePunctuation()
 
         phrases = [" ".join(phrase) for phrase in inputs]
-        doc = Document(" ".join(phrases))
+        doc = Document(original=" ".join(phrases))
         doc.phrases = phrases
-        doc.tokens = [[Token(token) for token in phrase] for phrase in inputs]
+        doc.tokens = [[Token(original=token) for token in phrase] for phrase in inputs]
         input_doc = doc
 
         for phrase, phrase_result in zip(doc.tokens, results):

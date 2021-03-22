@@ -32,12 +32,12 @@ class RemoveUrl(Cleaner):
         Returns: Document
         """
         if isinstance(text, str):
-            doc = Document(text)
+            doc = Document(original=text)
         else:
             doc = text
 
         if doc.cleaned is None:
-            doc.cleaned = doc.text
+            doc.cleaned = doc.original
 
         doc.cleaned = re.sub(r"http\S+", "", doc.cleaned)
         doc.cleaned = re.sub(r"www\S+", "", doc.cleaned)
@@ -57,12 +57,12 @@ class RemoveEmail(Cleaner):
         Returns: Document
         """
         if isinstance(text, str):
-            doc = Document(text)
+            doc = Document(original=text)
         else:
             doc = text
 
         if doc.cleaned is None:
-            doc.cleaned = doc.text
+            doc.cleaned = doc.original
 
         doc.cleaned = re.sub(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", "", doc.cleaned)
 
@@ -81,12 +81,12 @@ class RemoveNumber(Cleaner):
         Returns: Document
         """
         if isinstance(text, str):
-            doc = Document(text)
+            doc = Document(original=text)
         else:
             doc = text
 
         if doc.cleaned is None:
-            doc.cleaned = doc.text
+            doc.cleaned = doc.original
 
         doc.cleaned = re.sub(r'[0-9]+', '', doc.cleaned)
         return doc
@@ -104,12 +104,12 @@ class RemovePunctuation(Cleaner):
         Returns: Document
         """
         if isinstance(text, str):
-            doc = Document(text)
+            doc = Document(original=text)
         else:
             doc = text
 
         if doc.cleaned is None:
-            doc.cleaned = doc.text
+            doc.cleaned = doc.original
 
         doc.cleaned = doc.cleaned.translate(str.maketrans('', '', punctuation))
         return doc
@@ -150,12 +150,12 @@ class RemoveHTML(Cleaner):
         Returns: Document
         """
         if isinstance(text, str):
-            doc = Document(text)
+            doc = Document(original=text)
         else:
             doc = text
 
         if doc.cleaned is None:
-            doc.cleaned = doc.text
+            doc.cleaned = doc.original
 
         doc.cleaned = self.c(doc.cleaned, features=self.features, *self.args, **self.kwargs).get_text()
         return doc
