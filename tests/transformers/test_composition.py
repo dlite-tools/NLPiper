@@ -65,5 +65,4 @@ class TestCompose:
             for token, result in zip(phrase, phrase_result):
                 token.processed = result
 
-        assert pipe(inputs) == doc
         assert pipe(input_doc) == doc
