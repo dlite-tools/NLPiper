@@ -72,3 +72,8 @@ class TestMosesTokenizer:
     def test_if_no_package(self):
         with pytest.raises(ModuleNotFoundError):
             MosesTokenizer()
+
+
+class TestRemoveStopWords:
+    def test_remove_stop_words(self):
+        assert 0
