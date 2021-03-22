@@ -55,7 +55,7 @@ class TestCompose:
 
         pipe = Compose([crn, t, nct, nrp])
 
-        doc = crn(inputs)
+        doc = crn(Document(original=inputs))
         doc.tokens = [[Token(original=token) for token in doc.cleaned.split()]]
         input_doc = doc
 

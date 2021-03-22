@@ -18,20 +18,6 @@ def hide_available_pkg(monkeypatch):
     monkeypatch.setattr(builtins, '__import__', mocked_import)
 
 
-class TestRemovePunctuation:
-    @pytest.mark.parametrize('inputs,results', [
-        ('TEST.%$#"#', 'TEST'),
-        (r'!"te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t', 'test'),
-    ])
-    def test_remove_punctuation(self, inputs, results):
-        r = RemovePunctuation()
-        doc = Document(original=inputs)
-        doc.cleaned = results
-
-        assert r(inputs) == doc
-        assert r(Document(original=inputs)) == doc
-
-
 class TestRemoveUrl:
     @pytest.mark.parametrize('inputs,results', [
         ('TEST', 'TEST'),
@@ -46,8 +32,13 @@ class TestRemoveUrl:
         doc = Document(original=inputs)
         doc.cleaned = results
 
-        assert r(inputs) == doc
         assert r(Document(original=inputs)) == doc
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        with pytest.raises(TypeError):
+            r = RemoveUrl()
+            r(inputs)
 
 
 class TestRemoveEmail:
@@ -61,8 +52,13 @@ class TestRemoveEmail:
         doc = Document(original=inputs)
         doc.cleaned = results
 
-        assert r(inputs) == doc
         assert r(Document(original=inputs)) == doc
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        with pytest.raises(TypeError):
+            r = RemoveEmail()
+            r(inputs)
 
 
 class TestRemoveNumber:
@@ -76,8 +72,32 @@ class TestRemoveNumber:
         doc = Document(original=inputs)
         doc.cleaned = results
 
-        assert r(inputs) == doc
         assert r(Document(original=inputs)) == doc
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        with pytest.raises(TypeError):
+            r = RemoveNumber()
+            r(inputs)
+
+
+class TestRemovePunctuation:
+    @pytest.mark.parametrize('inputs,results', [
+        ('TEST.%$#"#', 'TEST'),
+        (r'!"te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t', 'test'),
+    ])
+    def test_remove_punctuation(self, inputs, results):
+        r = RemovePunctuation()
+        doc = Document(original=inputs)
+        doc.cleaned = results
+
+        assert r(Document(original=inputs)) == doc
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        with pytest.raises(TypeError):
+            r = RemovePunctuation()
+            r(inputs)
 
 
 class TestRemoveHTML:
@@ -92,9 +112,13 @@ class TestRemoveHTML:
         doc = Document(original=inputs)
         doc.cleaned = results
 
-        assert r(inputs) == doc
         assert r(Document(original=inputs)) == doc
-        assert r.log == {"features": "html.parser"}
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        with pytest.raises(TypeError):
+            r = RemoveHTML()
+            r(inputs)
 
     @pytest.mark.usefixtures('hide_available_pkg')
     def test_if_no_package(self):
