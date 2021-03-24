@@ -14,7 +14,7 @@ class Compose:
         """Pipeline for process text.
 
         Args:
-            transformers (List[Callable]): List of callable objects with implemented method ```__call__```.
+            transformers (List[BaseTransformer]): List of callable objects with implemented method ```__call__```.
         """
         self.transformers = transformers
         log.info("[Created] %s", repr(self))
