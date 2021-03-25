@@ -41,7 +41,7 @@ class TestCaseTokens:
     def test_document_wo_tokens(self, inputs):
         with pytest.raises(TypeError):
             n = CaseTokens()
-            n(Document(inputs))
+            n(Document(original=inputs))
 
 
 class TestRemovePunctuation:
@@ -76,4 +76,4 @@ class TestRemovePunctuation:
     def test_document_wo_tokens(self, inputs):
         with pytest.raises(TypeError):
             n = CaseTokens()
-            n(Document(inputs))
+            n(Document(original=inputs))
