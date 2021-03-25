@@ -74,7 +74,7 @@ class RemovePunctuation(Normalizer):
         """Remove punctuation.
 
         Args:
-            doc (Document): List of tokens to be normalized.
+            doc (Document): Document to be normalized.
 
         Returns: Document
         """
