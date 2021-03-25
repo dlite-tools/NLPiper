@@ -30,7 +30,7 @@ class Normalizer(BaseTransformer):
             doc.phrases = doc.cleaned
 
         if doc.tokens is None:
-            raise ("Document does not contain tokens.")
+            raise TypeError("Document does not contain tokens.")
 
         for phrase in doc.tokens:
             for token in phrase:
