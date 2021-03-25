@@ -10,26 +10,32 @@ class TestCaseTokens:
         ('upper', [['test']], [['TEST']]),
     ])
     def test_modes(self, mode, inputs, results):
-        c = CaseTokens(mode)
+        n = CaseTokens(mode)
 
+        # Prepare input doc
         phrases = [" ".join(phrase) for phrase in inputs]
         doc = Document(original=" ".join(phrases))
         doc.phrases = phrases
         doc.tokens = [[Token(original=token) for token in phrase] for phrase in inputs]
         input_doc = doc
 
+        # Prepare result doc
         for phrase, phrase_result in zip(doc.tokens, results):
             for token, result in zip(phrase, phrase_result):
-                token.processed = result
+                token.cleaned = result
 
-        assert c(inputs) == doc
-        assert c(input_doc) == doc
-        assert c.log == {"mode": mode}
+        assert n(input_doc) == doc
 
     @pytest.mark.parametrize('mode', [1, 'other'])
     def test_non_existent_mode(self, mode):
         with pytest.raises(AssertionError):
             CaseTokens(mode)
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        with pytest.raises(TypeError):
+            n = CaseTokens()
+            n(inputs)
 
 
 class TestRemovePunctuation:
@@ -38,17 +44,24 @@ class TestRemovePunctuation:
         ([[r'!"te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t']], [['test']]),
     ])
     def test_remove_punctuation(self, inputs, results):
-        r = RemovePunctuation()
+        n = RemovePunctuation()
 
+        # Prepare input doc
         phrases = [" ".join(phrase) for phrase in inputs]
         doc = Document(original=" ".join(phrases))
         doc.phrases = phrases
         doc.tokens = [[Token(original=token) for token in phrase] for phrase in inputs]
         input_doc = doc
 
+        # Prepare result doc
         for phrase, phrase_result in zip(doc.tokens, results):
             for token, result in zip(phrase, phrase_result):
-                token.processed = result
+                token.cleaned = result
 
-        assert r(inputs) == doc
-        assert r(input_doc) == doc
+        assert n(input_doc) == doc
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        with pytest.raises(TypeError):
+            n = RemovePunctuation()
+            n(inputs)
