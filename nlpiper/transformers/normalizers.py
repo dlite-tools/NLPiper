@@ -1,9 +1,8 @@
 """Normalizer Module."""
 
 from string import punctuation
-from typing import List, Union
 
-from nlpiper.core.document import Document, Token
+from nlpiper.core.document import Document
 from nlpiper.transformers import BaseTransformer
 
 __all__ = ["CaseTokens", "RemovePunctuation"]
@@ -31,7 +30,7 @@ class Normalizer(BaseTransformer):
             doc.phrases = doc.cleaned
 
         if doc.tokens is None:
-            raise TypeError("Document does not contain tokens.")
+            raise ("Document does not contain tokens.")
 
         for phrase in doc.tokens:
             for token in phrase:
@@ -75,9 +74,9 @@ class RemovePunctuation(Normalizer):
         """Remove punctuation.
 
         Args:
-            tokens (Union[List[List[str]], Document]): List of tokens to be normalized.
+            doc (Document): List of tokens to be normalized.
 
-        Returns: List[str]
+        Returns: Document
         """
         super()._validate_document(doc)
 
