@@ -20,6 +20,7 @@ class TestCompose:
         pipe = Compose([crn, nrp])
 
         assert pipe(Document(original=inputs)) == doc
+        assert repr(pipe) == "Compose([RemoveNumber(), RemovePunctuation()])"
 
     @pytest.mark.parametrize('inputs,results', [
         ([['TEST.%$#"#']], [['test']]),
