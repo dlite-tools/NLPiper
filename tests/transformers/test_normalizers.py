@@ -37,6 +37,12 @@ class TestCaseTokens:
             n = CaseTokens()
             n(inputs)
 
+    @pytest.mark.parametrize('inputs', ["string", 123])
+    def test_document_wo_tokens(self, inputs):
+        with pytest.raises(TypeError):
+            n = CaseTokens()
+            n(Document(inputs))
+
 
 class TestRemovePunctuation:
     @pytest.mark.parametrize('inputs,results', [
@@ -65,3 +71,9 @@ class TestRemovePunctuation:
         with pytest.raises(TypeError):
             n = RemovePunctuation()
             n(inputs)
+
+    @pytest.mark.parametrize('inputs', ["string", 123])
+    def test_document_wo_tokens(self, inputs):
+        with pytest.raises(TypeError):
+            n = CaseTokens()
+            n(Document(inputs))
