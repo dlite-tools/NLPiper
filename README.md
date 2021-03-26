@@ -49,4 +49,4 @@ requests or bugfixes.
 ## License and Credits
 
 `NLPiper` is licensed under the [MIT license](LICENSE) and is written and
-maintained by Tomás Osório (@tomassosorio), Daniel Ferrari (@FerrariDG) and Carlos Alves (@cmalves)
+maintained by Tomás Osório ([@tomassosorio](https://github.com/tomassosorio)), Daniel Ferrari ([@FerrariDG](https://github.com/FerrariDG)) and Carlos Alves ([@cmalves](https://github.com/cmalves))
