@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class Token(BaseModel):
     original: str
-    processed: Optional[str] = None
+    cleaned: Optional[str] = None
     lemma: Optional[str] = None
     stem: Optional[str] = None
 

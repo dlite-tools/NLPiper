@@ -40,7 +40,7 @@ class TestCompose:
 
         for phrase, phrase_result in zip(doc.tokens, results):
             for token, result in zip(phrase, phrase_result):
-                token.processed = result
+                token.cleaned = result
 
         assert pipe(input_doc) == doc
 
@@ -62,6 +62,6 @@ class TestCompose:
 
         for phrase, phrase_result in zip(doc.tokens, results):
             for token, result in zip(phrase, phrase_result):
-                token.processed = result
+                token.cleaned = result
 
         assert pipe(input_doc) == doc

@@ -1,3 +1,5 @@
+import pytest
+
 from nlpiper.transformers import BaseTransformer
 
 
@@ -19,3 +21,8 @@ class TestBaseTransformer:
 
         base = BaseTransformer(**{'a': 2, 'b': 4, 'c': 10})
         assert repr(base) == "BaseTransformer(a=2, b=4, c=10)"
+
+    def test_call_raise(self):
+        with pytest.raises(NotImplementedError):
+            base = BaseTransformer()
+            base("test")

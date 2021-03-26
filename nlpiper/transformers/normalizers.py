@@ -1,22 +1,41 @@
 """Normalizer Module."""
 
 from string import punctuation
-from typing import List, Union
 
-from nlpiper.core.document import Document, Token
+from nlpiper.core.document import Document
+from nlpiper.transformers import BaseTransformer
 
 __all__ = ["CaseTokens", "RemovePunctuation"]
 
 
-class Normalizer:
+class Normalizer(BaseTransformer):
     """Abstract class to Normalizers."""
 
-    def __init__(self, *args, **kwargs):
-        args = {"args": list(args)} if len(args) != 0 else {}
-        self.log = {**kwargs, **args}
+    def _validate_document(self, doc: Document):
+        """Validate if document is ready to be processed.
 
-    def __call__(self, tokens: Union[List[List[str]], Document]) -> Document:
-        raise NotImplementedError
+        Args:
+            doc (Document): document to be cleaned.
+
+        Raises:
+            TypeError: if doc is not a Document.
+        """
+        if not isinstance(doc, Document):
+            raise TypeError("Argument doc is not of type Document")
+
+        if doc.cleaned is None:
+            doc.cleaned = doc.original
+
+        if doc.phrases is None:
+            doc.phrases = doc.cleaned
+
+        if doc.tokens is None:
+            raise TypeError("Document does not contain tokens.")
+
+        for phrase in doc.tokens:
+            for token in phrase:
+                if token.cleaned is None:
+                    token.cleaned = token.original
 
 
 class CaseTokens(Normalizer):
@@ -32,56 +51,36 @@ class CaseTokens(Normalizer):
         assert mode in ('upper', 'lower'), f'{mode} mode is not available, it can only be "upper" or "lower".'
         self.mode = mode
 
-    def __call__(self, tokens: Union[List[List[str]], Document]) -> Document:
+    def __call__(self, doc: Document) -> Document:
         """Lower Tokens.
 
         Args:
-            tokens (Union[List[List[str]], Document]): List of tokens to be normalized.
+            doc (Document): Document to be normalized.
 
         Returns: Document
         """
-        if isinstance(tokens, list):
-            phrases = [" ".join(phrase) for phrase in tokens]
-            doc = Document(original=" ".join(phrases))
-            doc.phrases = phrases
-            doc.tokens = [[Token(original=token) for token in phrase] for phrase in tokens]
-        else:
-            doc = tokens
+        super()._validate_document(doc)
 
         for phrase in doc.tokens:
             for token in phrase:
-                if token.processed is None:
-                    token.processed = getattr(token.original, self.mode)()
-                else:
-                    token.processed = getattr(token.processed, self.mode)()
-
+                token.cleaned = getattr(token.cleaned, self.mode)()
         return doc
 
 
 class RemovePunctuation(Normalizer):
     """Remove Punctuation."""
 
-    def __call__(self, tokens: Union[List[List[str]], Document]) -> Document:
+    def __call__(self, doc: Document) -> Document:
         """Remove punctuation.
 
         Args:
-            tokens (Union[List[List[str]], Document]): List of tokens to be normalized.
+            doc (Document): Document to be normalized.
 
-        Returns: List[str]
+        Returns: Document
         """
-        if isinstance(tokens, list):
-            phrases = [" ".join(phrase) for phrase in tokens]
-            doc = Document(original=" ".join(phrases))
-            doc.phrases = phrases
-            doc.tokens = [[Token(original=token) for token in phrase] for phrase in tokens]
-        else:
-            doc = tokens
+        super()._validate_document(doc)
 
         for phrase in doc.tokens:
             for token in phrase:
-                if token.processed is None:
-                    token.processed = token.original.translate(str.maketrans('', '', punctuation))
-                else:
-                    token.processed = token.processed.translate(str.maketrans('', '', punctuation))
-
+                token.cleaned = token.cleaned.translate(str.maketrans('', '', punctuation))
         return doc
