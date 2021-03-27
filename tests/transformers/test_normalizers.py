@@ -99,9 +99,9 @@ class TestRemovePunctuation:
 class TestRemoveStopWords:
     @pytest.mark.parametrize('inputs,results', [
         ([['This', 'is', 'a', 'stop', 'Word']], [['This', '', '', 'stop', 'Word']]),])
-    def test_remove_stop_words(self, inputs, results):
+    def test_remove_stop_words_w_case_sensitive(self, inputs, results):
         pytest.importorskip('nltk')
-        n = RemoveStopWords()
+        n = RemoveStopWords(case_sensitive=True)
 
         # Prepare input doc
         phrases = [" ".join(phrase) for phrase in inputs]
