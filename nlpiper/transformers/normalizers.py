@@ -5,7 +5,7 @@ from string import punctuation
 from nlpiper.core.document import Document
 from nlpiper.transformers import BaseTransformer
 
-__all__ = ["CaseTokens", "RemovePunctuation"]
+__all__ = ["CaseTokens", "RemovePunctuation", "RemoveStopWords"]
 
 
 class Normalizer(BaseTransformer):
@@ -89,21 +89,22 @@ class RemovePunctuation(Normalizer):
 class RemoveStopWords(Normalizer):
     """Remove Stop Words."""
 
-    def __init__(self, language: str = "english", lower_case: bool = True):
+    def __init__(self, language: str = "english", case_sensitive: bool = True):
         """Remove stop words.
 
         When removing stop words, the token will be replaced by an empty string, `""` if is a stop word.
 
         Args:
             language (str): Language chosen to remove stop words.
-            lower_case (bool): If is case sensitive or not. If `True` the token will be case lowered to compare with
-            stop words, e.g. token: "The" -> "the" which is within stop words, otherwise, it will not be considered a
+            case_sensitive (bool): if True, then will not remove 'This' since 'T' is upper case, else will lower the
+                token and compare with the language stop words.
             stop word.
         """
         super().__init__(language=language)
-        self.case = "lower" if lower_case else "__str__"
+        self.case_sensitive = "__str__" if case_sensitive else "lower"
         try:
             import nltk
+            nltk.download("stopwords")
             self.stopwords = nltk.corpus.stopwords.words(language)
 
         except ImportError:
@@ -111,27 +112,18 @@ class RemoveStopWords(Normalizer):
                   "See the docs at https://www.nltk.org/install.html for more information.")
             raise
 
-    def __call__(self, tokens: Union[List[List[str]], Document]) -> Document:
+    def __call__(self, doc: Document) -> Document:
         """Remove Stop Words.
 
         Args:
-            tokens (Union[List[List[str]], Document]): List of tokens to be normalized.
+            doc (Document): Document to be normalized.
 
         Returns: Document
         """
-        if isinstance(tokens, list):
-            phrases = [" ".join(phrase) for phrase in tokens]
-            doc = Document(" ".join(phrases))
-            doc.phrases = phrases
-            doc.tokens = [[Token(token) for token in phrase] for phrase in tokens]
-        else:
-            doc = tokens
+        super()._validate_document(doc)
 
         for phrase in doc.tokens:
             for token in phrase:
-                if token.processed is None:
-                    token.processed = "" if getattr(token.original, self.case)() in self.stopwords else token.original
-                else:
-                    token.processed = "" if getattr(token.processed, self.case)() in self.stopwords else token.processed
+                token.cleaned = "" if getattr(token.cleaned, self.case_sensitive)() in self.stopwords else token.cleaned
 
         return doc

@@ -1,6 +1,8 @@
+from copy import deepcopy
+
 import pytest
 
-from nlpiper.transformers.normalizers import CaseTokens, RemovePunctuation
+from nlpiper.transformers.normalizers import CaseTokens, RemovePunctuation, RemoveStopWords
 from nlpiper.core.document import Document, Token
 
 
@@ -75,5 +77,44 @@ class TestRemovePunctuation:
     @pytest.mark.parametrize('inputs', ["string", 123])
     def test_document_wo_tokens(self, inputs):
         with pytest.raises(TypeError):
-            n = CaseTokens()
+            n = RemovePunctuation()
+            n(Document(original=inputs))
+
+
+class TestRemoveStopWords:
+    @pytest.mark.parametrize('inputs,results', [
+        ([['This', 'is', 'a', 'stop', 'Word']], [['This', '', '', 'stop', 'Word']]),])
+    def test_remove_stop_words(self, inputs, results):
+        pytest.importorskip('nltk')
+        n = RemoveStopWords()
+
+        # Prepare input doc
+        phrases = [" ".join(phrase) for phrase in inputs]
+        doc = Document(original=" ".join(phrases))
+        doc.cleaned = doc.original
+        doc.phrases = phrases
+        doc.tokens = [[Token(original=token) for token in phrase] for phrase in inputs]
+        input_doc = deepcopy(doc)
+
+        # Prepare result doc
+        for phrase, phrase_result in zip(doc.tokens, results):
+            for token, result in zip(phrase, phrase_result):
+                token.cleaned = result
+
+        assert n(input_doc) == doc
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        pytest.importorskip('nltk')
+
+        with pytest.raises(TypeError):
+            n = RemoveStopWords()
+            n(inputs)
+
+    @pytest.mark.parametrize('inputs', ["string", 123])
+    def test_document_wo_tokens(self, inputs):
+        pytest.importorskip('nltk')
+
+        with pytest.raises(TypeError):
+            n = RemoveStopWords()
             n(Document(original=inputs))
