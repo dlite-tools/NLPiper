@@ -96,9 +96,9 @@ class RemoveStopWords(Normalizer):
 
         Args:
             language (str): Language chosen to remove stop words.
-            case_sensitive (bool): if True, then will not remove 'This' since 'T' is upper case, else will lower the
-                token and compare with the language stop words.
-            stop word.
+            case_sensitive (bool): When True, the detection of stop words will be case sensitive, e.g. 'This' is a stop
+            word, however, since 'T' is upper case will not be considered as a stop word, otherwise, will be considered
+            as a stop word and replaced by an empty string, "".
         """
         super().__init__(language=language)
         self.case_sensitive = "__str__" if case_sensitive else "lower"
