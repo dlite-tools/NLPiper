@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 import pytest
 
 from nlpiper.transformers import cleaners, normalizers, tokenizers
@@ -34,9 +36,10 @@ class TestCompose:
 
         phrases = [" ".join(phrase) for phrase in inputs]
         doc = Document(original=" ".join(phrases))
+        doc.cleaned = doc.original
         doc.phrases = phrases
         doc.tokens = [[Token(original=token) for token in phrase] for phrase in inputs]
-        input_doc = doc
+        input_doc = deepcopy(doc)
 
         for phrase, phrase_result in zip(doc.tokens, results):
             for token, result in zip(phrase, phrase_result):
@@ -44,7 +47,7 @@ class TestCompose:
 
         assert pipe(input_doc) == doc
 
-    @pytest.mark.parametrize('inputs,results', [
+    @pytest.mark.parametrize('inputs, results', [
         ('T2E1ST.%$#"# test', [['test', 'test']]),
         (r'!"t2e""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t', [['test']]),
     ])
@@ -57,8 +60,9 @@ class TestCompose:
         pipe = Compose([crn, t, nct, nrp])
 
         doc = crn(Document(original=inputs))
+        doc.phrases = [doc.cleaned]
         doc.tokens = [[Token(original=token) for token in doc.cleaned.split()]]
-        input_doc = doc
+        input_doc = deepcopy(doc)
 
         for phrase, phrase_result in zip(doc.tokens, results):
             for token, result in zip(phrase, phrase_result):

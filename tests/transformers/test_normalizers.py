@@ -17,9 +17,10 @@ class TestCaseTokens:
         # Prepare input doc
         phrases = [" ".join(phrase) for phrase in inputs]
         doc = Document(original=" ".join(phrases))
+        doc.cleaned = doc.original
         doc.phrases = phrases
         doc.tokens = [[Token(original=token) for token in phrase] for phrase in inputs]
-        input_doc = doc
+        input_doc = deepcopy(doc)
 
         # Prepare result doc
         for phrase, phrase_result in zip(doc.tokens, results):
@@ -57,9 +58,10 @@ class TestRemovePunctuation:
         # Prepare input doc
         phrases = [" ".join(phrase) for phrase in inputs]
         doc = Document(original=" ".join(phrases))
+        doc.cleaned = doc.original
         doc.phrases = phrases
         doc.tokens = [[Token(original=token) for token in phrase] for phrase in inputs]
-        input_doc = doc
+        input_doc = deepcopy(doc)
 
         # Prepare result doc
         for phrase, phrase_result in zip(doc.tokens, results):
