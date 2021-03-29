@@ -7,6 +7,7 @@ name = "pypi"
 bs4 = "*"
 pydantic = "*"
 sacremoses = "*"
+nltk = "*"
 
 [dev-packages]
 flake8 = "*"
