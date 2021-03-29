@@ -100,7 +100,7 @@ class RemoveStopWords(Normalizer):
             word, however, since 'T' is upper case will not be considered as a stop word, otherwise, will be considered
             as a stop word and replaced by an empty string, "".
         """
-        super().__init__(language=language)
+        super().__init__(language=language, case_sensitive=case_sensitive)
         self.case_sensitive = "__str__" if case_sensitive else "lower"
         try:
             import nltk
