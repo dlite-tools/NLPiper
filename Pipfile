@@ -5,9 +5,9 @@ name = "pypi"
 
 [packages]
 bs4 = "*"
+nltk = "*"
 pydantic = "*"
 sacremoses = "*"
-nltk = "*"
 
 [dev-packages]
 flake8 = "*"
