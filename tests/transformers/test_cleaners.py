@@ -134,6 +134,7 @@ class TestStripAccents:
         ('unicode', 'ìíîïñòóôõöùúûüý', 'iiiinooooouuuuy'),
         ('ascii', 'ìíîïñòóôõöùúûüý', 'iiiinooooouuuuy'),
         ('unicode', 'this is à test', 'this is a test'),
+        ('unicode', 'this is a test', 'this is a test'),
         ('ascii', 'this is à test', 'this is a test'),
         ('unicode', '\u0625', '\u0627'),
         ('ascii', '\u0625', ''),

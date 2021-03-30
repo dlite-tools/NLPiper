@@ -184,7 +184,7 @@ class StripAccents(Cleaner):
         Returns: str
         """
         try:
-            # If `s` is ASCII-compatible, then it does not contain any accented
+            # If `text` is ASCII-compatible, then it does not contain any accented
             # characters and we can avoid an expensive list comprehension
             text.encode("ASCII", errors="strict")
             return text
