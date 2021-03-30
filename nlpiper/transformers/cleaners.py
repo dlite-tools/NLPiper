@@ -142,10 +142,10 @@ class RemoveHTML(Cleaner):
 
 
 class StripAccents(Cleaner):
-    """Remove accents and character normalization."""
+    """Strip accents and perform character normalization."""
 
     def __init__(self, mode: str = "unicode"):
-        """Strip accents and character normalization from a document.
+        """Strip accents and perform character normalization from a document.
 
         Args:
             mode (str): Available methods: `ascii` and `unicode`. The first method is faster and only works for
@@ -161,7 +161,7 @@ class StripAccents(Cleaner):
                                               f"The only available modes are: 'unicode' and 'ascii'.")
 
     def __call__(self, doc: Document) -> Document:
-        """Strip accents from the document.
+        """Strip accents and perform character normalization from the document.
 
         Args:
             doc (Document): document to be cleaned.
