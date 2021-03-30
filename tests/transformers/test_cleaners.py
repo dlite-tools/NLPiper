@@ -2,7 +2,14 @@ import builtins
 
 import pytest
 
-from nlpiper.transformers.cleaners import RemovePunctuation, RemoveUrl, RemoveEmail, RemoveNumber, RemoveHTML
+from nlpiper.transformers.cleaners import (
+    RemoveEmail,
+    RemoveEOF,
+    RemoveHTML,
+    RemoveNumber,
+    RemovePunctuation,
+    RemoveUrl
+)
 from nlpiper.core.document import Document
 
 
@@ -124,3 +131,25 @@ class TestRemoveHTML:
     def test_if_no_package(self):
         with pytest.raises(ModuleNotFoundError):
             RemoveHTML()
+
+
+class TestRemoveEOF:
+    @pytest.mark.parametrize('inputs,results', [
+        ('', ''),
+        ('a basic phrase', 'a basic phrase'),
+        ('line\nline', 'line line'),
+        ('line.\nline', 'line. line')
+    ])
+    def test_remove_eof(self, inputs, results):
+        doc = Document(original=inputs)
+
+        r = RemoveEOF()
+        r(doc)
+
+        assert doc.cleaned == results
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        with pytest.raises(TypeError):
+            r = RemoveEOF()
+            r(inputs)

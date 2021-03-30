@@ -99,6 +99,24 @@ class RemovePunctuation(Cleaner):
         return doc
 
 
+class RemoveEOF(Cleaner):
+    """Remove End of Line."""
+
+    def __call__(self, doc: Document) -> Document:
+        """Remove end of line from a document.
+
+        Args:
+            doc (Document): document to be cleaned.
+
+        Returns: Document
+        """
+        super()._validate_document(doc)
+
+        doc.cleaned = doc.cleaned.translate(str.maketrans('\n', ' '))
+
+        return doc
+
+
 class RemoveHTML(Cleaner):
     """Remove HTML and XML using BeautifulSoup4."""
 
