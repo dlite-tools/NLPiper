@@ -21,3 +21,7 @@ class BaseTransformer:
 
     def __call__(self, doc: Document) -> Document:
         raise NotImplementedError
+
+    def _add_step(self, doc: Document) -> None:
+        """Register a step transformation into the document object."""
+        doc.steps.append(repr(self))
