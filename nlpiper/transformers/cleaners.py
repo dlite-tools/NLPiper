@@ -6,7 +6,14 @@ from string import punctuation
 from nlpiper.core.document import Document
 from nlpiper.transformers import BaseTransformer
 
-__all__ = ["RemoveUrl", "RemoveEmail", "RemoveNumber", "RemovePunctuation", "RemoveHTML"]
+__all__ = [
+    "RemoveEmail",
+    "RemoveEOF",
+    "RemoveHTML",
+    "RemoveNumber",
+    "RemovePunctuation",
+    "RemoveUrl"
+]
 
 
 class Cleaner(BaseTransformer):
