@@ -5,7 +5,7 @@ from string import punctuation
 from nlpiper.core.document import Document
 from nlpiper.transformers import BaseTransformer
 
-__all__ = ["CaseTokens", "RemovePunctuation"]
+__all__ = ["CaseTokens", "RemovePunctuation", "RemoveStopWords"]
 
 
 class Normalizer(BaseTransformer):
@@ -83,4 +83,47 @@ class RemovePunctuation(Normalizer):
         for phrase in doc.tokens:
             for token in phrase:
                 token.cleaned = token.cleaned.translate(str.maketrans('', '', punctuation))
+        return doc
+
+
+class RemoveStopWords(Normalizer):
+    """Remove Stop Words."""
+
+    def __init__(self, language: str = "english", case_sensitive: bool = True):
+        """Remove stop words.
+
+        When removing stop words, the token will be replaced by an empty string, `""` if is a stop word.
+
+        Args:
+            language (str): Language chosen to remove stop words.
+            case_sensitive (bool): When True, the detection of stop words will be case sensitive, e.g. 'This' is a stop
+            word, however, since 'T' is upper case will not be considered as a stop word, otherwise, will be considered
+            as a stop word and replaced by an empty string, "".
+        """
+        super().__init__(language=language, case_sensitive=case_sensitive)
+        self.case_sensitive = "__str__" if case_sensitive else "lower"
+        try:
+            import nltk
+            nltk.download("stopwords")
+            self.stopwords = nltk.corpus.stopwords.words(language)
+
+        except ImportError:
+            print("Please install NLTK. "
+                  "See the docs at https://www.nltk.org/install.html for more information.")
+            raise
+
+    def __call__(self, doc: Document) -> Document:
+        """Remove Stop Words.
+
+        Args:
+            doc (Document): Document to be normalized.
+
+        Returns: Document
+        """
+        super()._validate_document(doc)
+
+        for phrase in doc.tokens:
+            for token in phrase:
+                token.cleaned = "" if getattr(token.cleaned, self.case_sensitive)() in self.stopwords else token.cleaned
+
         return doc
