@@ -128,7 +128,7 @@ class TestRemoveHTML:
 
 
 class TestStripAccents:
-    @pytest.mark.parametrize('mode, inputs,results', [
+    @pytest.mark.parametrize('mode,inputs,results', [
         ('unicode', 'àáâãäåçèéêë', 'aaaaaaceeee'),
         ('ascii', 'àáâãäåçèéêë', 'aaaaaaceeee'),
         ('unicode', 'ìíîïñòóôõöùúûüý', 'iiiinooooouuuuy'),
