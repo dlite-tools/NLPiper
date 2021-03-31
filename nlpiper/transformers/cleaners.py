@@ -7,7 +7,6 @@ from unicodedata import normalize, combining
 from nlpiper.core.document import Document
 from nlpiper.transformers import BaseTransformer
 
-
 __all__ = [
     "RemoveEmail",
     "RemoveEOF",
