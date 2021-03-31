@@ -1,4 +1,6 @@
 """Transformers Module."""
+from enum import Enum, auto
+
 from nlpiper.core.document import Document
 from nlpiper.logger import log
 
@@ -25,3 +27,47 @@ class BaseTransformer:
     def _add_step(self, doc: Document) -> None:
         """Register a step transformation into the document object."""
         doc.steps.append(repr(self))
+
+
+class TransformersType(Enum):
+    CLEANERS = auto()
+    TOKENIZERS = auto()
+    NORMALIZERS = auto()
+
+
+# Decorators
+def validate(transformer_type: TransformersType):
+    """Validate a transformation call.
+
+    Validations:
+    - The 'doc' argument must be an instance of Document class.
+    - Cleaners can not be called for document with tokens.
+    """
+    def inner_validate(func):
+        def wrapper(*args, **kwargs):
+            doc: Document = args[1]
+            if not isinstance(doc, Document):
+                raise TypeError("Argument doc is not of type Document")
+
+            if transformer_type == TransformersType.CLEANERS:
+                if doc.tokens is not None:
+                    raise RuntimeWarning("Cleaners can not be applied on documents with tokens")
+
+            return func(*args, **kwargs)
+        return wrapper
+    return inner_validate
+
+
+def add_step(func):
+    """Register a transformation into the document object."""
+
+    def wrapper(*args, **kwargs):
+        out = func(*args, **kwargs)
+        if out is None:
+            args[1].steps.append(repr(args[0]))
+        else:
+            out.steps.append(repr(args[0]))
+
+        return out
+
+    return wrapper
