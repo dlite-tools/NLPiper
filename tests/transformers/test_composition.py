@@ -46,6 +46,7 @@ class TestCompose:
                 token.cleaned = result
 
         assert pipe(input_doc) == doc
+        assert repr(pipe) == "Compose([CaseTokens(mode='lower'), RemovePunctuation()])"
 
     @pytest.mark.parametrize('inputs, results', [
         ('T2E1ST.%$#"# test', [['test', 'test']]),
@@ -69,3 +70,4 @@ class TestCompose:
                 token.cleaned = result
 
         assert pipe(input_doc) == doc
+        assert repr(pipe) == "Compose([RemoveNumber(), BasicTokenizer(), CaseTokens(mode='lower'), RemovePunctuation()])"
