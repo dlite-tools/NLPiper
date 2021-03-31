@@ -2,6 +2,7 @@
 
 import re
 from string import punctuation
+from unicodedata import normalize, combining
 
 from nlpiper.core.document import Document
 from nlpiper.transformers import BaseTransformer
@@ -12,7 +13,8 @@ __all__ = [
     "RemoveHTML",
     "RemoveNumber",
     "RemovePunctuation",
-    "RemoveUrl"
+    "RemoveUrl",
+    "StripAccents"
 ]
 
 
@@ -163,3 +165,72 @@ class RemoveHTML(Cleaner):
 
         doc.cleaned = self.c(doc.cleaned, features=self.features, *self.args, **self.kwargs).get_text()
         return doc
+
+
+class StripAccents(Cleaner):
+    """Strip accents and perform character normalization."""
+
+    def __init__(self, mode: str = "unicode"):
+        """Strip accents and perform character normalization from a document.
+
+        Args:
+            mode (str): Available methods: `ascii` and `unicode`. The first method is faster and only works for
+            characters that have an direct ASCII mapping. The second is sightly slower but works in any characters.
+            (Default: `unicode`)
+
+        Warning: mode `ascii` is only suited for languages that have a direct
+        transliteration to ASCII symbols.
+        """
+        super().__init__(mode=mode)
+        self.mode = mode
+        assert mode in ['unicode', 'ascii'], (f"{mode} is not implemented. "
+                                              f"The only available modes are: 'unicode' and 'ascii'.")
+
+    def __call__(self, doc: Document) -> Document:
+        """Strip accents and perform character normalization from the document.
+
+        Args:
+            doc (Document): document to be cleaned.
+
+        Returns: Document
+        """
+        super()._validate_document(doc)
+
+        doc.cleaned = (self._strip_accents_unicode(doc.cleaned) if self.mode == 'unicode'
+                       else self._strip_accents_ascii(doc.cleaned))
+        return doc
+
+    @staticmethod
+    def _strip_accents_unicode(text):
+        """Strip accents using unicode method.
+
+        Args:
+            text (str): Text to be stripped.
+
+        Returns: str
+        """
+        try:
+            # If `text` is ASCII-compatible, then it does not contain any accented
+            # characters and we can avoid an expensive list comprehension
+            text.encode("ASCII", errors="strict")
+            return text
+        except UnicodeEncodeError:
+            normalized = normalize('NFKD', text)
+            return ''.join([c for c in normalized if not combining(c)])
+
+    @staticmethod
+    def _strip_accents_ascii(text):
+        """Strip accents using ASCII method.
+
+        This will transform accentuated unicode symbols into ASCII or nothing.
+
+        Warning: this is only suited for languages that have a direct
+        transliteration to ASCII symbols.
+
+        Args:
+            text (str): Text to be stripped.
+
+        Returns: str
+        """
+        nkfd_form = normalize('NFKD', text)
+        return nkfd_form.encode('ASCII', 'ignore').decode('ASCII')

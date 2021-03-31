@@ -8,7 +8,8 @@ from nlpiper.transformers.cleaners import (
     RemoveHTML,
     RemoveNumber,
     RemovePunctuation,
-    RemoveUrl
+    RemoveUrl,
+    StripAccents
 )
 from nlpiper.core.document import Document
 
@@ -131,6 +132,43 @@ class TestRemoveHTML:
     def test_if_no_package(self):
         with pytest.raises(ModuleNotFoundError):
             RemoveHTML()
+
+
+class TestStripAccents:
+    @pytest.mark.parametrize('mode,inputs,results', [
+        ('unicode', 'àáâãäåçèéêë', 'aaaaaaceeee'),
+        ('ascii', 'àáâãäåçèéêë', 'aaaaaaceeee'),
+        ('unicode', 'ìíîïñòóôõöùúûüý', 'iiiinooooouuuuy'),
+        ('ascii', 'ìíîïñòóôõöùúûüý', 'iiiinooooouuuuy'),
+        ('unicode', 'this is à test', 'this is a test'),
+        ('unicode', 'this is a test', 'this is a test'),
+        ('ascii', 'this is à test', 'this is a test'),
+        ('unicode', '\u0625', '\u0627'),
+        ('ascii', '\u0625', ''),
+        ('unicode', 'o\u0308', 'o'),
+        ('ascii', 'o\u0308', 'o'),
+        ('unicode', '\u0300\u0301\u0302\u0303', ''),
+        ('ascii', '\u0300\u0301\u0302\u0303', ''),
+        ('unicode', 'o\u0308\u0304', 'o'),
+        ('ascii', 'o\u0308\u0304', 'o'),
+    ])
+    def test_strip_accents(self, mode, inputs, results):
+        r = StripAccents(mode=mode)
+        doc = Document(original=inputs)
+        doc.cleaned = results
+
+        assert r(Document(original=inputs)) == doc
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        with pytest.raises(TypeError):
+            r = StripAccents()
+            r(inputs)
+
+    @pytest.mark.parametrize('mode', ["random", 2])
+    def test_with_invalid_mode(self, mode):
+        with pytest.raises(AssertionError):
+            r = StripAccents(mode=mode)
 
 
 class TestRemoveEOF:
