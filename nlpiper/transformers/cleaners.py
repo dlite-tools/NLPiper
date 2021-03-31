@@ -7,7 +7,16 @@ from unicodedata import normalize, combining
 from nlpiper.core.document import Document
 from nlpiper.transformers import BaseTransformer
 
-__all__ = ["RemoveUrl", "RemoveEmail", "RemoveNumber", "RemovePunctuation", "RemoveHTML", "StripAccents"]
+
+__all__ = [
+    "RemoveEmail",
+    "RemoveEOF",
+    "RemoveHTML",
+    "RemoveNumber",
+    "RemovePunctuation",
+    "RemoveUrl",
+    "StripAccents"
+]
 
 
 class Cleaner(BaseTransformer):
@@ -97,6 +106,24 @@ class RemovePunctuation(Cleaner):
         super()._validate_document(doc)
 
         doc.cleaned = doc.cleaned.translate(str.maketrans('', '', punctuation))
+        return doc
+
+
+class RemoveEOF(Cleaner):
+    """Remove End of Line."""
+
+    def __call__(self, doc: Document) -> Document:
+        """Remove end of line from a document.
+
+        Args:
+            doc (Document): document to be cleaned.
+
+        Returns: Document
+        """
+        super()._validate_document(doc)
+
+        doc.cleaned = doc.cleaned.translate(str.maketrans('\n', ' '))
+
         return doc
 
 

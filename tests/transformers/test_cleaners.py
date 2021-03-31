@@ -2,8 +2,15 @@ import builtins
 
 import pytest
 
-from nlpiper.transformers.cleaners import (RemovePunctuation, RemoveUrl, RemoveEmail, RemoveNumber, RemoveHTML,
-                                           StripAccents)
+from nlpiper.transformers.cleaners import (
+    RemoveEmail,
+    RemoveEOF,
+    RemoveHTML,
+    RemoveNumber,
+    RemovePunctuation,
+    RemoveUrl,
+    StripAccents
+)
 from nlpiper.core.document import Document
 
 
@@ -152,6 +159,24 @@ class TestStripAccents:
 
         assert r(Document(original=inputs)) == doc
 
+    
+    class TestRemoveEOF:
+    @pytest.mark.parametrize('inputs,results', [
+        ('', ''),
+        ('a basic phrase', 'a basic phrase'),
+        ('line\nline', 'line line'),
+        ('line.\nline', 'line. line')
+    ])
+    def test_remove_eof(self, inputs, results):
+        doc = Document(original=inputs)
+
+        r = RemoveEOF()
+        r(doc)
+
+        assert doc.cleaned == results
+            r = RemoveEOF()
+            r(inputs)
+    
     @pytest.mark.parametrize('inputs', ["string", 2])
     def test_with_invalid_document(self, inputs):
         with pytest.raises(TypeError):

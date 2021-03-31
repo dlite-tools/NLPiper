@@ -15,3 +15,4 @@ class Document(BaseModel):
     cleaned: Optional[str] = None
     phrases: Optional[List[str]] = None
     tokens: Optional[List[List[Token]]] = None
+    steps: List[str] = []

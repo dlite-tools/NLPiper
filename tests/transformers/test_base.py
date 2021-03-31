@@ -1,6 +1,7 @@
 import pytest
 
 from nlpiper.transformers import BaseTransformer
+from nlpiper.core.document import Document
 
 
 class TestBaseTransformer:
@@ -25,4 +26,13 @@ class TestBaseTransformer:
     def test_call_raise(self):
         with pytest.raises(NotImplementedError):
             base = BaseTransformer()
-            base("test")
+            doc = Document(original="test")
+            base(doc)
+
+    def test_step_registration(self):
+        doc = Document(original="test")
+
+        base = BaseTransformer()
+        base._add_step(doc)
+
+        assert doc.steps == [repr(base)]
