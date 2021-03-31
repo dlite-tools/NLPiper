@@ -159,8 +159,19 @@ class TestStripAccents:
 
         assert r(Document(original=inputs)) == doc
 
-    
-    class TestRemoveEOF:
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_document(self, inputs):
+        with pytest.raises(TypeError):
+            r = StripAccents()
+            r(inputs)
+
+    @pytest.mark.parametrize('mode', ["random", 2])
+    def test_with_invalid_mode(self, mode):
+        with pytest.raises(AssertionError):
+            r = StripAccents(mode=mode)
+
+
+class TestRemoveEOF:
     @pytest.mark.parametrize('inputs,results', [
         ('', ''),
         ('a basic phrase', 'a basic phrase'),
@@ -174,16 +185,9 @@ class TestStripAccents:
         r(doc)
 
         assert doc.cleaned == results
-            r = RemoveEOF()
-            r(inputs)
-    
+
     @pytest.mark.parametrize('inputs', ["string", 2])
     def test_with_invalid_document(self, inputs):
         with pytest.raises(TypeError):
-            r = StripAccents()
+            r = RemoveEOF()
             r(inputs)
-
-    @pytest.mark.parametrize('mode', ["random", 2])
-    def test_with_invalid_mode(self, mode):
-        with pytest.raises(AssertionError):
-            r = StripAccents(mode=mode)
