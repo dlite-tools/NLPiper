@@ -21,7 +21,7 @@ class BaseTransformer:
         )
         return "%s(%s)" % (self.__class__.__name__, params)
 
-    def __call__(self, doc: Document) -> Document:
+    def __call__(self, doc: Document, inplace: bool = False) -> Document:
         raise NotImplementedError
 
     def _add_step(self, doc: Document) -> None:
