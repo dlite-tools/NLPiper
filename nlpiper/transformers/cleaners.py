@@ -12,6 +12,7 @@ from nlpiper.transformers import (
     add_step,
     validate
 )
+from nlpiper.logger import log
 
 
 __all__ = [
@@ -160,8 +161,8 @@ class CleanMarkup(BaseTransformer):
             self.features = features
 
         except ImportError:
-            print("Please install BeautifulSoup4. "
-                  "See the docs at https://www.crummy.com/software/BeautifulSoup/ for more information.")
+            log.error("Please install BeautifulSoup4. "
+                      "See the docs at https://www.crummy.com/software/BeautifulSoup/ for more information.")
             raise
 
     @validate(TransformersType.CLEANERS)
