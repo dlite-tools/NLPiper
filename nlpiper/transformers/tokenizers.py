@@ -1,52 +1,48 @@
 """Tokenizer Module."""
 
-from nlpiper.core.document import Document, Token
-from nlpiper.transformers import BaseTransformer
-
-__all__ = ["BasicTokenizer", "MosesTokenizer"]
-
-
-class Tokenizer(BaseTransformer):
-    """Abstract class to Tokenizers."""
-
-    def _validate_document(self, doc: Document):
-        """Validate if document is ready to be processed.
-
-        Args:
-            doc (Document): document to be tokenized.
-
-        Raises:
-            TypeError: if doc is not a Document.
-        """
-        if not isinstance(doc, Document):
-            raise TypeError("Argument doc is not of type Document")
-
-        if doc.cleaned is None:
-            doc.cleaned = doc.original
-
-        if doc.phrases is None:
-            doc.phrases = [doc.cleaned]
+from typing import Optional
+from nlpiper.core.document import (
+    Document,
+    Token
+)
+from nlpiper.logger import log
+from nlpiper.transformers import (
+    BaseTransformer,
+    TransformersType,
+    add_step,
+    validate
+)
 
 
-class BasicTokenizer(Tokenizer):
+__all__ = [
+    "BasicTokenizer",
+    "MosesTokenizer"
+]
+
+
+class BasicTokenizer(BaseTransformer):
     """Basic tokenizer which tokenizes a document by splitting tokens by its blank spaces."""
 
-    def __call__(self, doc: Document) -> Document:
+    @validate(TransformersType.TOKENIZERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
         """Tokenize the document in a list of tokens.
 
         Args:
             doc (Document): Text to be tokenized.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
-        super()._validate_document(doc)
+        d = doc if inplace else doc._deepcopy()
 
-        doc.tokens = [[Token(original=token) for token in phrase.split()] for phrase in doc.phrases]
+        d.tokens = [Token(token) for token in d.cleaned.split()]
 
-        return doc
+        return None if inplace else d
 
 
-class MosesTokenizer(Tokenizer):
+class MosesTokenizer(BaseTransformer):
     """SacreMoses tokenizer.
 
     Transformer to tokenize a Document using Sacremoses, https://github.com/alvations/sacremoses
@@ -65,20 +61,24 @@ class MosesTokenizer(Tokenizer):
             self.t = MosesTokenizer(*args, **kwargs)
 
         except ImportError:
-            print("Please install SacreMoses. "
-                  "See the docs at https://github.com/alvations/sacremoses for more information.")
+            log.error("Please install SacreMoses. "
+                      "See the docs at https://github.com/alvations/sacremoses for more information.")
             raise
 
-    def __call__(self, doc: Document) -> Document:
+    @validate(TransformersType.TOKENIZERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
         """Tokenize the document in a list of tokens.
 
         Args:
             doc (Document): Document to be tokenized.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
-        super()._validate_document(doc)
+        d = doc if inplace else doc._deepcopy()
 
-        doc.tokens = [[Token(original=token) for token in self.t.tokenize(phrase)] for phrase in doc.phrases]
+        d.tokens = [Token(token) for token in self.t.tokenize(d.cleaned)]
 
-        return doc
+        return None if inplace else d
