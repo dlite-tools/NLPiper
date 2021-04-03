@@ -35,6 +35,8 @@ class CleanURL(BaseTransformer):
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
@@ -56,6 +58,8 @@ class CleanEmail(BaseTransformer):
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         d = doc if inplace else doc._deepcopy()
@@ -77,6 +81,8 @@ class CleanNumber(BaseTransformer):
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
@@ -97,6 +103,8 @@ class CleanPunctuation(BaseTransformer):
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
@@ -117,6 +125,8 @@ class CleanEOF(BaseTransformer):
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
@@ -161,6 +171,8 @@ class CleanMarkup(BaseTransformer):
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
@@ -197,6 +209,8 @@ class CleanAccents(BaseTransformer):
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
