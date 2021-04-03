@@ -49,9 +49,11 @@ def validate(transformer_type: TransformersType):
             if not isinstance(doc, Document):
                 raise TypeError("Argument doc is not of type Document")
 
-            if transformer_type == TransformersType.CLEANERS:
+            if transformer_type in (TransformersType.CLEANERS, TransformersType.TOKENIZERS):
                 if doc.tokens is not None:
-                    raise RuntimeWarning("Cleaners can not be applied on documents with tokens")
+                    raise RuntimeWarning(
+                        f"{transformer_type.name.title()} transformer can not be applied on documents with tokens"
+                    )
 
             return func(*args, **kwargs)
         return wrapper
