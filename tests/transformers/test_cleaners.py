@@ -44,7 +44,7 @@ class TestCleanersValidations:
         doc.tokens.append(Token("test"))
 
         c = CleanEOF()
-        with pytest.raises(RuntimeWarning):
+        with pytest.raises(RuntimeError):
             c(doc)
 
     @pytest.mark.usefixtures('hide_available_pkg')

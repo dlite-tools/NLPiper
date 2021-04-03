@@ -51,7 +51,7 @@ def validate(transformer_type: TransformersType):
 
             if transformer_type in (TransformersType.CLEANERS, TransformersType.TOKENIZERS):
                 if doc.tokens is not None:
-                    raise RuntimeWarning(
+                    raise RuntimeError(
                         f"{transformer_type.name.title()} transformer can not be applied on documents with tokens"
                     )
 
