@@ -75,7 +75,6 @@ class TestCleanURL:
         assert doc.steps == []
 
         # Inplace True
-        c = CleanURL()
         out = c(doc, True)
 
         assert doc.cleaned == results
