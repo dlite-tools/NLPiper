@@ -1,3 +1,4 @@
+from copy import deepcopy
 from typing import List, Optional
 
 from pydantic import BaseModel
@@ -21,3 +22,6 @@ class Document(BaseModel):
 
     def __init__(self, original: str, **data) -> None:
         super().__init__(original=original, cleaned=original, **data)
+
+    def _deepcopy(self):
+        return deepcopy(self)
