@@ -3,15 +3,18 @@ import builtins
 import pytest
 
 from nlpiper.transformers.cleaners import (
-    RemoveEmail,
-    RemoveEOF,
-    RemoveHTML,
-    RemoveNumber,
-    RemovePunctuation,
-    RemoveUrl,
-    StripAccents
+    CleanAccents,
+    CleanEmail,
+    CleanEOF,
+    CleanMarkup,
+    CleanNumber,
+    CleanPunctuation,
+    CleanURL,
 )
-from nlpiper.core.document import Document
+from nlpiper.core.document import (
+    Document,
+    Token
+)
 
 
 @pytest.fixture
@@ -19,14 +22,38 @@ def hide_available_pkg(monkeypatch):
     import_orig = builtins.__import__
 
     def mocked_import(name, *args, **kwargs):
-        if name == 'bs4':
+        if name in ('bs4'):
             raise ModuleNotFoundError()
         return import_orig(name, *args, **kwargs)
 
     monkeypatch.setattr(builtins, '__import__', mocked_import)
 
 
-class TestRemoveUrl:
+class TestCleanersValidations:
+
+    @pytest.mark.parametrize('inputs', ["string", 2])
+    def test_with_invalid_input(self, inputs):
+        with pytest.raises(TypeError):
+            c = CleanEOF()
+            c(inputs)
+
+    @pytest.mark.parametrize('inputs', ["test"])
+    def test_with_doc_tokens(self, inputs):
+        doc = Document("test")
+        doc.tokens = list()
+        doc.tokens.append(Token("test"))
+
+        c = CleanEOF()
+        with pytest.raises(RuntimeWarning):
+            c(doc)
+
+    @pytest.mark.usefixtures('hide_available_pkg')
+    def test_if_no_package(self):
+        with pytest.raises(ModuleNotFoundError):
+            CleanMarkup()
+
+
+class TestCleanURL:
     @pytest.mark.parametrize('inputs,results', [
         ('TEST', 'TEST'),
         ('test www.web.com', 'test '),
@@ -35,106 +62,134 @@ class TestRemoveUrl:
         ('test https:\\www.web.com', 'test '),
         ('testhttps:\\www.web.com', 'test'),
     ])
-    def test_remove_url(self, inputs, results):
-        r = RemoveUrl()
-        doc = Document(original=inputs)
-        doc.cleaned = results
+    def test_clean_url(self, inputs, results):
+        doc = Document(inputs)
 
-        assert r(Document(original=inputs)) == doc
+        # Inplace False
+        c = CleanURL()
+        out = c(doc)
 
-    @pytest.mark.parametrize('inputs', ["string", 2])
-    def test_with_invalid_document(self, inputs):
-        with pytest.raises(TypeError):
-            r = RemoveUrl()
-            r(inputs)
+        assert out.cleaned == results
+        assert out.steps == [repr(c)]
+        assert doc.cleaned == inputs
+        assert doc.steps == []
+
+        # Inplace True
+        c = CleanURL()
+        out = c(doc, True)
+
+        assert doc.cleaned == results
+        assert doc.steps == [repr(c)]
+        assert out is None
 
 
-class TestRemoveEmail:
+class TestCleanEmail:
     @pytest.mark.parametrize('inputs,results', [
         ('TEST', 'TEST'),
         ('test test@test.com', 'test '),
         ('testtest@test.com', ''),
+        ('testtest@test.org', ''),
     ])
-    def test_remove_email(self, inputs, results):
-        r = RemoveEmail()
-        doc = Document(original=inputs)
-        doc.cleaned = results
+    def test_clean_email(self, inputs, results):
+        doc = Document(inputs)
+        c = CleanEmail()
 
-        assert r(Document(original=inputs)) == doc
+        # Inplace False
+        out = c(doc)
 
-    @pytest.mark.parametrize('inputs', ["string", 2])
-    def test_with_invalid_document(self, inputs):
-        with pytest.raises(TypeError):
-            r = RemoveEmail()
-            r(inputs)
+        assert out.cleaned == results
+        assert out.steps == [repr(c)]
+        assert doc.cleaned == inputs
+        assert doc.steps == []
+
+        # Inplace True
+        out = c(doc, True)
+
+        assert doc.cleaned == results
+        assert doc.steps == [repr(c)]
+        assert out is None
 
 
-class TestRemoveNumber:
+class TestCleanNumber:
     @pytest.mark.parametrize('inputs,results', [
         ('TEST', 'TEST'),
         ('test 12 test', 'test  test'),
         ('test123test', 'testtest'),
     ])
-    def test_remove_number(self, inputs, results):
-        r = RemoveNumber()
-        doc = Document(original=inputs)
-        doc.cleaned = results
+    def test_clean_number(self, inputs, results):
+        doc = Document(inputs)
+        c = CleanNumber()
 
-        assert r(Document(original=inputs)) == doc
+        # Inplace False
+        out = c(doc)
 
-    @pytest.mark.parametrize('inputs', ["string", 2])
-    def test_with_invalid_document(self, inputs):
-        with pytest.raises(TypeError):
-            r = RemoveNumber()
-            r(inputs)
+        assert out.cleaned == results
+        assert out.steps == [repr(c)]
+        assert doc.cleaned == inputs
+        assert doc.steps == []
+
+        # Inplace True
+        out = c(doc, True)
+
+        assert doc.cleaned == results
+        assert doc.steps == [repr(c)]
+        assert out is None
 
 
-class TestRemovePunctuation:
+class TestCleanPunctuation:
     @pytest.mark.parametrize('inputs,results', [
         ('TEST.%$#"#', 'TEST'),
         (r'!"te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t', 'test'),
     ])
-    def test_remove_punctuation(self, inputs, results):
-        r = RemovePunctuation()
-        doc = Document(original=inputs)
-        doc.cleaned = results
+    def test_clean_punctuation(self, inputs, results):
+        doc = Document(inputs)
+        c = CleanPunctuation()
 
-        assert r(Document(original=inputs)) == doc
+        # Inplace False
+        out = c(doc)
 
-    @pytest.mark.parametrize('inputs', ["string", 2])
-    def test_with_invalid_document(self, inputs):
-        with pytest.raises(TypeError):
-            r = RemovePunctuation()
-            r(inputs)
+        assert out.cleaned == results
+        assert out.steps == [repr(c)]
+        assert doc.cleaned == inputs
+        assert doc.steps == []
+
+        # Inplace True
+        out = c(doc, True)
+
+        assert doc.cleaned == results
+        assert doc.steps == [repr(c)]
+        assert out is None
 
 
-class TestRemoveHTML:
+class TestCleanMarkup:
     @pytest.mark.parametrize('inputs,results', [
         ('<html><title>TEST</title>', 'TEST'),
         ('<p class="title"><b>test 12 test</b></p>', 'test 12 test'),
         ('<?xml version="1.0" encoding="UTF-8"?><note><body>test123test</body></note>', 'test123test'),
+        ('<html><title>TEST<br><br>TEST</title>', 'TEST TEST'),
     ])
-    def test_remove_html(self, inputs, results):
+    def test_clean_markup(self, inputs, results):
         pytest.importorskip('bs4')
-        r = RemoveHTML()
-        doc = Document(original=inputs)
-        doc.cleaned = results
+        doc = Document(inputs)
+        c = CleanMarkup()
 
-        assert r(Document(original=inputs)) == doc
+        # Inplace False
+        out = c(doc)
 
-    @pytest.mark.parametrize('inputs', ["string", 2])
-    def test_with_invalid_document(self, inputs):
-        with pytest.raises(TypeError):
-            r = RemoveHTML()
-            r(inputs)
+        assert out.cleaned == results
+        assert out.steps == [repr(c)]
+        assert doc.cleaned == inputs
+        assert doc.steps == []
 
-    @pytest.mark.usefixtures('hide_available_pkg')
-    def test_if_no_package(self):
-        with pytest.raises(ModuleNotFoundError):
-            RemoveHTML()
+        # Inplace True
+        out = c(doc, True)
+
+        assert doc.cleaned == results
+        assert doc.steps == [repr(c)]
+        assert out is None
 
 
-class TestStripAccents:
+class TestCleanAccents:
     @pytest.mark.parametrize('mode,inputs,results', [
         ('unicode', 'àáâãäåçèéêë', 'aaaaaaceeee'),
         ('ascii', 'àáâãäåçèéêë', 'aaaaaaceeee'),
@@ -152,42 +207,53 @@ class TestStripAccents:
         ('unicode', 'o\u0308\u0304', 'o'),
         ('ascii', 'o\u0308\u0304', 'o'),
     ])
-    def test_strip_accents(self, mode, inputs, results):
-        r = StripAccents(mode=mode)
-        doc = Document(original=inputs)
-        doc.cleaned = results
+    def test_clean_accents(self, mode, inputs, results):
+        doc = Document(inputs)
+        c = CleanAccents(mode=mode)
 
-        assert r(Document(original=inputs)) == doc
+        # Inplace False
+        out = c(doc)
 
-    @pytest.mark.parametrize('inputs', ["string", 2])
-    def test_with_invalid_document(self, inputs):
-        with pytest.raises(TypeError):
-            r = StripAccents()
-            r(inputs)
+        assert out.cleaned == results
+        assert out.steps == [repr(c)]
+        assert doc.cleaned == inputs
+        assert doc.steps == []
+
+        # Inplace True
+        out = c(doc, True)
+
+        assert doc.cleaned == results
+        assert doc.steps == [repr(c)]
+        assert out is None
 
     @pytest.mark.parametrize('mode', ["random", 2])
     def test_with_invalid_mode(self, mode):
-        with pytest.raises(AssertionError):
-            r = StripAccents(mode=mode)
+        with pytest.raises(ValueError):
+            CleanAccents(mode=mode)
 
 
-class TestRemoveEOF:
+class TestCleanEOF:
     @pytest.mark.parametrize('inputs,results', [
         ('', ''),
         ('a basic phrase', 'a basic phrase'),
         ('line\nline', 'line line'),
         ('line.\nline', 'line. line')
     ])
-    def test_remove_eof(self, inputs, results):
-        doc = Document(original=inputs)
+    def test_clean_eof(self, inputs, results):
+        doc = Document(inputs)
+        c = CleanEOF()
 
-        r = RemoveEOF()
-        r(doc)
+        # Inplace False
+        out = c(doc)
+
+        assert out.cleaned == results
+        assert out.steps == [repr(c)]
+        assert doc.cleaned == inputs
+        assert doc.steps == []
+
+        # Inplace True
+        out = c(doc, True)
 
         assert doc.cleaned == results
-
-    @pytest.mark.parametrize('inputs', ["string", 2])
-    def test_with_invalid_document(self, inputs):
-        with pytest.raises(TypeError):
-            r = RemoveEOF()
-            r(inputs)
+        assert doc.steps == [repr(c)]
+        assert out is None
