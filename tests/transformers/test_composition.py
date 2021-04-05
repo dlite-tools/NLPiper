@@ -14,60 +14,96 @@ class TestCompose:
         (r'!"t2e""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t', 'test'),
     ])
     def test_w_cleaners(self, inputs, results):
-        crn = cleaners.RemoveNumber()
-        nrp = cleaners.RemovePunctuation()
-        doc = Document(original=inputs)
-        doc.cleaned = results
+        crn = cleaners.CleanNumber()
+        nrp = cleaners.CleanPunctuation()
+        doc = Document(inputs)
 
         pipe = Compose([crn, nrp])
 
-        assert pipe(Document(original=inputs)) == doc
-        assert repr(pipe) == "Compose([RemoveNumber(), RemovePunctuation()])"
+        out = pipe(doc)
+
+        assert out.cleaned == results
+        assert out.steps == [repr(crn), repr(nrp)]
+        assert doc.cleaned == inputs
+        assert doc.steps == []
 
     @pytest.mark.parametrize('inputs,results', [
-        ([['TEST.%$#"#']], [['test']]),
-        ([[r'!"Te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t']], [['test']]),
+        (['TEST.%$#"#'], ['test']),
+        ([r'!"Te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t'], ['test']),
     ])
     def test_w_normalizers(self, inputs, results):
+        results_expected = [Token(tk) for tk in inputs]
+        for tk, out in zip(results_expected, results):
+            tk.cleaned = out
+
+        doc = Document(" ".join(inputs))
+
+        t = tokenizers.BasicTokenizer()
         nct = normalizers.CaseTokens()
         nrp = normalizers.RemovePunctuation()
 
-        pipe = Compose([nct, nrp])
+        pipe = Compose([t, nct, nrp])
 
-        phrases = [" ".join(phrase) for phrase in inputs]
-        doc = Document(original=" ".join(phrases))
-        doc.cleaned = doc.original
-        doc.phrases = phrases
-        doc.tokens = [[Token(original=token) for token in phrase] for phrase in inputs]
-        input_doc = deepcopy(doc)
+        out = pipe(doc)
 
-        for phrase, phrase_result in zip(doc.tokens, results):
-            for token, result in zip(phrase, phrase_result):
-                token.cleaned = result
+        assert out.tokens == results_expected
+        assert out.steps == [repr(t), repr(nct), repr(nrp)]
+        assert doc.tokens is None
+        assert doc.steps == []
 
-        assert pipe(input_doc) == doc
-        assert repr(pipe) == "Compose([CaseTokens(mode='lower'), RemovePunctuation()])"
-
-    @pytest.mark.parametrize('inputs, results', [
-        ('T2E1ST.%$#"# test', [['test', 'test']]),
-        (r'!"t2e""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t', [['test']]),
+    @pytest.mark.parametrize('inputs,results', [
+        (['T2E1ST.%$#"#', 'test'], [('TEST.%$#"#', 'test'), ('test', 'test')]),
+        ([r'!"t2e""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t'], [(r'!"te""!"#$%&()*+,-.s/:;<=>?@[\]^_`{|}~""t', 'test')]),
     ])
     def test_w_cleaner_tokenizer_normalizers(self, inputs, results):
-        crn = cleaners.RemoveNumber()
+        results_expected = [Token(tk_original) for tk_original, tk_cleaned in results]
+        for tk, (tk_original, tk_cleaned) in zip(results_expected, results):
+            tk.cleaned = tk_cleaned
+
+        doc = Document(" ".join(inputs))
+
+        crn = cleaners.CleanNumber()
         t = tokenizers.BasicTokenizer()
         nct = normalizers.CaseTokens()
         nrp = normalizers.RemovePunctuation()
 
         pipe = Compose([crn, t, nct, nrp])
 
-        doc = crn(Document(original=inputs))
-        doc.phrases = [doc.cleaned]
-        doc.tokens = [[Token(original=token) for token in doc.cleaned.split()]]
-        input_doc = deepcopy(doc)
+        out = pipe(doc)
 
-        for phrase, phrase_result in zip(doc.tokens, results):
-            for token, result in zip(phrase, phrase_result):
-                token.cleaned = result
+        assert out.tokens == results_expected
+        assert out.steps == [repr(crn), repr(t), repr(nct), repr(nrp)]
+        assert doc.tokens is None
+        assert doc.steps == []
 
-        assert pipe(input_doc) == doc
-        assert repr(pipe) == "Compose([RemoveNumber(), BasicTokenizer(), CaseTokens(mode='lower'), RemovePunctuation()])"
+    def test_create_compose_from_steps(self):
+
+        pipe = Compose([
+            cleaners.CleanNumber(),
+            tokenizers.BasicTokenizer(),
+            normalizers.CaseTokens(),
+            normalizers.RemovePunctuation()
+        ])
+
+        doc = Document("basic test document 1.")
+        out = pipe(doc)
+
+        new_pipe = Compose.create_from_steps(out.steps)
+
+        assert repr(pipe) == repr(new_pipe)
+
+    def test_create_compose_from_steps_with_wrong_def(self):
+
+        pipe = Compose([
+            cleaners.CleanNumber(),
+            tokenizers.BasicTokenizer(),
+            normalizers.CaseTokens(),
+            normalizers.RemovePunctuation()
+        ])
+
+        doc = Document("basic test document 1.")
+        out = pipe(doc)
+        out.steps.append('NotTransformer()')
+
+        with pytest.raises(NameError):
+            new_pipe = Compose.create_from_steps(out.steps)
