@@ -6,7 +6,10 @@ from nlpiper.transformers.tokenizers import (
     BasicTokenizer,
     MosesTokenizer
 )
-from nlpiper.core.document import Document, Token
+from nlpiper.core.document import (
+    Document,
+    Token
+)
 
 
 @pytest.fixture
