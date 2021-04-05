@@ -8,10 +8,10 @@ from nlpiper.core.document import Document
 from nlpiper.transformers import BaseTransformer
 from nlpiper.logger import log
 
-# Needed for create_from_steps method
-from nlpiper.transformers.cleaners import *  # noqa: F401, F403
-from nlpiper.transformers.normalizers import *  # noqa: F401, F403
-from nlpiper.transformers.tokenizers import *  # noqa: F401, F403
+# Needed for create_from_steps method (eval instruction)
+from nlpiper.transformers.cleaners import *  # noqa: F401, F403 (flake8 ignore)
+from nlpiper.transformers.normalizers import *  # noqa: F401, F403 (flake8 ignore)
+from nlpiper.transformers.tokenizers import *  # noqa: F401, F403 (flake8 ignore)
 
 
 class Compose:
