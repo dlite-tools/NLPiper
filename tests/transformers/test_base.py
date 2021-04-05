@@ -28,11 +28,3 @@ class TestBaseTransformer:
             base = BaseTransformer()
             doc = Document(original="test")
             base(doc)
-
-    def test_step_registration(self):
-        doc = Document(original="test")
-
-        base = BaseTransformer()
-        base._add_step(doc)
-
-        assert doc.steps == [repr(base)]

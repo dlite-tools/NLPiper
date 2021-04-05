@@ -24,10 +24,6 @@ class BaseTransformer:
     def __call__(self, doc: Document, inplace: bool = False) -> Document:
         raise NotImplementedError
 
-    def _add_step(self, doc: Document) -> None:
-        """Register a step transformation into the document object."""
-        doc.steps.append(repr(self))
-
 
 class TransformersType(Enum):
     CLEANERS = auto()
