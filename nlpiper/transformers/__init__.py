@@ -54,6 +54,11 @@ def validate(transformer_type: TransformersType):
                     raise RuntimeError(
                         f"{transformer_type.name.title()} transformer can not be applied on documents with tokens"
                     )
+            elif transformer_type == TransformersType.NORMALIZERS:
+                if doc.tokens is None:
+                    raise RuntimeError(
+                        f"{transformer_type.name.title()} transformer can not be applied on documents without tokens"
+                    )
 
             return func(*args, **kwargs)
         return wrapper
