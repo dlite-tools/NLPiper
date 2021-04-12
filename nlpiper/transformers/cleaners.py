@@ -2,131 +2,143 @@
 
 import re
 from string import punctuation
+from typing import Optional
 from unicodedata import normalize, combining
 
 from nlpiper.core.document import Document
-from nlpiper.transformers import BaseTransformer
+from nlpiper.transformers import (
+    BaseTransformer,
+    TransformersType,
+    add_step,
+    validate
+)
+from nlpiper.logger import log
+
 
 __all__ = [
-    "RemoveEmail",
-    "RemoveEOF",
-    "RemoveHTML",
-    "RemoveNumber",
-    "RemovePunctuation",
-    "RemoveUrl",
-    "StripAccents"
+    "CleanAccents",
+    "CleanEmail",
+    "CleanEOF",
+    "CleanMarkup",
+    "CleanNumber",
+    "CleanPunctuation",
+    "CleanURL",
 ]
 
 
-class Cleaner(BaseTransformer):
-    """Abstract class to Cleaners."""
-
-    def _validate_document(self, doc: Document):
-        """Validate if document is ready to be processed.
-
-        Args:
-            doc (Document): document to be cleaned.
-
-        Raises:
-            TypeError: if doc is not a Document.
-        """
-        if not isinstance(doc, Document):
-            raise TypeError("Argument doc is not of type Document")
-
-        if doc.cleaned is None:
-            doc.cleaned = doc.original
-
-
-class RemoveUrl(Cleaner):
+class CleanURL(BaseTransformer):
     """Remove URLs."""
 
-    def __call__(self, doc: Document) -> Document:
+    @validate(TransformersType.CLEANERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
         """Remove URLs from a document.
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
-        super()._validate_document(doc)
+        d = doc if inplace else doc._deepcopy()
 
-        doc.cleaned = re.sub(r"http\S+", "", doc.cleaned)
-        doc.cleaned = re.sub(r"www\S+", "", doc.cleaned)
+        d.cleaned = re.sub(r"http\S+", "", d.cleaned)
+        d.cleaned = re.sub(r"www\S+", "", d.cleaned)
 
-        return doc
+        return None if inplace else d
 
 
-class RemoveEmail(Cleaner):
+class CleanEmail(BaseTransformer):
     """Remove Emails."""
 
-    def __call__(self, doc: Document) -> Document:
+    @validate(TransformersType.CLEANERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
         """Remove emails from a document.
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
+        d = doc if inplace else doc._deepcopy()
         """
-        super()._validate_document(doc)
+        d = doc if inplace else doc._deepcopy()
 
-        doc.cleaned = re.sub(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", "", doc.cleaned)
+        d.cleaned = re.sub(r"[a-z0-9\.\-+_]+@[a-z0-9\.\-+_]+\.[a-z]+", "", d.cleaned)
 
-        return doc
+        return None if inplace else d
 
 
-class RemoveNumber(Cleaner):
+class CleanNumber(BaseTransformer):
     """Remove Numbers."""
 
-    def __call__(self, doc: Document) -> Document:
+    @validate(TransformersType.CLEANERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
         """Remove numbers from a document.
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
-        super()._validate_document(doc)
+        d = doc if inplace else doc._deepcopy()
 
-        doc.cleaned = re.sub(r'[0-9]+', '', doc.cleaned)
-        return doc
+        d.cleaned = re.sub(r'[0-9]+', '', d.cleaned)
+
+        return None if inplace else d
 
 
-class RemovePunctuation(Cleaner):
+class CleanPunctuation(BaseTransformer):
     """Remove Punctuation."""
 
-    def __call__(self, doc: Document) -> Document:
+    @validate(TransformersType.CLEANERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
         """Remove punctuation from a document.
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
-        super()._validate_document(doc)
+        d = doc if inplace else doc._deepcopy()
 
-        doc.cleaned = doc.cleaned.translate(str.maketrans('', '', punctuation))
-        return doc
+        d.cleaned = d.cleaned.translate(str.maketrans('', '', punctuation))
+
+        return None if inplace else d
 
 
-class RemoveEOF(Cleaner):
+class CleanEOF(BaseTransformer):
     """Remove End of Line."""
 
-    def __call__(self, doc: Document) -> Document:
+    @validate(TransformersType.CLEANERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
         """Remove end of line from a document.
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
-        super()._validate_document(doc)
+        d = doc if inplace else doc._deepcopy()
 
-        doc.cleaned = doc.cleaned.translate(str.maketrans('\n', ' '))
+        d.cleaned = d.cleaned.translate(str.maketrans('\n', ' '))
 
-        return doc
+        return None if inplace else d
 
 
-class RemoveHTML(Cleaner):
+class CleanMarkup(BaseTransformer):
     """Remove HTML and XML using BeautifulSoup4."""
 
     def __init__(self, features: str = "html.parser", *args, **kwargs):
@@ -149,25 +161,30 @@ class RemoveHTML(Cleaner):
             self.features = features
 
         except ImportError:
-            print("Please install BeautifulSoup4. "
-                  "See the docs at https://www.crummy.com/software/BeautifulSoup/ for more information.")
+            log.error("Please install BeautifulSoup4. "
+                      "See the docs at https://www.crummy.com/software/BeautifulSoup/ for more information.")
             raise
 
-    def __call__(self, doc: Document) -> Document:
+    @validate(TransformersType.CLEANERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
         """Remove HTML and XML from the document.
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
-        super()._validate_document(doc)
+        d = doc if inplace else doc._deepcopy()
 
-        doc.cleaned = self.c(doc.cleaned, features=self.features, *self.args, **self.kwargs).get_text()
-        return doc
+        d.cleaned = self.c(d.cleaned, features=self.features, *self.args, **self.kwargs).get_text(" ")
+
+        return None if inplace else d
 
 
-class StripAccents(Cleaner):
+class CleanAccents(BaseTransformer):
     """Strip accents and perform character normalization."""
 
     def __init__(self, mode: str = "unicode"):
@@ -178,27 +195,32 @@ class StripAccents(Cleaner):
             characters that have an direct ASCII mapping. The second is sightly slower but works in any characters.
             (Default: `unicode`)
 
-        Warning: mode `ascii` is only suited for languages that have a direct
-        transliteration to ASCII symbols.
+        Warning: mode `ascii` is only suited for languages that have a direct transliteration to ASCII symbols.
         """
+        if mode not in ('unicode', 'ascii'):
+            raise ValueError(f"{mode} is not implemented. The only available modes are: 'unicode' and 'ascii'.")
+
         super().__init__(mode=mode)
         self.mode = mode
-        assert mode in ['unicode', 'ascii'], (f"{mode} is not implemented. "
-                                              f"The only available modes are: 'unicode' and 'ascii'.")
 
-    def __call__(self, doc: Document) -> Document:
+    @validate(TransformersType.CLEANERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
         """Strip accents and perform character normalization from the document.
 
         Args:
             doc (Document): document to be cleaned.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
 
         Returns: Document
         """
-        super()._validate_document(doc)
+        d = doc if inplace else doc._deepcopy()
 
-        doc.cleaned = (self._strip_accents_unicode(doc.cleaned) if self.mode == 'unicode'
-                       else self._strip_accents_ascii(doc.cleaned))
-        return doc
+        d.cleaned = (self._strip_accents_unicode(d.cleaned) if self.mode == 'unicode'
+                     else self._strip_accents_ascii(d.cleaned))
+
+        return None if inplace else d
 
     @staticmethod
     def _strip_accents_unicode(text):
