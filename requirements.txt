@@ -1,4 +1,0 @@
-bs4==0.0.1
-nltk==3.5
-pydantic==1.8.1
-sacremoses==0.0.43
