@@ -21,7 +21,7 @@ The package can be install using `pip`:
 ```
 git clone https://github.com/tomassosorio/NLPiper.git
 cd NLPiper
-pipenv install --dev
+poetry install
 ```
 
 ---
@@ -32,10 +32,8 @@ All contributions, bug reports, bug fixes, documentation improvements,
 enhancements and ideas are welcome.
 
 A detailed overview on how to contribute can be found in the
-[contributing guide]
+[contributing guide](CONTRIBUTING.md)
 on GitHub.
-
-TODO: Create a contributing guide (check: [link](https://docs.github.com/en/github/building-a-strong-community/setting-guidelines-for-repository-contributors), [example](https://github.com/pandera-dev/pandera/blob/master/.github/CONTRIBUTING.md))
 
 ---
 
