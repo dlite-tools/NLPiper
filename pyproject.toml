@@ -46,6 +46,12 @@ bs4 = ["bs4"]
 nltk = ["nltk"]
 sacremoses = ["sacremoses"]
 
+all = [
+    "bs4",
+    "nltk",
+    "sacremoses"
+]
+
 [tool.poetry.dev-dependencies]
 flake8 = "^3.9.0"
 mypy = "^0.812"

@@ -357,6 +357,7 @@ optional = false
 python-versions = "*"
 
 [extras]
+all = ["bs4", "nltk", "sacremoses"]
 bs4 = ["bs4"]
 nltk = ["nltk"]
 sacremoses = ["sacremoses"]
@@ -364,7 +365,7 @@ sacremoses = ["sacremoses"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "f6bdc40dbca416a98d8947466f434147cb3a5e5042cb1d2ab7051763b6f1a121"
+content-hash = "485e6883e1da2413589642521893cbb70b9621d679c8ec49eb9b18e0b141140b"
 
 [metadata.files]
 atomicwrites = [
