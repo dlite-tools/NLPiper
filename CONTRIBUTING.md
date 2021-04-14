@@ -8,7 +8,7 @@ Please note we have a code of conduct, please follow it in all your interactions
 ## Contributing to the Codebase
 
 The code is hosted on [GitHub](https://github.com/tomassosorio/NLPiper),
-so you will need to use [Git](http://git-scm.com/) to clone the project and make
+so you will need to use [Git](http://git-scm.com/) to fork and clone the project, and make
 changes to the codebase. Once you have obtained a copy of the code, you should
 create a development environment that is separate from your existing Python
 environment so that you can make and test changes without compromising your
@@ -20,8 +20,8 @@ own work environment.
 To create an isolated development environment:
 
 * Install [Poetry](https://python-poetry.org/)
-* Make sure that you have [cloned the repository](https://github.com/tomassosorio/NLPiper)
-* `cd` to the NLPiper source directory
+* Make sure that you have cloned the repository
+* Go to the project source directory
 * Build environment. Run `poetry install`
 
 
@@ -33,6 +33,8 @@ do not break any tests by running:
 ```
 make all
 ```
+
+Do not forget to create new tests to cover the code alterations.
 
 ### Pull Request Process
 
