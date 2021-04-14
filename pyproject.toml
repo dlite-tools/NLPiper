@@ -1,0 +1,65 @@
+[tool.poetry]
+name = "nlpiper"
+version = "0.0.1"
+description = "NLPiper package"
+authors = ["Tomás Osório"]
+maintainers = [
+    "Carlos Alves",
+    "Daniel Ferrari",
+    "Tomás Osório"
+]
+license = "MIT"
+
+readme = "README.md"
+
+packages = [
+    { include = "nlpiper" }
+]
+
+repository = "https://github.com/tomassosorio/NLPiper"
+documentation = "https://github.com/tomassosorio/NLPiper"
+
+keywords = ["nlp", "package"]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: Freely Distributable",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities"
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+pydantic = "^1.8.1"
+
+bs4 = { version = "^0.0.1", optional = true }
+nltk = { version = "^3.5", optional = true }
+sacremoses = { version = "^0.0.43", optional = true }
+
+[tool.poetry.extras]
+bs4 = ["bs4"]
+nltk = ["nltk"]
+sacremoses = ["sacremoses"]
+
+all = [
+    "bs4",
+    "nltk",
+    "sacremoses"
+]
+
+[tool.poetry.dev-dependencies]
+flake8 = "^3.9.0"
+mypy = "^0.812"
+pydocstyle = "^5.1.1"
+pytest = "^6.2.2"
+pytest-cov = "^2.11.1"
+
+[build-system]
+requires = ["poetry_core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
