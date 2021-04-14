@@ -32,5 +32,9 @@ jobs:
       run: poetry install
     - name: Static tests
       run: make static-tests
-    - name: Unit tests
+    - name: Unit tests with minimal dependencies
       run: make unit-tests
+    - name: Unit tests with extra dependencies
+      run: |
+        poetry install -E all
+        make unit-tests
