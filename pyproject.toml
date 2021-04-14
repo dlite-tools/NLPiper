@@ -35,10 +35,16 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.8"
 
-bs4 = "^0.0.1"
-nltk = "^3.5"
 pydantic = "^1.8.1"
-sacremoses = "^0.0.43"
+
+bs4 = { version = "^0.0.1", optional = true }
+nltk = { version = "^3.5", optional = true }
+sacremoses = { version = "^0.0.43", optional = true }
+
+[tool.poetry.extras]
+bs4 = ["bs4"]
+nltk = ["nltk"]
+sacremoses = ["sacremoses"]
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.9.0"
