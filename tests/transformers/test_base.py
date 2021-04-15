@@ -1,6 +1,9 @@
 import pytest
 
-from nlpiper.transformers import BaseTransformer
+from nlpiper.transformers import (
+    BaseTransformer,
+    validate
+)
 from nlpiper.core.document import Document
 
 
@@ -26,5 +29,18 @@ class TestBaseTransformer:
     def test_call_raise(self):
         with pytest.raises(NotImplementedError):
             base = BaseTransformer()
-            doc = Document(original="test")
+            doc = Document("test")
             base(doc)
+
+
+class TestValidateDecorator:
+
+    def test_invalid_transformer_type(self):
+
+        @validate(-1)
+        def test_call(self, doc, inplace):
+            pass
+
+        doc = Document("test")
+        with pytest.raises(RuntimeError):
+            test_call(None, doc, False)
