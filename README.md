@@ -24,6 +24,20 @@ cd NLPiper
 poetry install
 ```
 
+**NLPiper** by design, will only install the minimum necessary dependencies, however some **transformations** need special
+packages, to install them you can install them all at once by running:
+
+```
+poetry install --extra 'all'
+```
+
+Or only choose the ones that are strictly needed for your purpose, replacing `'all'` by the ones needed. 
+
+Available options:
+- `'bs4'`
+- `'nltk'`
+- `'sacremoses'`
+
 ---
 
 ## Contributions
