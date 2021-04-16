@@ -15,7 +15,8 @@ from nlpiper.logger import log
 __all__ = [
     "CaseTokens",
     "RemovePunctuation",
-    "RemoveStopWords"
+    "RemoveStopWords",
+    "SpellCheck",
 ]
 
 
@@ -119,5 +120,68 @@ class RemoveStopWords(BaseTransformer):
 
         for token in d.tokens:
             token.cleaned = "" if getattr(token.cleaned, self.case_sensitive)() in self.stopwords else token.cleaned
+
+        return None if inplace else d
+
+
+class SpellCheck(BaseTransformer):
+    """Spellcheck the tokens."""
+
+    def __init__(self, language: str = "en_GB", max_distance: Optional[int] = None, *args, **kwargs):
+        """Spellcheck tokens.
+
+        Args:
+            language (str): By default you have the following dictionaries available `'en_AU'`, `'en_CA'`, `'en_GB'`,
+             `'en_NZ'`, `'en_US'`, `'en_ZA'`, Default(`"en_GB"`).
+            max_distance (Optional[int]): Default(`None`)
+        """
+        super().__init__(language=language, max_distance=max_distance, *args, **kwargs)
+        self.max_distance = max_distance
+        try:
+            from hunspell import Hunspell
+            self.h = Hunspell(lang=language, *args, **kwargs)
+
+        except ImportError:
+            log.error("Please install cyhunspell. "
+                      "See the docs at https://pypi.org/project/cyhunspell/ for more information.")
+            raise
+
+        if max_distance:
+            try:
+                from nltk.metrics.distance import edit_distance
+                self.edit_distance = edit_distance
+
+            except ImportError:
+                log.error("Please install NLTK. "
+                          "See the docs at https://www.nltk.org/install.html for more information.")
+                raise
+
+    @validate(TransformersType.NORMALIZERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
+        """
+
+        Args:
+            doc (Document): Document to be normalized.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
+
+        Returns: Document
+        """
+        d = doc if inplace else doc._deepcopy()
+
+        def suggest(cleaned: str):
+            if self.max_distance:
+                suggestions = self.h.suggest(cleaned)
+
+                distances = [self.edit_distance(cleaned, s) for s in suggestions]
+                min_distance = min(distances)
+
+                return suggestions[distances.index(min_distance)] if self.max_distance >= min_distance else cleaned
+            else:
+                return ''
+
+        for token in d.tokens:
+            token.cleaned = token.cleaned if self.h.spell(token.cleaned) else suggest(token.cleaned)
 
         return None if inplace else d
