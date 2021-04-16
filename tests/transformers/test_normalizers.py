@@ -16,11 +16,11 @@ from nlpiper.core.document import (
 
 
 @pytest.fixture
-def hide_available_pkg(monkeypatch):
+def hide_available_pkg(request, monkeypatch):
     import_orig = builtins.__import__
 
     def mocked_import(name, *args, **kwargs):
-        if name in ('nltk', ):
+        if name in (request.param, ):
             raise ModuleNotFoundError()
         return import_orig(name, *args, **kwargs)
 
@@ -43,13 +43,18 @@ class TestNormalizersValidations:
         with pytest.raises(RuntimeError):
             t(doc)
 
-    @pytest.mark.usefixtures('hide_available_pkg')
-    def test_if_no_package(self):
+    @pytest.mark.parametrize('hide_available_pkg', ['nltk'], indirect=['hide_available_pkg'])
+    def test_if_no_package_nltk(self, hide_available_pkg):
         with pytest.raises(ModuleNotFoundError):
             RemoveStopWords()
 
         with pytest.raises(ModuleNotFoundError):
             SpellCheck(max_distance=1)
+
+    @pytest.mark.parametrize('hide_available_pkg', ['hunspell'], indirect=['hide_available_pkg'])
+    def test_if_no_package_hunspell(self, hide_available_pkg):
+        with pytest.raises(ModuleNotFoundError):
+            SpellCheck(max_distance=None)
 
 
 class TestCaseTokens:
