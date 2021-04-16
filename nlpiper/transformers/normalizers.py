@@ -148,6 +148,7 @@ class SpellCheck(BaseTransformer):
 
         if max_distance:
             try:
+                import nltk  # noqa: F401
                 from nltk.metrics.distance import edit_distance
                 self.edit_distance = edit_distance
 

@@ -20,7 +20,7 @@ def hide_available_pkg(monkeypatch):
     import_orig = builtins.__import__
 
     def mocked_import(name, *args, **kwargs):
-        if name in ('nltk'):
+        if name in ('nltk', ):
             raise ModuleNotFoundError()
         return import_orig(name, *args, **kwargs)
 
@@ -47,6 +47,9 @@ class TestNormalizersValidations:
     def test_if_no_package(self):
         with pytest.raises(ModuleNotFoundError):
             RemoveStopWords()
+
+        with pytest.raises(ModuleNotFoundError):
+            SpellCheck(max_distance=1)
 
 
 class TestCaseTokens:
