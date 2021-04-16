@@ -121,3 +121,49 @@ class RemoveStopWords(BaseTransformer):
             token.cleaned = "" if getattr(token.cleaned, self.case_sensitive)() in self.stopwords else token.cleaned
 
         return None if inplace else d
+
+
+class StemmerNLTKSnowball(BaseTransformer):
+    """Stem tokens using Snowball Stemmer from NLTK."""
+
+    def __init__(self, language: str = "english", ignore_stopwords: bool = False):
+        """Stem tokens using Snowball Stemmer from NLTK.
+
+        Args:
+            language (str): Available languages "arabic", "danish", "dutch", "english", "finnish", "french", "german",
+             "hungarian", "italian", "norwegian", "porter", "portuguese", "romanian", "russian", "spanish", "swedish".
+             (Default: `"english"`)
+            ignore_stopwords (bool): Skip stop words from being stemmed if `True`. (Default: `False`)
+        """
+        super().__init__(language=language, ignore_stopwords=ignore_stopwords)
+        try:
+            import nltk
+            from nltk.stem.snowball import SnowballStemmer
+            if ignore_stopwords:
+                nltk.download("stopwords")
+
+            self.stemmer = SnowballStemmer(language=language, ignore_stopwords=ignore_stopwords)
+
+        except ImportError:
+            print("Please install NLTK. "
+                  "See the docs at https://www.nltk.org/install.html for more information.")
+            raise
+
+    @validate(TransformersType.NORMALIZERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
+        """Stem tokens.
+
+        Args:
+            doc (Document): Document to be normalized.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
+
+        Returns: Document
+        """
+        d = doc if inplace else doc._deepcopy()
+
+        for token in d.tokens:
+            token.cleaned = self.stemmer.stem(token.cleaned)
+
+        return None if inplace else d
