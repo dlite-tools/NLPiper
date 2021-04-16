@@ -5,7 +5,8 @@ import pytest
 from nlpiper.transformers.normalizers import (
     CaseTokens,
     RemovePunctuation,
-    RemoveStopWords
+    RemoveStopWords,
+    StemmerNLTKSnowball
 )
 from nlpiper.transformers.tokenizers import BasicTokenizer
 from nlpiper.core.document import (
@@ -46,6 +47,9 @@ class TestNormalizersValidations:
     def test_if_no_package(self):
         with pytest.raises(ModuleNotFoundError):
             RemoveStopWords()
+
+        with pytest.raises(ModuleNotFoundError):
+            StemmerNLTKSnowball()
 
 
 class TestCaseTokens:
@@ -157,3 +161,39 @@ class TestRemoveStopWords:
         assert doc.tokens == results_expected
         assert doc.steps == [repr(t), repr(n)]
         assert out is None
+
+
+class TestStemmerNLTKSnowball:
+
+    @pytest.mark.parametrize('ignore_stopwords,inputs,results', [
+        (True, ['This', 'computer', 'is', 'fastest', 'because'], ['this', 'comput', 'is', 'fastest', 'because']),
+        (False, ['This', 'computer', 'is', 'fastest', 'because'], ['this', 'comput', 'is', 'fastest', 'becaus'])])
+    def test_remove_stop_words_w_case_sensitive(self, ignore_stopwords, inputs, results):
+        pytest.importorskip('nltk')
+
+        results_expected = [Token(tk) for tk in inputs]
+        for tk, out in zip(results_expected, results):
+            tk.cleaned = out
+
+        doc = Document(" ".join(inputs))
+
+        # To apply a normalizer is necessary to have tokens
+        t = BasicTokenizer()
+        t(doc, inplace=True)
+
+        n = StemmerNLTKSnowball(ignore_stopwords=ignore_stopwords)
+        # Inplace False
+        out = n(doc)
+
+        assert out.tokens == results_expected
+        assert out.steps == [repr(t), repr(n)]
+        assert doc.tokens == [Token(token) for token in inputs]
+        assert doc.steps == [repr(t)]
+
+        # Inplace True
+        out = n(doc, True)
+
+        assert doc.tokens == results_expected
+        assert doc.steps == [repr(t), repr(n)]
+        assert out is None
+

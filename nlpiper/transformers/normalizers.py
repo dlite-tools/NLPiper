@@ -15,7 +15,8 @@ from nlpiper.logger import log
 __all__ = [
     "CaseTokens",
     "RemovePunctuation",
-    "RemoveStopWords"
+    "RemoveStopWords",
+    "StemmerNLTKSnowball"
 ]
 
 
