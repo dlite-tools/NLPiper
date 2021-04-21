@@ -136,11 +136,11 @@ class SpellCheck(BaseTransformer):
             language (str): By default the following dictionaries are available: `'en_AU'`, `'en_CA'`, `'en_GB'`,
              `'en_NZ'`, `'en_US'`, `'en_ZA'`, however is possible to use other dictionaries, for this please check
               https://pypi.org/project/cyhunspell/, Default(`"en_GB"`).
-            max_distance (Optional[int]): If `None`, if the token is not spelt correctly than will be replaced by
+            max_distance (Optional[int]): If `None`, the tokens that are not spelt correctly are replaced by
              an empty string, otherwise will maintain the original token. To use `max_distance` is necessary to install
               `nltk` package, which will check if a token is correctly spelt or not, if not than it will check the
               suggested words by Hunspell and calculate the levenshtein distance between the token and the suggestions,
-              and will replace the token by the word with the lower distance if is also lower than the max_distance,
+              and will replace the token by the word with the lower distance if is also lower than the `max_distance`,
               otherwise will maintain the original token. Default(`None`)
             args: For further utilities check https://pypi.org/project/cyhunspell/
             kwargs: For further utilities check https://pypi.org/project/cyhunspell/
