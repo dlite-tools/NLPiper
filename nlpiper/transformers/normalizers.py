@@ -131,10 +131,12 @@ class Stemmer(BaseTransformer):
         """Stem tokens.
 
         Args:
-            version (str):
-            language (str): Available languages "arabic", "danish", "dutch", "english", "finnish", "french", "german",
-             "hungarian", "italian", "norwegian", "porter", "portuguese", "romanian", "russian", "spanish", "swedish".
-             (Default: `"english"`)
+            version (str): Currently there are two stemmers available: `nltk` and `hunspell`.
+            language (str): Available languages for `nltk`: "arabic", "danish", "dutch", "english", "finnish", "french",
+             "german", "hungarian", "italian", "norwegian", "porter", "portuguese", "romanian", "russian", "spanish",
+             "swedish". (Default: `"english"`) For `hunspell`  by default the following languages are available:
+             `'en_AU'`, `'en_CA'`, `'en_GB'`, `'en_NZ'`, `'en_US'`, `'en_ZA'`, however is possible to use other
+             dictionaries, for this please check https://pypi.org/project/cyhunspell/
         """
         super().__init__(language=language)
         if version == 'nltk':
