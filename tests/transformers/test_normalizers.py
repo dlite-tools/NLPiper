@@ -175,6 +175,7 @@ class TestStemmerNLTKSnowball:
          ['this', 'computer', 'is', 'fast', 'because'])])
     def test_remove_stop_words_w_case_sensitive(self, version, language, inputs, results):
         pytest.importorskip('nltk')
+        pytest.importorskip('hunspell')
 
         results_expected = [Token(tk) for tk in inputs]
         for tk, out in zip(results_expected, results):
