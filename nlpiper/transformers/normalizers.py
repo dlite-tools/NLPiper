@@ -16,7 +16,7 @@ __all__ = [
     "CaseTokens",
     "RemovePunctuation",
     "RemoveStopWords",
-    "StemmerNLTKSnowball"
+    "Stemmer"
 ]
 
 
@@ -124,31 +124,39 @@ class RemoveStopWords(BaseTransformer):
         return None if inplace else d
 
 
-class StemmerNLTKSnowball(BaseTransformer):
-    """Stem tokens using Snowball Stemmer from NLTK."""
+class Stemmer(BaseTransformer):
+    """Stem tokens."""
 
-    def __init__(self, language: str = "english", ignore_stopwords: bool = False):
-        """Stem tokens using Snowball Stemmer from NLTK.
+    def __init__(self, version: str = 'nltk', language: str = "english", *args, **kwargs):
+        """Stem tokens.
 
         Args:
+            version (str):
             language (str): Available languages "arabic", "danish", "dutch", "english", "finnish", "french", "german",
              "hungarian", "italian", "norwegian", "porter", "portuguese", "romanian", "russian", "spanish", "swedish".
              (Default: `"english"`)
-            ignore_stopwords (bool): Skip stop words from being stemmed if `True`. (Default: `False`)
         """
-        super().__init__(language=language, ignore_stopwords=ignore_stopwords)
-        try:
-            import nltk
-            from nltk.stem.snowball import SnowballStemmer
-            if ignore_stopwords:
-                nltk.download("stopwords")
+        super().__init__(language=language)
+        if version == 'nltk':
+            try:
+                import nltk  # noqa: F401
+                from nltk.stem.snowball import SnowballStemmer
+                self.stemmer = SnowballStemmer(language=language, *args, **kwargs)
 
-            self.stemmer = SnowballStemmer(language=language, ignore_stopwords=ignore_stopwords)
+            except ImportError:
+                print("Please install NLTK. "
+                      "See the docs at https://www.nltk.org/install.html for more information.")
+                raise
 
-        except ImportError:
-            print("Please install NLTK. "
-                  "See the docs at https://www.nltk.org/install.html for more information.")
-            raise
+        if version == 'hunspell':
+            try:
+                from hunspell import Hunspell
+                self.stemmer = Hunspell(lang=language, *args, **kwargs)
+
+            except ImportError:
+                log.error("Please install cyhunspell. "
+                          "See the docs at https://pypi.org/project/cyhunspell/ for more information.")
+                raise
 
     @validate(TransformersType.NORMALIZERS)
     @add_step
@@ -165,6 +173,8 @@ class StemmerNLTKSnowball(BaseTransformer):
         d = doc if inplace else doc._deepcopy()
 
         for token in d.tokens:
-            token.cleaned = self.stemmer.stem(token.cleaned)
+            stem = self.stemmer.stem(token.cleaned)
+            stem = stem[0] if isinstance(stem, tuple) else stem
+            token.cleaned = stem if stem else token.cleaned
 
         return None if inplace else d
