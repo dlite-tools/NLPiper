@@ -39,6 +39,7 @@ python = "^3.8"
 pydantic = "^1.8.1"
 
 bs4 = { version = "^0.0.1", optional = true }
+cyhunspell = { version = "^2.0.2", optional = true }
 nltk = { version = "^3.5", optional = true }
 sacremoses = { version = "^0.0.43", optional = true }
 
@@ -46,9 +47,11 @@ sacremoses = { version = "^0.0.43", optional = true }
 bs4 = ["bs4"]
 nltk = ["nltk"]
 sacremoses = ["sacremoses"]
+hunspell = ["cyhunspell"]
 
 all = [
     "bs4",
+    "hunspell",
     "nltk",
     "sacremoses"
 ]

@@ -5,7 +5,8 @@ import pytest
 from nlpiper.transformers.normalizers import (
     CaseTokens,
     RemovePunctuation,
-    RemoveStopWords
+    RemoveStopWords,
+    SpellCheck
 )
 from nlpiper.transformers.tokenizers import BasicTokenizer
 from nlpiper.core.document import (
@@ -15,11 +16,11 @@ from nlpiper.core.document import (
 
 
 @pytest.fixture
-def hide_available_pkg(monkeypatch):
+def hide_available_pkg(request, monkeypatch):
     import_orig = builtins.__import__
 
     def mocked_import(name, *args, **kwargs):
-        if name in ('nltk'):
+        if name in (request.param, ):
             raise ModuleNotFoundError()
         return import_orig(name, *args, **kwargs)
 
@@ -42,10 +43,18 @@ class TestNormalizersValidations:
         with pytest.raises(RuntimeError):
             t(doc)
 
-    @pytest.mark.usefixtures('hide_available_pkg')
-    def test_if_no_package(self):
+    @pytest.mark.parametrize('hide_available_pkg', ['nltk'], indirect=['hide_available_pkg'])
+    def test_if_no_package_nltk(self, hide_available_pkg):
         with pytest.raises(ModuleNotFoundError):
             RemoveStopWords()
+
+        with pytest.raises(ModuleNotFoundError):
+            SpellCheck(max_distance=1)
+
+    @pytest.mark.parametrize('hide_available_pkg', ['hunspell'], indirect=['hide_available_pkg'])
+    def test_if_no_package_hunspell(self, hide_available_pkg):
+        with pytest.raises(ModuleNotFoundError):
+            SpellCheck(max_distance=None)
 
 
 class TestCaseTokens:
@@ -143,6 +152,42 @@ class TestRemoveStopWords:
         t(doc, inplace=True)
 
         n = RemoveStopWords(case_sensitive=sensitive)
+        # Inplace False
+        out = n(doc)
+
+        assert out.tokens == results_expected
+        assert out.steps == [repr(t), repr(n)]
+        assert doc.tokens == [Token(token) for token in inputs]
+        assert doc.steps == [repr(t)]
+
+        # Inplace True
+        out = n(doc, True)
+
+        assert doc.tokens == results_expected
+        assert doc.steps == [repr(t), repr(n)]
+        assert out is None
+
+
+class TestSpellCheck:
+    @pytest.mark.parametrize('max_distance,inputs,results', [
+        (None, ['This', 'isx', 'a', 'stop', 'Word'], ['This', '', 'a', 'stop', 'Word']),
+        (1, ['Thisx', 'iszk', 'a', 'stop', 'Word'], ['This', 'iszk', 'a', 'stop', 'Word']),
+    ])
+    def test_remove_stop_words_w_case_sensitive(self, max_distance, inputs, results):
+        pytest.importorskip('hunspell')
+        pytest.importorskip('nltk')
+
+        results_expected = [Token(tk) for tk in inputs]
+        for tk, out in zip(results_expected, results):
+            tk.cleaned = out
+
+        doc = Document(" ".join(inputs))
+
+        # To apply a normalizer is necessary to have tokens
+        t = BasicTokenizer()
+        t(doc, inplace=True)
+
+        n = SpellCheck(max_distance=max_distance)
         # Inplace False
         out = n(doc)
 
