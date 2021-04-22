@@ -107,3 +107,36 @@ class TestCompose:
 
         with pytest.raises(NameError):
             new_pipe = Compose.create_from_steps(out.steps)
+
+    def test_rollback_document_wo_steps(self):
+        doc = Document("basic test document")
+        with pytest.raises(ValueError):
+            Compose.rollback_document(doc)
+
+    @pytest.mark.parametrize('num_steps', [-1, 0, 3])
+    def test_rollback_invalid_num_steps(self, num_steps):
+        doc = Document("Basic Test Document")
+        pipe = Compose([
+            tokenizers.BasicTokenizer(),
+            normalizers.CaseTokens()
+        ])
+        pipe(doc, True)
+
+        with pytest.raises(ValueError):
+            Compose.rollback_document(doc, num_steps)
+
+    @pytest.mark.parametrize('steps', [1, 2, 3])
+    def test_rollback_valid_num_steps(self, steps):
+        doc = Document("Basic Test Document 1 2 3")
+        pipe = Compose([
+            cleaners.CleanNumber(),
+            tokenizers.BasicTokenizer(),
+            normalizers.CaseTokens()
+        ])
+        pipe(doc, True)
+
+        out = Compose.rollback_document(doc, steps)
+
+        assert len(doc.steps) == len(pipe.transformers)
+        assert len(out.steps) == len(doc.steps) - steps
+        assert out.steps == doc.steps[:-steps]
