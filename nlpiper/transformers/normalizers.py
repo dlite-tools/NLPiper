@@ -181,6 +181,7 @@ class Stemmer(BaseTransformer):
             stem = self.stemmer.stem(token.cleaned)
             stem = stem[0] if isinstance(stem, tuple) else stem
             token.cleaned = stem if stem else token.cleaned
+            token.stem = stem if stem else token.cleaned
 
         return None if inplace else d
 

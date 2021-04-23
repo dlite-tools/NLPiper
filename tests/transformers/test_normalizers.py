@@ -225,6 +225,7 @@ class TestStemmer:
         results_expected = [Token(tk) for tk in inputs]
         for tk, out in zip(results_expected, results):
             tk.cleaned = out
+            tk.stem = out
 
         doc = Document(" ".join(inputs))
 
