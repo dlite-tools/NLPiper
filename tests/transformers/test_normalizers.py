@@ -180,7 +180,7 @@ class TestSpellCheck:
         (None, ['This', 'isx', 'a', 'stop', 'Word'], ['This', '', 'a', 'stop', 'Word']),
         (1, ['Thisx', 'iszk', 'a', 'stop', 'Word'], ['This', 'iszk', 'a', 'stop', 'Word']),
     ])
-    def test_remove_stop_words_w_case_sensitive(self, max_distance, inputs, results):
+    def test_spell_checking(self, max_distance, inputs, results):
         pytest.importorskip('hunspell')
         pytest.importorskip('nltk')
 
@@ -218,7 +218,7 @@ class TestStemmer:
          ['this', 'comput', 'is', 'fastest', 'becaus']),
         ('hunspell', 'en_GB', ['This', 'computer', 'is', 'fastest', 'because'],
          ['this', 'computer', 'is', 'fast', 'because'])])
-    def test_remove_stop_words_w_case_sensitive(self, version, language, inputs, results):
+    def test_stemmer(self, version, language, inputs, results):
         pytest.importorskip('nltk')
         pytest.importorskip('hunspell')
 
@@ -248,3 +248,7 @@ class TestStemmer:
         assert doc.tokens == results_expected
         assert doc.steps == [repr(t), repr(n)]
         assert out is None
+
+    def test_unavailable_version(self):
+        with pytest.raises(ValueError):
+            Stemmer(version='random')

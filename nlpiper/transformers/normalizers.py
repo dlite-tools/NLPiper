@@ -153,7 +153,7 @@ class Stemmer(BaseTransformer):
                       "See the docs at https://www.nltk.org/install.html for more information.")
                 raise
 
-        if version == 'hunspell':
+        elif version == 'hunspell':
             try:
                 from hunspell import Hunspell
                 self.stemmer = Hunspell(lang=language, *args, **kwargs)
@@ -162,6 +162,10 @@ class Stemmer(BaseTransformer):
                 log.error("Please install cyhunspell. "
                           "See the docs at https://pypi.org/project/cyhunspell/ for more information.")
                 raise
+
+        else:
+            raise ValueError(f"Currently {repr(version)} is not available."
+                             f" You can opt by using 'nltk' or 'hunspell' to stem the tokens.")
 
     @validate(TransformersType.NORMALIZERS)
     @add_step
