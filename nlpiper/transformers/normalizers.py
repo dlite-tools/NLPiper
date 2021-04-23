@@ -16,6 +16,7 @@ __all__ = [
     "CaseTokens",
     "RemovePunctuation",
     "RemoveStopWords",
+    "SpellCheck",
     "Stemmer"
 ]
 
@@ -180,5 +181,79 @@ class Stemmer(BaseTransformer):
             stem = self.stemmer.stem(token.cleaned)
             stem = stem[0] if isinstance(stem, tuple) else stem
             token.cleaned = stem if stem else token.cleaned
+
+        return None if inplace else d
+
+
+class SpellCheck(BaseTransformer):
+    """Perform Spellcheck on tokens."""
+
+    def __init__(self, language: str = "en_GB", max_distance: Optional[int] = None, *args, **kwargs):
+        """Perform Spellcheck on tokens.
+
+        Uses Hunspell spellchecker engine.
+
+        Args:
+            language (str): By default the following dictionaries are available: `'en_AU'`, `'en_CA'`, `'en_GB'`,
+             `'en_NZ'`, `'en_US'`, `'en_ZA'`, however is possible to use other dictionaries, for this please check
+              https://pypi.org/project/cyhunspell/, Default(`"en_GB"`).
+            max_distance (Optional[int]): If `None`, the tokens that are not spelt correctly are replaced by
+             an empty string, otherwise will maintain the original token. To use `max_distance` is necessary to install
+              `nltk` package, which will check if a token is correctly spelt or not, if not than it will check the
+              suggested words by Hunspell and calculate the levenshtein distance between the token and the suggestions,
+              and will replace the token by the word with the lower distance if is also lower than the `max_distance`,
+              otherwise will maintain the original token. Default(`None`)
+            args: For further utilities check https://pypi.org/project/cyhunspell/
+            kwargs: For further utilities check https://pypi.org/project/cyhunspell/
+        """
+        super().__init__(language=language, max_distance=max_distance, *args, **kwargs)
+        self.max_distance = max_distance
+        try:
+            from hunspell import Hunspell
+            self.h = Hunspell(lang=language, *args, **kwargs)
+
+        except ImportError:
+            log.error("Please install cyhunspell. "
+                      "See the docs at https://pypi.org/project/cyhunspell/ for more information.")
+            raise
+
+        if max_distance:
+            try:
+                import nltk  # noqa: F401
+                from nltk.metrics.distance import edit_distance
+                self.edit_distance = edit_distance
+
+            except ImportError:
+                log.error("Please install NLTK. "
+                          "See the docs at https://www.nltk.org/install.html for more information.")
+                raise
+
+    @validate(TransformersType.NORMALIZERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
+        """
+
+        Args:
+            doc (Document): Document to be normalized.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
+
+        Returns: Document
+        """
+        d = doc if inplace else doc._deepcopy()
+
+        def suggest(cleaned: str):
+            if self.max_distance:
+                suggestions = self.h.suggest(cleaned)
+
+                distances = [self.edit_distance(cleaned, s) for s in suggestions]
+                min_distance = min(distances)
+
+                return suggestions[distances.index(min_distance)] if self.max_distance >= min_distance else cleaned
+            else:
+                return ''
+
+        for token in d.tokens:
+            token.cleaned = token.cleaned if self.h.spell(token.cleaned) else suggest(token.cleaned)
 
         return None if inplace else d
