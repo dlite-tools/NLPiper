@@ -32,7 +32,6 @@ class Compose:
 
         Args:
             steps (List[str]): List of steps applied on a document.
-            [description]
 
         Returns: Compose
         """
