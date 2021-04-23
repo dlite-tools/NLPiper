@@ -141,7 +141,7 @@ class Stemmer(BaseTransformer):
              `'en_AU'`, `'en_CA'`, `'en_GB'`, `'en_NZ'`, `'en_US'`, `'en_ZA'`, however is possible to use other
              dictionaries, for this please check https://pypi.org/project/cyhunspell/
         """
-        super().__init__(language=language)
+        super().__init__(version=version, language=language, *args, **kwargs)
         if version == 'nltk':
             try:
                 import nltk  # noqa: F401
