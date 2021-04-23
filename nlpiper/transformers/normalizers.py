@@ -130,6 +130,8 @@ class Stemmer(BaseTransformer):
     def __init__(self, version: str = 'nltk', language: str = "english", *args, **kwargs):
         """Stem tokens.
 
+        Stemmer currently supports two way to stem the tokens, using NLTK SnowballStemmer or using Hunspell.
+
         Args:
             version (str): Currently there are two stemmers available: `nltk` and `hunspell`.
             language (str): Available languages for `nltk`: "arabic", "danish", "dutch", "english", "finnish", "french",
