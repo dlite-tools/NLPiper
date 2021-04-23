@@ -28,6 +28,13 @@ class Compose:
 
     @classmethod
     def create_from_steps(self, steps: List[str]):
+        """Create a Compose instance from a list of steps.
+
+        Args:
+            steps (List[str]): List of steps applied on a document.
+
+        Returns: Compose
+        """
         try:
             transformers = [eval(step) for step in steps]
         except NameError as e:
@@ -35,6 +42,30 @@ class Compose:
             raise e
 
         return Compose(transformers)
+
+    @classmethod
+    def rollback_document(self, doc: Document, num_steps: int = 1) -> Document:
+        """Rollback the steps applied to a document.
+
+        The method will return a new document with the steps applied to the rollback point.
+
+        Args:
+            doc (Document): Document instance that will have the steps rolled back.
+            num_steps (int, optional): Number of steps to rollback, by default 1.
+
+        Returns: Document
+        """
+        if len(doc.steps) == 0:
+            raise ValueError("Document must have steps to rollback")
+
+        if not (0 < num_steps <= len(doc.steps)):
+            raise ValueError(f"Number of steps to rollback must be between 1 and {len(doc.steps)} steps")
+
+        out = Document(doc.original)
+
+        steps = self.create_from_steps(doc.steps[:-num_steps])
+
+        return steps(out, inplace=False)
 
     def __repr__(self) -> str:
         params = ', '.join([repr(t) for t in self.transformers])
