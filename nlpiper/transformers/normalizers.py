@@ -17,6 +17,7 @@ __all__ = [
     "RemovePunctuation",
     "RemoveStopWords",
     "SpellCheck",
+    "Stemmer"
 ]
 
 
@@ -120,6 +121,71 @@ class RemoveStopWords(BaseTransformer):
 
         for token in d.tokens:
             token.cleaned = "" if getattr(token.cleaned, self.case_sensitive)() in self.stopwords else token.cleaned
+
+        return None if inplace else d
+
+
+class Stemmer(BaseTransformer):
+    """Stem tokens."""
+
+    def __init__(self, version: str = 'nltk', language: str = "english", *args, **kwargs):
+        """Stem tokens.
+
+        Stemmer currently supports two way to stem the tokens, using NLTK SnowballStemmer or using Hunspell.
+
+        Args:
+            version (str): Currently there are two stemmers available: `nltk` and `hunspell`.
+            language (str): Available languages for `nltk`: "arabic", "danish", "dutch", "english", "finnish", "french",
+             "german", "hungarian", "italian", "norwegian", "porter", "portuguese", "romanian", "russian", "spanish",
+             "swedish". (Default: `"english"`) For `hunspell`  by default the following languages are available:
+             `'en_AU'`, `'en_CA'`, `'en_GB'`, `'en_NZ'`, `'en_US'`, `'en_ZA'`, however is possible to use other
+             dictionaries, for this please check https://pypi.org/project/cyhunspell/
+        """
+        super().__init__(version=version, language=language, *args, **kwargs)
+        if version == 'nltk':
+            try:
+                import nltk  # noqa: F401
+                from nltk.stem.snowball import SnowballStemmer
+                self.stemmer = SnowballStemmer(language=language, *args, **kwargs)
+
+            except ImportError:
+                print("Please install NLTK. "
+                      "See the docs at https://www.nltk.org/install.html for more information.")
+                raise
+
+        elif version == 'hunspell':
+            try:
+                from hunspell import Hunspell
+                self.stemmer = Hunspell(lang=language, *args, **kwargs)
+
+            except ImportError:
+                log.error("Please install cyhunspell. "
+                          "See the docs at https://pypi.org/project/cyhunspell/ for more information.")
+                raise
+
+        else:
+            raise ValueError(f"Currently {repr(version)} is not available."
+                             f" You can opt by using 'nltk' or 'hunspell' to stem the tokens.")
+
+    @validate(TransformersType.NORMALIZERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
+        """Stem tokens.
+
+        Args:
+            doc (Document): Document to be normalized.
+            inplace (bool): if True will return a new doc object,
+                            otherwise will change the object passed as parameter.
+
+        Returns: Document
+        """
+        d = doc if inplace else doc._deepcopy()
+
+        for token in d.tokens:
+            stem = self.stemmer.stem(token.cleaned)
+            stem = stem[0] if isinstance(stem, tuple) else stem
+            token.cleaned = stem if stem else token.cleaned
+            token.stem = stem if stem else token.cleaned
 
         return None if inplace else d
 

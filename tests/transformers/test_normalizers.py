@@ -6,6 +6,7 @@ from nlpiper.transformers.normalizers import (
     CaseTokens,
     RemovePunctuation,
     RemoveStopWords,
+    Stemmer,
     SpellCheck
 )
 from nlpiper.transformers.tokenizers import BasicTokenizer
@@ -51,10 +52,16 @@ class TestNormalizersValidations:
         with pytest.raises(ModuleNotFoundError):
             SpellCheck(max_distance=1)
 
+        with pytest.raises(ModuleNotFoundError):
+            Stemmer(version='nltk')
+
     @pytest.mark.parametrize('hide_available_pkg', ['hunspell'], indirect=['hide_available_pkg'])
     def test_if_no_package_hunspell(self, hide_available_pkg):
         with pytest.raises(ModuleNotFoundError):
             SpellCheck(max_distance=None)
+
+        with pytest.raises(ModuleNotFoundError):
+            Stemmer(version='hunspell')
 
 
 class TestCaseTokens:
@@ -173,7 +180,7 @@ class TestSpellCheck:
         (None, ['This', 'isx', 'a', 'stop', 'Word'], ['This', '', 'a', 'stop', 'Word']),
         (1, ['Thisx', 'iszk', 'a', 'stop', 'Word'], ['This', 'iszk', 'a', 'stop', 'Word']),
     ])
-    def test_remove_stop_words_w_case_sensitive(self, max_distance, inputs, results):
+    def test_spell_checking(self, max_distance, inputs, results):
         pytest.importorskip('hunspell')
         pytest.importorskip('nltk')
 
@@ -202,3 +209,46 @@ class TestSpellCheck:
         assert doc.tokens == results_expected
         assert doc.steps == [repr(t), repr(n)]
         assert out is None
+
+
+class TestStemmer:
+
+    @pytest.mark.parametrize('version,language,inputs,results', [
+        ('nltk', 'english', ['This', 'computer', 'is', 'fastest', 'because'],
+         ['this', 'comput', 'is', 'fastest', 'becaus']),
+        ('hunspell', 'en_GB', ['This', 'computer', 'is', 'fastest', 'because'],
+         ['this', 'computer', 'is', 'fast', 'because'])])
+    def test_stemmer(self, version, language, inputs, results):
+        pytest.importorskip('nltk')
+        pytest.importorskip('hunspell')
+
+        results_expected = [Token(tk) for tk in inputs]
+        for tk, out in zip(results_expected, results):
+            tk.cleaned = out
+            tk.stem = out
+
+        doc = Document(" ".join(inputs))
+
+        # To apply a normalizer is necessary to have tokens
+        t = BasicTokenizer()
+        t(doc, inplace=True)
+
+        n = Stemmer(version=version, language=language)
+        # Inplace False
+        out = n(doc)
+
+        assert out.tokens == results_expected
+        assert out.steps == [repr(t), repr(n)]
+        assert doc.tokens == [Token(token) for token in inputs]
+        assert doc.steps == [repr(t)]
+
+        # Inplace True
+        out = n(doc, True)
+
+        assert doc.tokens == results_expected
+        assert doc.steps == [repr(t), repr(n)]
+        assert out is None
+
+    def test_unavailable_version(self):
+        with pytest.raises(ValueError):
+            Stemmer(version='random')
