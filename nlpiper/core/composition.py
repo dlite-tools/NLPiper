@@ -27,7 +27,7 @@ class Compose:
         log.info("[Created] %s", repr(self))
 
     @classmethod
-    def create_from_steps(self, steps: List[str]):
+    def create_from_steps(self, steps: List[str]) -> Compose:
         """Create a Compose instance from a list of steps.
 
         Args:
@@ -60,7 +60,7 @@ class Compose:
             raise ValueError("Document must have steps to rollback")
 
         if not (0 < num_steps <= len(doc.steps)):
-            raise ValueError("Number of steps to rollback must be between 1 and length of document steps")
+            raise ValueError(f"Number of steps to rollback must be between 1 and {len(doc.steps)} steps")
 
         out = Document(doc.original)
 
