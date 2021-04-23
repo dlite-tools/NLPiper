@@ -65,7 +65,7 @@ class Compose:
 
         steps = self.create_from_steps(doc.steps[:-num_steps])
 
-        return steps(out, False)  # type: ignore
+        return steps(out, inplace=False)
 
     def __repr__(self) -> str:
         params = ', '.join([repr(t) for t in self.transformers])
