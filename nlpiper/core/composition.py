@@ -27,7 +27,7 @@ class Compose:
         log.info("[Created] %s", repr(self))
 
     @classmethod
-    def create_from_steps(self, steps: List[str]) -> Compose:
+    def create_from_steps(self, steps: List[str]):
         """Create a Compose instance from a list of steps.
 
         Args:
@@ -65,7 +65,7 @@ class Compose:
 
         steps = self.create_from_steps(doc.steps[:-num_steps])
 
-        return steps(out)
+        return steps(out, False)  # type: ignore
 
     def __repr__(self) -> str:
         params = ', '.join([repr(t) for t in self.transformers])
