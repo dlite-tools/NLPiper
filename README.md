@@ -6,7 +6,7 @@
 (Introduction)
 
 ---
-## Install
+## Installation
 
 You can install NLPiper from PyPi with `pip` or your favorite package manager:
 
