@@ -8,7 +8,9 @@
 ---
 ## Install
 
-The package can be install using `pip`:
+You can install NLPiper from PyPi with `pip` or your favorite package manager:
+
+    pip install nlpiper
 
 ---
 
@@ -25,15 +27,15 @@ The following table explains the optional dependencies that can be installed:
 
 To install the optional dependency needed for your purpose you can run:
 
-```
-pip install nlpiper[<package>]
-```
+
+    pip install nlpiper[<package>]
+
 
 You can install all of these dependencies at once with:
 
-```
-pip install nlpiper[all]
-```
+
+    pip install nlpiper[all]
+
 
 ---
 
@@ -51,15 +53,15 @@ poetry install
 
 To install an [optional dependency](##Optional-Dependencies) you can run:
 
-```
-poetry install --extras <package>
-```
+
+    poetry install --extras <package>
+
 
 To install all the optional dependencies run:
 
-```
-poetry install --extras all
-```
+
+    poetry install --extras all
+
 
 ---
 
