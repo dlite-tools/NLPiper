@@ -12,6 +12,31 @@ The package can be install using `pip`:
 
 ---
 
+## Optional Dependencies
+
+Some **transformations** require the installation of additional packages.
+The following table explains the optional dependencies that can be installed:
+
+| Package                                                                                                   | Description
+|---                                                                                                        |---
+| <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/" target="_blank"><code>bs4</code></a>     | Used in **CleanMarkup** to remove HTML and XML from the document.
+| <a href="https://www.nltk.org/install.html" target="_blank"><code>nltk</code></a>                         | Used in **RemoveStopWords** to remove stop words from the document.
+| <a href="https://github.com/alvations/sacremoses" target="_blank"><code>sacremoses</code></a>             | Used in **MosesTokenizer** to tokenize the document using Sacremoses.
+
+To install the optional dependency needed for your purpose you can run:
+
+```
+pip install nlpiper[<package>]
+```
+
+You can install all of these dependencies at once with:
+
+```
+pip install nlpiper[all]
+```
+
+---
+
 ## Usage
 
 ---
@@ -24,19 +49,17 @@ cd NLPiper
 poetry install
 ```
 
-**NLPiper** by design, will only install the minimum necessary dependencies, however some **transformations** need special
-packages, to install them you can install them all at once by running:
+To install an [optional dependency](##Optional-Dependencies) you can run:
 
 ```
-poetry install --extras 'all'
+poetry install --extras <package>
 ```
 
-Or only choose the ones that are strictly needed for your purpose, replacing `'all'` by the ones needed.
+To install all the optional dependencies run:
 
-Available options:
-- `'bs4'`
-- `'nltk'`
-- `'sacremoses'`
+```
+poetry install --extras all
+```
 
 ---
 
