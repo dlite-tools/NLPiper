@@ -28,10 +28,10 @@ poetry install
 packages, to install them you can install them all at once by running:
 
 ```
-poetry install --extra 'all'
+poetry install --extras 'all'
 ```
 
-Or only choose the ones that are strictly needed for your purpose, replacing `'all'` by the ones needed. 
+Or only choose the ones that are strictly needed for your purpose, replacing `'all'` by the ones needed.
 
 Available options:
 - `'bs4'`
