@@ -146,9 +146,9 @@ class CleanMarkup(BaseTransformer):
 
         Args:
             features (str): Parser used to remove HTML and XML, which could be used the following parsers:
-            ```"html.parser"```, ```"lxml"```, ```"lxml-xml"```, ```"xml"```,  ```"html5lib"```,
-             for more information about the parser
-             go to: https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser
+                ``"html.parser"``, ``"lxml"``, ``"lxml-xml"``, ``"xml"``,  ``"html5lib"``.
+                For more information about the parser
+                go to `BeautifulSoup4 parsers documentation <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser>`_.
             *args: See the docs at https://www.crummy.com/software/BeautifulSoup/bs4/doc/ for more information.
             **kwargs: See the docs at https://www.crummy.com/software/BeautifulSoup/bs4/doc/ for more information.
         """
