@@ -1,0 +1,5 @@
+Cleaners
+============================
+
+.. autoclass:: CleanURL
+   :members:
