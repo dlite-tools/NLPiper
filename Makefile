@@ -31,3 +31,7 @@ coverage-html:
 		###### Running coverage analysis with html export ######
 		poetry run pytest -v --cov-report html --cov $(PACKAGE)
 		open htmlcov/index.html
+
+build-docs:
+		###### Build documentation ######
+		poetry run make -C docs html
