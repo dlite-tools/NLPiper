@@ -64,6 +64,10 @@ Applies on the token level, e.g. remove stop-words, spell-check, etc.
 - `CaseTokens`: lower or upper case all tokens.
 - `RemovePunctuation`: Remove punctuation from resulting tokens.
 - `RemoveStopWords`: Remove stop-words as tokens.
+- `Stemmer`: Get the stem from the tokens.
+- `SpellCheck`: Spell check the token, if given max distance will calculate the Levenshtein distance from the token with
+the suggested word and if lower the token is replaced by the suggestion else will keep the token. If no maximum distance is given if the
+word is not correctly spelt then will be replaced by an empty string.
 
 #### Document
 `Document` is a dataclass that contains all the information used during text preprocessing.
