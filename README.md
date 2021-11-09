@@ -30,14 +30,38 @@ The package can be install using `pip`:
 ```python
 >>> from nlpiper.core.document import Document
 >>> doc = Document("The following character is a number: 1 and the next one is not a.")
-Document(original='The following character is a number: 1 and the next one is not a.', cleaned='The following character is a number: 1 and the next one is not a.', tokens=None, steps=[])
+Document(
+    original='The following character is a number: 1 and the next one is not a.', 
+    cleaned='The following character is a number: 1 and the next one is not a.', 
+    tokens=None, 
+    steps=[]
+)
 ```
 
 ### Apply Pipeline to a Document:
 ```python
 >>> pipeline(doc)
 >>> doc
-Document(original='The following character is a number: 1 and the next one is not a.', cleaned='The following character is a number:  and the next one is not a.', tokens=[Token(original='The', cleaned='the', lemma=None, stem=None), Token(original='following', cleaned='following', lemma=None, stem=None), Token(original='character', cleaned='character', lemma=None, stem=None), Token(original='is', cleaned='is', lemma=None, stem=None), Token(original='a', cleaned='a', lemma=None, stem=None), Token(original='number:', cleaned='number:', lemma=None, stem=None), Token(original='and', cleaned='and', lemma=None, stem=None), Token(original='the', cleaned='the', lemma=None, stem=None), Token(original='next', cleaned='next', lemma=None, stem=None), Token(original='one', cleaned='one', lemma=None, stem=None), Token(original='is', cleaned='is', lemma=None, stem=None), Token(original='not', cleaned='not', lemma=None, stem=None), Token(original='a.', cleaned='a.', lemma=None, stem=None)], steps=['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"])
+Document(
+    original='The following character is a number: 1 and the next one is not a.', 
+    cleaned='The following character is a number:  and the next one is not a.', 
+    tokens=[
+        Token(original='The', cleaned='the', lemma=None, stem=None), 
+        Token(original='following', cleaned='following', lemma=None, stem=None), 
+        Token(original='character', cleaned='character', lemma=None, stem=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None), 
+        Token(original='a', cleaned='a', lemma=None, stem=None), 
+        Token(original='number:', cleaned='number:', lemma=None, stem=None), 
+        Token(original='and', cleaned='and', lemma=None, stem=None), 
+        Token(original='the', cleaned='the', lemma=None, stem=None), 
+        Token(original='next', cleaned='next', lemma=None, stem=None), 
+        Token(original='one', cleaned='one', lemma=None, stem=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None), 
+        Token(original='not', cleaned='not', lemma=None, stem=None), 
+        Token(original='a.', cleaned='a.', lemma=None, stem=None)
+    ], 
+    steps=['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"]
+)
 ```
 
 ### Available Transformers
@@ -57,7 +81,6 @@ Tokenize a document after cleaning is done (Split document into tokens)
 
 - `BasicTokenizer`: Split tokens by spaces in the text.
 - `MosesTokenizer`: Split tokens using Moses tokenizer (https://github.com/alvations/sacremoses)
-- `StanzaTokenizer`: Split tokens using Stanza tokenizer (https://github.com/stanfordnlp/stanza)
 
 #### Normalizer
 Applies on the token level, e.g. remove stop-words, spell-check, etc.
@@ -98,9 +121,33 @@ It is also possible to rollback the steps applied to a document:
 ```python
 >>> new_doc = Compose.rollback_document(doc, 2)
 >>> new_doc
-Document(original='The following character is a number: 1 and the next one is not a.', cleaned='The following character is a number:  and the next one is not a.', tokens=None, steps=['CleanNumber()'])
+Document(
+    original='The following character is a number: 1 and the next one is not a.', 
+    cleaned='The following character is a number:  and the next one is not a.', 
+    tokens=None, 
+    steps=['CleanNumber()']
+)
 >>> doc
-Document(original='The following character is a number: 1 and the next one is not a.', cleaned='The following character is a number:  and the next one is not a.', tokens=[Token(original='The', cleaned='the', lemma=None, stem=None), Token(original='following', cleaned='following', lemma=None, stem=None), Token(original='character', cleaned='character', lemma=None, stem=None), Token(original='is', cleaned='is', lemma=None, stem=None), Token(original='a', cleaned='a', lemma=None, stem=None), Token(original='number:', cleaned='number:', lemma=None, stem=None), Token(original='and', cleaned='and', lemma=None, stem=None), Token(original='the', cleaned='the', lemma=None, stem=None), Token(original='next', cleaned='next', lemma=None, stem=None), Token(original='one', cleaned='one', lemma=None, stem=None), Token(original='is', cleaned='is', lemma=None, stem=None), Token(original='not', cleaned='not', lemma=None, stem=None), Token(original='a.', cleaned='a.', lemma=None, stem=None)], steps=['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"])
+Document(
+    original='The following character is a number: 1 and the next one is not a.', 
+    cleaned='The following character is a number:  and the next one is not a.', 
+    tokens=[
+        Token(original='The', cleaned='the', lemma=None, stem=None), 
+        Token(original='following', cleaned='following', lemma=None, stem=None), 
+        Token(original='character', cleaned='character', lemma=None, stem=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None), 
+        Token(original='a', cleaned='a', lemma=None, stem=None), 
+        Token(original='number:', cleaned='number:', lemma=None, stem=None), 
+        Token(original='and', cleaned='and', lemma=None, stem=None), 
+        Token(original='the', cleaned='the', lemma=None, stem=None), 
+        Token(original='next', cleaned='next', lemma=None, stem=None), 
+        Token(original='one', cleaned='one', lemma=None, stem=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None), 
+        Token(original='not', cleaned='not', lemma=None, stem=None), 
+        Token(original='a.', cleaned='a.', lemma=None, stem=None)
+    ], 
+    steps=['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"]
+)
 ```
 
 ---
