@@ -123,7 +123,26 @@ It is also possible to rollback the steps applied to a document:
 >>> new_doc
 Document(original='The following character is a number: 1 and the next one is not a.', cleaned='The following character is a number:  and the next one is not a.', tokens=None, steps=['CleanNumber()'])
 >>> doc
-Document(original='The following character is a number: 1 and the next one is not a.', cleaned='The following character is a number:  and the next one is not a.', tokens=[Token(original='The', cleaned='the', lemma=None, stem=None), Token(original='following', cleaned='following', lemma=None, stem=None), Token(original='character', cleaned='character', lemma=None, stem=None), Token(original='is', cleaned='is', lemma=None, stem=None), Token(original='a', cleaned='a', lemma=None, stem=None), Token(original='number:', cleaned='number:', lemma=None, stem=None), Token(original='and', cleaned='and', lemma=None, stem=None), Token(original='the', cleaned='the', lemma=None, stem=None), Token(original='next', cleaned='next', lemma=None, stem=None), Token(original='one', cleaned='one', lemma=None, stem=None), Token(original='is', cleaned='is', lemma=None, stem=None), Token(original='not', cleaned='not', lemma=None, stem=None), Token(original='a.', cleaned='a.', lemma=None, stem=None)], steps=['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"])
+Document(
+    original='The following character is a number: 1 and the next one is not a.', 
+    cleaned='The following character is a number:  and the next one is not a.', 
+    tokens=[
+        Token(original='The', cleaned='the', lemma=None, stem=None), 
+        Token(original='following', cleaned='following', lemma=None, stem=None), 
+        Token(original='character', cleaned='character', lemma=None, stem=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None), 
+        Token(original='a', cleaned='a', lemma=None, stem=None), 
+        Token(original='number:', cleaned='number:', lemma=None, stem=None), 
+        Token(original='and', cleaned='and', lemma=None, stem=None), 
+        Token(original='the', cleaned='the', lemma=None, stem=None), 
+        Token(original='next', cleaned='next', lemma=None, stem=None), 
+        Token(original='one', cleaned='one', lemma=None, stem=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None), 
+        Token(original='not', cleaned='not', lemma=None, stem=None), 
+        Token(original='a.', cleaned='a.', lemma=None, stem=None)
+    ], 
+    steps=['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"]
+)
 ```
 
 ---
