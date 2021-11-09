@@ -30,7 +30,12 @@ The package can be install using `pip`:
 ```python
 >>> from nlpiper.core.document import Document
 >>> doc = Document("The following character is a number: 1 and the next one is not a.")
-Document(original='The following character is a number: 1 and the next one is not a.', cleaned='The following character is a number: 1 and the next one is not a.', tokens=None, steps=[])
+Document(
+    original='The following character is a number: 1 and the next one is not a.', 
+    cleaned='The following character is a number: 1 and the next one is not a.', 
+    tokens=None, 
+    steps=[]
+)
 ```
 
 ### Apply Pipeline to a Document:
