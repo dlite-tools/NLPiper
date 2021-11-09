@@ -18,7 +18,7 @@ def hide_available_pkg(monkeypatch):
     import_orig = builtins.__import__
 
     def mocked_import(name, *args, **kwargs):
-        if name in ('sacremoses'):
+        if name in (['sacremoses', 'stanza']):
             raise ModuleNotFoundError()
         return import_orig(name, *args, **kwargs)
 
@@ -29,8 +29,9 @@ class TestTokenizersValidations:
 
     @pytest.mark.parametrize('inputs', ["string", 2])
     def test_with_invalid_input(self, inputs):
+        t = BasicTokenizer()
+
         with pytest.raises(TypeError):
-            t = BasicTokenizer()
             t(inputs)
 
     @pytest.mark.parametrize('inputs', ["test"])
@@ -40,13 +41,18 @@ class TestTokenizersValidations:
         doc.tokens.append(Token("test"))
 
         t = BasicTokenizer()
+
         with pytest.raises(RuntimeError):
             t(doc)
 
     @pytest.mark.usefixtures('hide_available_pkg')
-    def test_if_no_package(self):
+    @pytest.mark.parametrize('package', [
+        MosesTokenizer,
+        StanzaTokenizer
+    ])
+    def test_if_no_package(self, package):
         with pytest.raises(ModuleNotFoundError):
-            MosesTokenizer()
+            package()
 
 
 class TestBasicTokenizer:
