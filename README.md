@@ -121,7 +121,12 @@ It is also possible to rollback the steps applied to a document:
 ```python
 >>> new_doc = Compose.rollback_document(doc, 2)
 >>> new_doc
-Document(original='The following character is a number: 1 and the next one is not a.', cleaned='The following character is a number:  and the next one is not a.', tokens=None, steps=['CleanNumber()'])
+Document(
+    original='The following character is a number: 1 and the next one is not a.', 
+    cleaned='The following character is a number:  and the next one is not a.', 
+    tokens=None, 
+    steps=['CleanNumber()']
+)
 >>> doc
 Document(
     original='The following character is a number: 1 and the next one is not a.', 
