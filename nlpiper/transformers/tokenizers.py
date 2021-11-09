@@ -104,7 +104,7 @@ class StanzaTokenizer(BaseTransformer):
             import stanza
             from stanza import Pipeline
             stanza.download(language)
-            self.p = Pipeline(lang=language, processors='tokenize,mwt,pos,lemma', tokenize_pretokenized=True, *args,
+            self.p = Pipeline(lang=language, processors='tokenize', tokenize_pretokenized=False, *args,
                               **kwargs)
 
         except ImportError:
