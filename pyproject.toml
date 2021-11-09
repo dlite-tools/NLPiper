@@ -53,7 +53,7 @@ stanza = ["stanza"]
 
 all = [
     "bs4",
-    "hunspell",
+    "cyhunspell",
     "nltk",
     "sacremoses",
     "stanza"
