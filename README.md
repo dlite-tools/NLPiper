@@ -81,6 +81,7 @@ Tokenize a document after cleaning is done (Split document into tokens)
 
 - `BasicTokenizer`: Split tokens by spaces in the text.
 - `MosesTokenizer`: Split tokens using Moses tokenizer (https://github.com/alvations/sacremoses)
+- `StanzaTokenizer`: Split tokens using Stanza tokenizer (https://github.com/stanfordnlp/stanza)
 
 #### Normalizer
 Applies on the token level, e.g. remove stop-words, spell-check, etc.
