@@ -43,7 +43,7 @@ class CaseTokens(BaseTransformer):
 
         Args:
             doc (Document): Document to be normalized.
-            inplace (bool): if True will return a new doc object,
+            inplace (bool): if False will return a new doc object,
                             otherwise will change the object passed as parameter.
 
         Returns: Document
@@ -66,7 +66,7 @@ class RemovePunctuation(BaseTransformer):
 
         Args:
             doc (Document): Document to be normalized.
-            inplace (bool): if True will return a new doc object,
+            inplace (bool): if False will return a new doc object,
                             otherwise will change the object passed as parameter.
 
         Returns: Document
@@ -112,7 +112,7 @@ class RemoveStopWords(BaseTransformer):
 
         Args:
             doc (Document): Document to be normalized.
-            inplace (bool): if True will return a new doc object,
+            inplace (bool): if False will return a new doc object,
                             otherwise will change the object passed as parameter.
 
         Returns: Document
@@ -174,7 +174,7 @@ class Stemmer(BaseTransformer):
 
         Args:
             doc (Document): Document to be normalized.
-            inplace (bool): if True will return a new doc object,
+            inplace (bool): if False will return a new doc object,
                             otherwise will change the object passed as parameter.
 
         Returns: Document
@@ -240,7 +240,7 @@ class SpellCheck(BaseTransformer):
 
         Args:
             doc (Document): Document to be normalized.
-            inplace (bool): if True will return a new doc object,
+            inplace (bool): if False will return a new doc object,
                             otherwise will change the object passed as parameter.
 
         Returns: Document

@@ -31,7 +31,7 @@ class BasicTokenizer(BaseTransformer):
 
         Args:
             doc (Document): Text to be tokenized.
-            inplace (bool): if True will return a new doc object,
+            inplace (bool): if False will return a new doc object,
                             otherwise will change the object passed as parameter.
 
         Returns: Document
@@ -73,7 +73,7 @@ class MosesTokenizer(BaseTransformer):
 
         Args:
             doc (Document): Document to be tokenized.
-            inplace (bool): if True will return a new doc object,
+            inplace (bool): if False will return a new doc object,
                             otherwise will change the object passed as parameter.
 
         Returns: Document
@@ -119,7 +119,7 @@ class StanzaTokenizer(BaseTransformer):
 
         Args:
             doc (Document): Document to be tokenized.
-            inplace (bool): if True will return a new doc object,
+            inplace (bool): if False will return a new doc object,
                             otherwise will change the object passed as parameter.
 
         Returns: Document

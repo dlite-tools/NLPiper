@@ -76,7 +76,7 @@ class Compose:
 
         Args:
             doc (Document): Document object to be processed.
-            inplace (bool): if True will return a new doc object,
+            inplace (bool): if False will return a new doc object,
                             otherwise will change the object passed as parameter.
 
         Returns: Document
