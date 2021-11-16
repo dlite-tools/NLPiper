@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/imgs/nlpiper.png" />
+  <img src="/docs/imgs/nlpiper.png" />
 </p>
 
 [![Test](https://github.com/tomassosorio/NLPiper/actions/workflows/test.yml/badge.svg)](https://github.com/tomassosorio/NLPiper/actions/workflows/test.yml)
