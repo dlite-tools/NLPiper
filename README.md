@@ -1,4 +1,6 @@
-![NLPiper Logo](/imgs/nlpiper.png)
+<p align="center">
+  <img src="/imgs/nlpiper.png" />
+</p>
 
 [![Test](https://github.com/tomassosorio/NLPiper/actions/workflows/test.yml/badge.svg)](https://github.com/tomassosorio/NLPiper/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
