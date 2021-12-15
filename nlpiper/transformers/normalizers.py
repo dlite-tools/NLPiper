@@ -1,7 +1,10 @@
 """Normalizer Module."""
 
 from string import punctuation
-from typing import Optional
+from typing import (
+    Optional,
+    List
+)
 
 from nlpiper.core.document import Document
 from nlpiper.transformers import (
@@ -16,6 +19,7 @@ __all__ = [
     "CaseTokens",
     "RemovePunctuation",
     "RemoveStopWords",
+    "VocabularyFilter",
     "SpellCheck",
     "Stemmer"
 ]
@@ -121,6 +125,45 @@ class RemoveStopWords(BaseTransformer):
 
         for token in d.tokens:
             token.cleaned = "" if getattr(token.cleaned, self.case_sensitive)() in self.stopwords else token.cleaned
+
+        return None if inplace else d
+
+
+class VocabularyFilter(BaseTransformer):
+    """Only allow tokens from a pre-defined vocabulary."""
+
+    def __init__(self, vocabulary: List[str], case_sensitive: bool = True):
+        """Only allow tokens from a pre-defined vocabulary.
+
+        Only accept tokens that are in the vocabulary, otherwise the token will be replace by an empty string, `""`.
+
+        Args:
+            vocabulary (str): List of tokens that define the vocabulary.
+            case_sensitive (bool): When `True`, the detection of a token in the vocabulary will be case sensitive,
+             e.g. `vocab = ['this']`, if `'This'` is a token, since 'T' is upper case and will not be considered as a
+             token from the vocabulary and will be replaced by an empty string, `""`, otherwise, will be considered
+            as in vocabulary and kept.
+        """
+        super().__init__(vocabulary=vocabulary, case_sensitive=case_sensitive)
+        self.vocab = vocabulary if case_sensitive else [token.lower() for token in vocabulary]
+        self.case_sensitive = "__str__" if case_sensitive else "lower"
+
+    @validate(TransformersType.NORMALIZERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
+        """Remove Stop Words.
+
+        Args:
+            doc (Document): Document to be normalized.
+            inplace (bool): if `False` will return a new doc object,
+                            otherwise will change the object passed as parameter.
+
+        Returns: Document
+        """
+        d = doc if inplace else doc._deepcopy()
+
+        for token in d.tokens:
+            token.cleaned = "" if getattr(token.cleaned, self.case_sensitive)() not in self.vocab else token.cleaned
 
         return None if inplace else d
 

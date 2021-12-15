@@ -6,6 +6,7 @@ from nlpiper.transformers.normalizers import (
     CaseTokens,
     RemovePunctuation,
     RemoveStopWords,
+    VocabularyFilter,
     Stemmer,
     SpellCheck
 )
@@ -159,6 +160,41 @@ class TestRemoveStopWords:
         t(doc, inplace=True)
 
         n = RemoveStopWords(case_sensitive=sensitive)
+        # Inplace False
+        out = n(doc)
+
+        assert out.tokens == results_expected
+        assert out.steps == [repr(t), repr(n)]
+        assert doc.tokens == [Token(token) for token in inputs]
+        assert doc.steps == [repr(t)]
+
+        # Inplace True
+        out = n(doc, True)
+
+        assert doc.tokens == results_expected
+        assert doc.steps == [repr(t), repr(n)]
+        assert out is None
+
+
+class TestVocabularyFilter:
+    vocabulary = ['this', 'is', 'a', 'token']
+
+    @pytest.mark.parametrize('sensitive,inputs,results', [
+        (True, ['This', 'is', 'a', 'Token'], ['', 'is', 'a', '']),
+        (False, ['This', 'is', 'a', 'Token'], ['This', 'is', 'a', 'Token']),
+    ])
+    def test_vocabulary_filter_w_case_sensitive(self, sensitive, inputs, results):
+        results_expected = [Token(tk) for tk in inputs]
+        for tk, out in zip(results_expected, results):
+            tk.cleaned = out
+
+        doc = Document(" ".join(inputs))
+
+        # To apply a normalizer is necessary to have tokens
+        t = BasicTokenizer()
+        t(doc, inplace=True)
+
+        n = VocabularyFilter(vocabulary=self.vocabulary, case_sensitive=sensitive)
         # Inplace False
         out = n(doc)
 
