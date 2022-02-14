@@ -4,7 +4,7 @@ from nlpiper.transformers import (
     BaseTransformer,
     validate
 )
-from nlpiper.core.document import Document
+from nlpiper.core import Document
 
 
 class TestBaseTransformer:

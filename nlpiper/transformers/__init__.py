@@ -1,7 +1,7 @@
 """Transformers Module."""
 from enum import Enum, auto
 
-from nlpiper.core.document import Document
+from nlpiper.core import Document
 from nlpiper.logger import log
 
 

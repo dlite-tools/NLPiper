@@ -4,7 +4,7 @@ from typing import (
     List
 )
 
-from nlpiper.core.document import Document
+from nlpiper.core import Document
 from nlpiper.transformers import BaseTransformer
 from nlpiper.logger import log
 
@@ -27,7 +27,7 @@ class Compose:
         log.info("[Created] %s", repr(self))
 
     @classmethod
-    def create_from_steps(self, steps: List[str]):
+    def create_from_steps(cls, steps: List[str]):
         """Create a Compose instance from a list of steps.
 
         Args:
@@ -44,7 +44,7 @@ class Compose:
         return Compose(transformers)
 
     @classmethod
-    def rollback_document(self, doc: Document, num_steps: int = 1) -> Document:
+    def rollback_document(cls, doc: Document, num_steps: int = 1) -> Document:
         """Rollback the steps applied to a document.
 
         The method will return a new document with the steps applied to the rollback point.
@@ -63,7 +63,7 @@ class Compose:
 
         out = Document(doc.original)
 
-        steps = self.create_from_steps(doc.steps[:-num_steps])
+        steps = cls.create_from_steps(doc.steps[:-num_steps])
 
         return steps(out, inplace=False)
 
