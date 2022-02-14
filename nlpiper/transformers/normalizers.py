@@ -192,8 +192,8 @@ class Stemmer(BaseTransformer):
                 self.stemmer = SnowballStemmer(language=language, *args, **kwargs)
 
             except ImportError:
-                print("Please install NLTK. "
-                      "See the docs at https://www.nltk.org/install.html for more information.")
+                log.error("Please install NLTK. "
+                          "See the docs at https://www.nltk.org/install.html for more information.")
                 raise
 
         elif version == 'hunspell':
