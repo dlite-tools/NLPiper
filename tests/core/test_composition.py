@@ -106,7 +106,7 @@ class TestCompose:
         out.steps.append('NotTransformer()')
 
         with pytest.raises(NameError):
-            new_pipe = Compose.create_from_steps(out.steps)
+            Compose.create_from_steps(out.steps)
 
     def test_rollback_document_wo_steps(self):
         doc = Document("basic test document")
