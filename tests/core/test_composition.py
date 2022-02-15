@@ -4,7 +4,10 @@ import pytest
 
 from nlpiper.transformers import cleaners, normalizers, tokenizers
 from nlpiper.core.composition import Compose
-from nlpiper.core.document import Document, Token
+from nlpiper.core.document import (
+    Document,
+    Token
+)
 
 
 class TestCompose:

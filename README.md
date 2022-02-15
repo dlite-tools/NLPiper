@@ -30,7 +30,7 @@ The package can be install using `pip`:
 
 ### Generate a Document and Document structure:
 ```python
->>> from nlpiper.core.document import Document
+>>> from nlpiper.core import Document
 >>> doc = Document("The following character is a number: 1 and the next one is not a.")
 Document(
     original='The following character is a number: 1 and the next one is not a.', 

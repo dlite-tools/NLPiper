@@ -5,7 +5,7 @@ from string import punctuation
 from typing import Optional
 from unicodedata import normalize, combining
 
-from nlpiper.core.document import Document
+from nlpiper.core import Document
 from nlpiper.transformers import (
     BaseTransformer,
     TransformersType,

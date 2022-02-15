@@ -6,7 +6,7 @@ from typing import (
     List
 )
 
-from nlpiper.core.document import Document
+from nlpiper.core import Document
 from nlpiper.transformers import (
     BaseTransformer,
     TransformersType,
