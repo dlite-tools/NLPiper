@@ -7,7 +7,7 @@ all: static-tests coverage
 
 style:
 		###### Running style analysis ######
-		poetry run flake8 $(PACKAGE)
+		poetry run flake8 $(PACKAGE) $(UNIT_TESTS)
 
 typecheck:
 		###### Running static type analysis ######
