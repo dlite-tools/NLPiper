@@ -3,6 +3,8 @@ from typing import Any, List, Optional
 
 from pydantic import BaseModel, validator
 
+from nlpiper.logger import log
+
 
 def _check_if_embedded_in_numpy_array(v):
     try:
@@ -11,8 +13,9 @@ def _check_if_embedded_in_numpy_array(v):
             raise TypeError('Embedding value is not a numpy array.')
 
     except ImportError:
-        raise ImportError("To use embeddings please install numpy. "
-                          "See the docs at https://numpy.org/ for more information.")
+        log.error("To use embeddings please install numpy. "
+                  "See the docs at https://numpy.org/ for more information.")
+        raise
     return v
 
 
