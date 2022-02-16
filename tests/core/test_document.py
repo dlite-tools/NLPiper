@@ -2,10 +2,7 @@ import pytest
 from pydantic import ValidationError
 
 from nlpiper.core.composition import Compose
-from nlpiper.core.document import (
-    Document,
-    Token
-)
+from nlpiper.core.document import Document
 from nlpiper.transformers.tokenizers import BasicTokenizer
 
 
@@ -28,7 +25,6 @@ class TestDocument:
 
     def test_document_embedding_invalid_array(self):
         pytest.importorskip('numpy')
-        import numpy as np
 
         d = create_document()
 
@@ -37,7 +33,6 @@ class TestDocument:
 
     def test_token_embedding_invalid_array(self):
         pytest.importorskip('numpy')
-        import numpy as np
 
         d = create_document()
 

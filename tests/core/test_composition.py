@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 import pytest
 
 from nlpiper.transformers import cleaners, normalizers, tokenizers
