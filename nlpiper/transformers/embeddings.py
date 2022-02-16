@@ -30,7 +30,11 @@ class GensimEmbeddings(BaseTransformer):
             apply_doc (Optional[str]): If different than `None`, then will be calculated the the embeddings vector for
             the document, which could be `"mean"` or `"sum"` of the valid tokens.
         """
-        super().__init__(keyed_vectors=keyed_vectors, apply_doc=apply_doc)
+        super().__init__(keyed_vectors=keyed_vectors, vector_size=keyed_vectors.vector_size,
+                         mapfile_path=keyed_vectors.mapfile_path, apply_doc=apply_doc)
+        assert apply_doc in ('sum', 'mean', None), 'apply_doc value is not valid, can only be:' \
+                                                   ' `None`, `"mean"` or `"sum"`.'
+
         try:
             import numpy as np
             self.np = np

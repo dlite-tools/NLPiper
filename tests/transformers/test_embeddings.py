@@ -52,14 +52,15 @@ class TestGensimEmbeddings:
         assert doc.embedded is None
         assert out is None
 
-    def test_embedding_token_document(self):
+    @pytest.mark.parametrize('apply_doc', ['sum', 'mean'])
+    def test_embedding_token_document(self, apply_doc):
         doc = Document('Test random stuff.')
 
         # To apply a embeddings is necessary to have tokens
         t = BasicTokenizer()
         t(doc, inplace=True)
 
-        e = GensimEmbeddings(self.glove_vectors, 'sum')
+        e = GensimEmbeddings(self.glove_vectors, apply_doc)
 
         # Inplace False
         out = e(doc)
@@ -77,6 +78,10 @@ class TestGensimEmbeddings:
         assert doc.steps == [repr(t), repr(e)]
         assert doc.embedded.shape == (25,)
         assert out is None
+
+    def test_random_apply_doc(self):
+        with pytest.raises(AssertionError):
+            GensimEmbeddings(self.glove_vectors, 'random')
 
 
 class TestEmbeddings:
