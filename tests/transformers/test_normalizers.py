@@ -1,5 +1,3 @@
-import builtins
-
 import pytest
 
 from nlpiper.transformers.normalizers import (
@@ -17,16 +15,7 @@ from nlpiper.core.document import (
 )
 
 
-@pytest.fixture
-def hide_available_pkg(request, monkeypatch):
-    import_orig = builtins.__import__
-
-    def mocked_import(name, *args, **kwargs):
-        if name in (request.param, ):
-            raise ModuleNotFoundError()
-        return import_orig(name, *args, **kwargs)
-
-    monkeypatch.setattr(builtins, '__import__', mocked_import)
+from tests.transformers import hide_available_pkg  # noqa: F401
 
 
 class TestNormalizersValidations:
@@ -46,7 +35,7 @@ class TestNormalizersValidations:
             t(doc)
 
     @pytest.mark.parametrize('hide_available_pkg', ['nltk'], indirect=['hide_available_pkg'])
-    def test_if_no_package_nltk(self, hide_available_pkg):
+    def test_if_no_package_nltk(self, hide_available_pkg):  # noqa: F811
         with pytest.raises(ModuleNotFoundError):
             RemoveStopWords()
 
@@ -57,7 +46,7 @@ class TestNormalizersValidations:
             Stemmer(version='nltk')
 
     @pytest.mark.parametrize('hide_available_pkg', ['hunspell'], indirect=['hide_available_pkg'])
-    def test_if_no_package_hunspell(self, hide_available_pkg):
+    def test_if_no_package_hunspell(self, hide_available_pkg):  # noqa: F811
         with pytest.raises(ModuleNotFoundError):
             SpellCheck(max_distance=None)
 

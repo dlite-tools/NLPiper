@@ -1,5 +1,3 @@
-import builtins
-
 import pytest
 
 from nlpiper.transformers.tokenizers import (
@@ -12,17 +10,7 @@ from nlpiper.core.document import (
     Token
 )
 
-
-@pytest.fixture
-def hide_available_pkg(monkeypatch):
-    import_orig = builtins.__import__
-
-    def mocked_import(name, *args, **kwargs):
-        if name in (['sacremoses', 'stanza']):
-            raise ModuleNotFoundError()
-        return import_orig(name, *args, **kwargs)
-
-    monkeypatch.setattr(builtins, '__import__', mocked_import)
+from tests.transformers import hide_available_pkg  # noqa: F401
 
 
 class TestTokenizersValidations:
@@ -45,12 +33,10 @@ class TestTokenizersValidations:
         with pytest.raises(RuntimeError):
             t(doc)
 
-    @pytest.mark.usefixtures('hide_available_pkg')
-    @pytest.mark.parametrize('package', [
-        MosesTokenizer,
-        StanzaTokenizer
-    ])
-    def test_if_no_package(self, package):
+    @pytest.mark.parametrize('hide_available_pkg,package', [('sacremoses', MosesTokenizer),
+                                                            ('stanza', StanzaTokenizer)],
+                             indirect=['hide_available_pkg'])
+    def test_if_no_package(self, hide_available_pkg, package):  # noqa: F811
         with pytest.raises(ModuleNotFoundError):
             package()
 
