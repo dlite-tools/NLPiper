@@ -25,8 +25,10 @@ class GensimEmbeddings(BaseTransformer):
         Gensim Embedding extraction..
 
         Args:
-            keyed_vectors (Any): Model path.
-            apply_doc (Optional[str]):
+            keyed_vectors (Any): Gensim model based on keyedVectors,
+            see more in: https://radimrehurek.com/gensim/models/keyedvectors.html
+            apply_doc (Optional[str]): If different than `None`, then will be calculated the the embeddings vector for
+            the document, which could be `"mean"` or `"sum"` of the valid tokens.
         """
         super().__init__(keyed_vectors=keyed_vectors, apply_doc=apply_doc)
         try:
