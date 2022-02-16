@@ -97,6 +97,11 @@ Applies on the token level, e.g. remove stop-words, spell-check, etc.
 the suggested word and if lower the token is replaced by the suggestion else will keep the token. If no maximum distance is given if the
 word is not correctly spelt then will be replaced by an empty string.
 
+#### Embeddings
+Applies on the token level, converting words by embeddings
+
+- `GensimEmbeddings`: Use Gensim word embeddings.
+
 #### Document
 `Document` is a dataclass that contains all the information used during text preprocessing.
 
@@ -105,12 +110,14 @@ Document attributes:
 - `cleaned`: original text to be processed when document is initiated and then attribute which `Cleaners` and `Tokenizers` work.
 - `tokens`: list of tokens that where obtained using a `Tokenizer`.
 - `steps`: list of transforms applied on the document.
+- `embedded`: document embedding.
 
 `token`:
 - `original`: original token.
 - `cleaned`: original token at initiation, then modified according with `Normalizers`.
 - `lemma`: token lemma (need to use a normalizer to obtain).
 - `stem`: token stem (need to use a normalizer to obtain).
+- `embedded`: token embedding.
 
 #### Compose
 Compose applies the chosen transformers into a given document.
