@@ -21,7 +21,7 @@ The package can be installed using `pip`:
 `pip install nlpiper`
 
 For all transforms be available:
-`pip install nlpiper[all]`, otherwise, just install the packages needed.
+`pip install 'nlpiper[all]'`, otherwise, just install the packages needed.
 
 ## Usage
 
