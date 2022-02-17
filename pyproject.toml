@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "nlpiper"
 version = "0.0.1"
-description = "NLPiper package"
+description = "NLPiper, a lightweight package integrated with a universe of frameworks to pre-process documents."
 authors = ["Tomás Osório"]
 maintainers = [
     "Carlos Alves",
@@ -17,9 +17,10 @@ packages = [
 ]
 
 repository = "https://github.com/tomassosorio/NLPiper"
-documentation = "https://github.com/tomassosorio/NLPiper"
+documentation = "https://github.com/tomassosorio/NLPiper/README.md"
 
-keywords = ["nlp", "package"]
+keywords = ["NLP", "CL", "natural language processing", "computational linguistics", "parsing", "tokenizing",
+    "linguistics", "language", "natural language", "text analytics", "deep-learning "]
 
 classifiers = [
     "Development Status :: 4 - Beta",
