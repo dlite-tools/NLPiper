@@ -1,5 +1,5 @@
 """Embeddings Module."""
-
+import random
 from typing import Any, Optional
 
 from nlpiper.core.document import Document
@@ -18,6 +18,7 @@ __all__ = [
 
 class GensimEmbeddings(BaseTransformer):
     """Gensim Embedding extraction."""
+    random.Random()
 
     def __init__(self, keyed_vectors: Any, apply_doc: Optional[str] = None):
         """Stem tokens.
