@@ -134,9 +134,9 @@ Document attributes:
 #### Compose
 Compose applies the chosen transformers into a given document.
 It restricts the order that the transformers can be applied, first are the Cleaners, then the Tokenizers and lastly
-the Normalizers.
+the Normalizers and Embeddings.
 
-It is possible to create a compuse using the steps from a processed document:
+It is possible to create a compose using the steps from a processed document:
 ```python
 >>> new_pipeline = Compose.create_from_steps(doc.steps)
 ```
