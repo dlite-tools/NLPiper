@@ -6,9 +6,6 @@ from nlpiper.core.document import Document
 from nlpiper.transformers.tokenizers import BasicTokenizer
 
 
-from tests.transformers import hide_available_pkg  # noqa: F401
-
-
 def create_document():
     pipe = Compose([BasicTokenizer()])
     d = Document('Random Stuff.')

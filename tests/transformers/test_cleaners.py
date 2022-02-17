@@ -14,8 +14,6 @@ from nlpiper.core.document import (
     Token
 )
 
-from tests.transformers import hide_available_pkg  # noqa: F401
-
 
 class TestCleanersValidations:
 

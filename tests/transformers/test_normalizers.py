@@ -15,9 +15,6 @@ from nlpiper.core.document import (
 )
 
 
-from tests.transformers import hide_available_pkg  # noqa: F401
-
-
 class TestNormalizersValidations:
 
     @pytest.mark.parametrize('inputs', ["string", 2])

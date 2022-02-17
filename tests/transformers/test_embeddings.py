@@ -5,9 +5,6 @@ from nlpiper.transformers.embeddings import GensimEmbeddings
 from nlpiper.transformers.tokenizers import BasicTokenizer
 
 
-from tests.transformers import hide_available_pkg  # noqa: F401
-
-
 class TestGensimEmbeddings:
     pytest.importorskip('gensim')
     pytest.importorskip('numpy')
