@@ -7,12 +7,18 @@
 
 NLPiper is a package that agglomerates different NLP tools and applies their transformations in the target document.
 
+## Goal
+Lightweight package integrated with a universe of frameworks to pre-process documents.
+
 ---
 ## Install
 
-The package can be install using `pip`:
+The package can be installed using `pip`:
 
----
+`pip install nlpiper`
+
+For all transforms be available:
+`pip install nlpiper[all]`, otherwise, just install the packages needed.
 
 ## Usage
 
@@ -32,36 +38,39 @@ The package can be install using `pip`:
 ```python
 >>> from nlpiper.core import Document
 >>> doc = Document("The following character is a number: 1 and the next one is not a.")
+>>> doc
 Document(
     original='The following character is a number: 1 and the next one is not a.', 
     cleaned='The following character is a number: 1 and the next one is not a.', 
-    tokens=None, 
+    tokens=None,
+    embedded=None,
     steps=[]
 )
 ```
 
 ### Apply Pipeline to a Document:
 ```python
->>> pipeline(doc)
+>>> doc = pipeline(doc)
 >>> doc
 Document(
     original='The following character is a number: 1 and the next one is not a.', 
     cleaned='The following character is a number:  and the next one is not a.', 
     tokens=[
-        Token(original='The', cleaned='the', lemma=None, stem=None), 
-        Token(original='following', cleaned='following', lemma=None, stem=None), 
-        Token(original='character', cleaned='character', lemma=None, stem=None), 
-        Token(original='is', cleaned='is', lemma=None, stem=None), 
-        Token(original='a', cleaned='a', lemma=None, stem=None), 
-        Token(original='number:', cleaned='number:', lemma=None, stem=None), 
-        Token(original='and', cleaned='and', lemma=None, stem=None), 
-        Token(original='the', cleaned='the', lemma=None, stem=None), 
-        Token(original='next', cleaned='next', lemma=None, stem=None), 
-        Token(original='one', cleaned='one', lemma=None, stem=None), 
-        Token(original='is', cleaned='is', lemma=None, stem=None), 
-        Token(original='not', cleaned='not', lemma=None, stem=None), 
-        Token(original='a.', cleaned='a.', lemma=None, stem=None)
-    ], 
+        Token(original='The', cleaned='the', lemma=None, stem=None, embedded=None), 
+        Token(original='following', cleaned='following', lemma=None, stem=None, embedded=None), 
+        Token(original='character', cleaned='character', lemma=None, stem=None, embedded=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None, embedded=None), 
+        Token(original='a', cleaned='a', lemma=None, stem=None, embedded=None), 
+        Token(original='number:', cleaned='number:', lemma=None, stem=None, embedded=None), 
+        Token(original='and', cleaned='and', lemma=None, stem=None, embedded=None), 
+        Token(original='the', cleaned='the', lemma=None, stem=None, embedded=None), 
+        Token(original='next', cleaned='next', lemma=None, stem=None, embedded=None), 
+        Token(original='one', cleaned='one', lemma=None, stem=None, embedded=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None, embedded=None), 
+        Token(original='not', cleaned='not', lemma=None, stem=None, embedded=None), 
+        Token(original='a.', cleaned='a.', lemma=None, stem=None, embedded=None)
+    ],
+    embedded=None,
     steps=['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"]
 )
 ```
@@ -135,7 +144,8 @@ It is also possible to rollback the steps applied to a document:
 Document(
     original='The following character is a number: 1 and the next one is not a.', 
     cleaned='The following character is a number:  and the next one is not a.', 
-    tokens=None, 
+    tokens=None,
+    embedded=None,
     steps=['CleanNumber()']
 )
 >>> doc
@@ -143,20 +153,21 @@ Document(
     original='The following character is a number: 1 and the next one is not a.', 
     cleaned='The following character is a number:  and the next one is not a.', 
     tokens=[
-        Token(original='The', cleaned='the', lemma=None, stem=None), 
-        Token(original='following', cleaned='following', lemma=None, stem=None), 
-        Token(original='character', cleaned='character', lemma=None, stem=None), 
-        Token(original='is', cleaned='is', lemma=None, stem=None), 
-        Token(original='a', cleaned='a', lemma=None, stem=None), 
-        Token(original='number:', cleaned='number:', lemma=None, stem=None), 
-        Token(original='and', cleaned='and', lemma=None, stem=None), 
-        Token(original='the', cleaned='the', lemma=None, stem=None), 
-        Token(original='next', cleaned='next', lemma=None, stem=None), 
-        Token(original='one', cleaned='one', lemma=None, stem=None), 
-        Token(original='is', cleaned='is', lemma=None, stem=None), 
-        Token(original='not', cleaned='not', lemma=None, stem=None), 
-        Token(original='a.', cleaned='a.', lemma=None, stem=None)
-    ], 
+        Token(original='The', cleaned='the', lemma=None, stem=None, embedded=None), 
+        Token(original='following', cleaned='following', lemma=None, stem=None, embedded=None), 
+        Token(original='character', cleaned='character', lemma=None, stem=None, embedded=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None, embedded=None), 
+        Token(original='a', cleaned='a', lemma=None, stem=None, embedded=None), 
+        Token(original='number:', cleaned='number:', lemma=None, stem=None, embedded=None), 
+        Token(original='and', cleaned='and', lemma=None, stem=None, embedded=None), 
+        Token(original='the', cleaned='the', lemma=None, stem=None, embedded=None), 
+        Token(original='next', cleaned='next', lemma=None, stem=None, embedded=None), 
+        Token(original='one', cleaned='one', lemma=None, stem=None, embedded=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None, embedded=None), 
+        Token(original='not', cleaned='not', lemma=None, stem=None, embedded=None), 
+        Token(original='a.', cleaned='a.', lemma=None, stem=None, embedded=None)
+    ],
+    embedded=None,
     steps=['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"]
 )
 ```
