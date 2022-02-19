@@ -140,7 +140,11 @@ the Normalizers and Embeddings.
 
 It is possible to create a compose using the steps from a processed document:
 ```python
+>>> doc.steps
+['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"]
 >>> new_pipeline = Compose.create_from_steps(doc.steps)
+>>> new_pipeline
+Compose([CleanNumber(), BasicTokenizer(), CaseTokens(mode='lower')])
 ```
 It is also possible to rollback the steps applied to a document:
 ```python
