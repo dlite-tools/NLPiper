@@ -35,6 +35,8 @@ For all transforms be available:
 ...                    tokenizers.BasicTokenizer(),
 ...                    normalizers.CaseTokens()
 ... ])
+>>> pipeline
+Compose([CleanNumber(), BasicTokenizer(), CaseTokens(mode='lower')])
 ```
 
 ### Generate a Document and Document structure:
