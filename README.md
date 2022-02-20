@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="/docs/imgs/nlpiper.png" />
+  <img src="https://raw.githubusercontent.com/tomassosorio/NLPiper/main/docs/imgs/nlpiper.png" />
 </p>
 
 [![Test](https://github.com/tomassosorio/NLPiper/actions/workflows/test.yml/badge.svg)](https://github.com/tomassosorio/NLPiper/actions/workflows/test.yml)
@@ -21,7 +21,7 @@ The package can be installed using `pip`:
 `pip install nlpiper`
 
 For all transforms be available:
-`pip install nlpiper[all]`, otherwise, just install the packages needed.
+`pip install 'nlpiper[all]'`, otherwise, just install the packages needed.
 
 ## Usage
 
@@ -35,6 +35,8 @@ For all transforms be available:
 ...                    tokenizers.BasicTokenizer(),
 ...                    normalizers.CaseTokens()
 ... ])
+>>> pipeline
+Compose([CleanNumber(), BasicTokenizer(), CaseTokens(mode='lower')])
 ```
 
 ### Generate a Document and Document structure:
@@ -138,7 +140,11 @@ the Normalizers and Embeddings.
 
 It is possible to create a compose using the steps from a processed document:
 ```python
+>>> doc.steps
+['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"]
 >>> new_pipeline = Compose.create_from_steps(doc.steps)
+>>> new_pipeline
+Compose([CleanNumber(), BasicTokenizer(), CaseTokens(mode='lower')])
 ```
 It is also possible to rollback the steps applied to a document:
 ```python

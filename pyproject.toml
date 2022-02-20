@@ -3,11 +3,7 @@ name = "nlpiper"
 version = "0.1.0"
 description = "NLPiper, a lightweight package integrated with a universe of frameworks to pre-process documents."
 authors = ["Tomás Osório"]
-maintainers = [
-    "Carlos Alves",
-    "Daniel Ferrari",
-    "Tomás Osório"
-]
+maintainers = ["Carlos Alves, Daniel Ferrari, Tomás Osório"]
 license = "MIT"
 
 readme = "README.md"
