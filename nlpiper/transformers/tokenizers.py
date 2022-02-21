@@ -91,7 +91,7 @@ class StanzaTokenizer(BaseTransformer):
     Transformer to tokenize a Document using stanza, https://github.com/stanfordnlp/stanza
     """
 
-    def __init__(self, language: str = 'en', *args, **kwargs):
+    def __init__(self, language: str = 'en', processors='tokenize', *args, **kwargs):
         """Stanza tokenizer.
 
         Args:
@@ -99,13 +99,15 @@ class StanzaTokenizer(BaseTransformer):
             *args: See the docs at https://stanfordnlp.github.io/stanza/tokenize.html add for more information.
             **kwargs: See the docs at https://stanfordnlp.github.io/stanza/tokenize.html add for more information.
         """
-        super().__init__(language=language, *args, **kwargs)
+        super().__init__(language=language, processors=processors, *args, **kwargs)
         try:
             import stanza
             from stanza import Pipeline
             stanza.download(language)
-            self.p = Pipeline(lang=language, processors='tokenize', tokenize_pretokenized=False, *args,
+            assert 'tokenize' in processors.lower(), 'StanzaTokenizer needs `"tokenize"` on processors'
+            self.p = Pipeline(lang=language, processors=processors, tokenize_pretokenized=False, *args,
                               **kwargs)
+            self.processors = processors
 
         except ImportError:
             log.error("Please install Stanza. "
@@ -126,6 +128,18 @@ class StanzaTokenizer(BaseTransformer):
         """
         d = doc if inplace else doc._deepcopy()
 
-        d.tokens = [Token(word.text) for sentence in self.p(doc.cleaned).sentences for word in sentence.words]
+        tokens = []
+        for sentence in self.p(doc.cleaned).sentences:
+            for word in sentence.words:
+                token = Token(word.parent.text)
+
+                if 'lemma' in self.processors.lower():
+                    token.lemma = word.lemma
+
+                if 'ner' in self.processors.lower():
+                    token.ner = word.parent.ner
+
+                tokens.append(token)
+        d.tokens = tokens
 
         return None if inplace else d
