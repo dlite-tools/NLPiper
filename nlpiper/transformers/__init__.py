@@ -56,6 +56,10 @@ def validate(transformer_type: TransformersType):
                     raise RuntimeError(
                         f"{transformer_type.name.title()} transformer can not be applied on documents without tokens"
                     )
+                elif doc.embedded is not None:
+                    raise RuntimeError(
+                        f"{transformer_type.name.title()} transformer can not be applied on documents with embeddings"
+                    )
             else:
                 raise RuntimeError("TransformerType behavior not implemented")
 
