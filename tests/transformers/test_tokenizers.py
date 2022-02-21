@@ -137,11 +137,11 @@ class TestStanzaTokenizer:
          ),
 
         ('tokenize,ner',
-         'Nous, Tomás, Carlos un Daniel, avons atteint la fin du sentier.',
-         ['Nous', ',', 'Tomás', ',', 'Carlos', 'un', 'Daniel', ',', 'avons', 'atteint', 'la', 'fin', 'du', 'du',
+         'Nous, Tomás Carlos un Daniel, avons atteint la fin du sentier.',
+         ['Nous', ',', 'Tomás', 'Carlos', 'un', 'Daniel', ',', 'avons', 'atteint', 'la', 'fin', 'du', 'du',
           'sentier', '.'],
-         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None],
-         ['O', 'O', 'S-PER', 'O', 'S-PER', 'O', 'S-PER', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']
+         [None, None, None, None, None, None, None, None, None, None, None, None, None, None, None],
+         ['O', 'O', 'B-PER', 'E-PER', 'O', 'S-PER', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']
          )
     ])
     def test_tokenizer_w_processors_mtw_pos_lemma_ner(self, processors, document, tokenization_result, lemma_result,
