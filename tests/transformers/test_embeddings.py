@@ -32,6 +32,7 @@ class TestGensimEmbeddings:
         assert all([isinstance(token.embedded, self.np.ndarray) for token in out.tokens])
         assert all([token.embedded is None for token in doc.tokens])
         assert doc.steps == [repr(t)]
+        assert doc.embedded is None
 
         # Inplace True
         out = e(doc, True)
