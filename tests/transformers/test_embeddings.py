@@ -3,6 +3,7 @@ import pytest
 from nlpiper.core.document import Document
 from nlpiper.transformers.embeddings import GensimEmbeddings
 from nlpiper.transformers.tokenizers import BasicTokenizer
+from nlpiper.transformers.normalizers import CaseTokens
 
 
 class TestGensimEmbeddings:
@@ -52,10 +53,10 @@ class TestGensimEmbeddings:
         out = e(doc)
 
         assert out.steps == [repr(t), repr(e)]
+        assert out.embedded.shape == (25,)
         assert all([isinstance(token.embedded, self.np.ndarray) for token in out.tokens])
         assert all([token.embedded is None for token in doc.tokens])
         assert doc.steps == [repr(t)]
-        assert doc.embedded.shape == (25,)
 
         # Inplace True
         out = e(doc, True)
@@ -93,3 +94,28 @@ class TestEmbeddings:
     def test_if_no_package(self, hide_available_pkg):  # noqa: F811
         with pytest.raises(ModuleNotFoundError):
             GensimEmbeddings(1)
+
+    def test_embedding_applied_twice(self):
+        doc = Document('Test random stuff.')
+
+        # To apply a embeddings is necessary to have tokens
+        t = BasicTokenizer()
+        t(doc, inplace=True)
+
+        e = GensimEmbeddings(self.gensim.models.KeyedVectors(1))
+
+        with pytest.raises(RuntimeError):
+            e(e(doc))
+
+    def test_embedding_applied_then_normalizer(self):
+        doc = Document('Test random stuff.')
+
+        # To apply a embeddings is necessary to have tokens
+        t = BasicTokenizer()
+        n = CaseTokens()
+        t(doc, inplace=True)
+
+        e = GensimEmbeddings(self.gensim.models.KeyedVectors(1))
+
+        with pytest.raises(RuntimeError):
+            n(e(doc))

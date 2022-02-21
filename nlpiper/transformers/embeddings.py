@@ -76,6 +76,6 @@ class GensimEmbeddings(BaseTransformer):
                 token.embedded = self.np.zeros(self.keyed_vectors.vector_size, dtype=self.np.float32)
 
         if self.apply_doc is not None:
-            doc.embedded = getattr(self.np, self.apply_doc)([token.embedded for token in d.tokens], axis=0)
+            d.embedded = getattr(self.np, self.apply_doc)([token.embedded for token in d.tokens], axis=0)
 
         return None if inplace else d
