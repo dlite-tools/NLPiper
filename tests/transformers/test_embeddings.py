@@ -13,35 +13,10 @@ class TestGensimEmbeddings:
     import numpy as np
     glove_vectors = gensim.downloader.load('glove-twitter-25')
 
-    def test_embedding_token(self):
-        doc = Document('Test random stuff.')
-
-        # To apply a embeddings is necessary to have tokens
-        t = BasicTokenizer()
-        t(doc, inplace=True)
-
-        e = GensimEmbeddings(self.glove_vectors)
-
-        # Inplace False
-        out = e(doc)
-
-        assert out.steps == [repr(t), repr(e)]
-        assert all([isinstance(token.embedded, self.np.ndarray) for token in out.tokens])
-        assert all([token.embedded is None for token in doc.tokens])
-        assert doc.steps == [repr(t)]
-        assert doc.embedded is None
-
-        # Inplace True
-        out = e(doc, True)
-
-        assert all([isinstance(token.embedded, self.np.ndarray) for token in doc.tokens])
-        assert doc.steps == [repr(t), repr(e)]
-        assert doc.embedded is None
-        assert out is None
-
     @pytest.mark.parametrize('apply_doc', ['sum', 'mean'])
-    def test_embedding_token_document(self, apply_doc):
-        doc = Document('Test random stuff.')
+    @pytest.mark.parametrize('document', ['Test random stuff.', ''])
+    def test_embedding_token(self, apply_doc, document):
+        doc = Document(document)
 
         # To apply a embeddings is necessary to have tokens
         t = BasicTokenizer()
@@ -95,8 +70,9 @@ class TestEmbeddings:
         with pytest.raises(ModuleNotFoundError):
             GensimEmbeddings(1)
 
-    def test_embedding_applied_twice(self):
-        doc = Document('Test random stuff.')
+    @pytest.mark.parametrize('document', ['Test random stuff.', ''])
+    def test_embedding_applied_twice(self, document):
+        doc = Document(document)
 
         # To apply a embeddings is necessary to have tokens
         t = BasicTokenizer()
@@ -107,8 +83,9 @@ class TestEmbeddings:
         with pytest.raises(RuntimeError):
             e(e(doc))
 
-    def test_embedding_applied_then_normalizer(self):
-        doc = Document('Test random stuff.')
+    @pytest.mark.parametrize('document', ['Test random stuff.', ''])
+    def test_embedding_applied_then_normalizer(self, document):
+        doc = Document(document)
 
         # To apply a embeddings is necessary to have tokens
         t = BasicTokenizer()
