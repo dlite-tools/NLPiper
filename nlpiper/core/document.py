@@ -24,6 +24,7 @@ class Token(BaseModel):
     cleaned: Optional[str] = None
     lemma: Optional[str] = None
     stem: Optional[str] = None
+    ner: Optional[str] = None
     embedded: Optional[Any] = None
 
     def __init__(self, original: str, **data) -> None:
