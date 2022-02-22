@@ -61,19 +61,19 @@ Document(
     original='The following character is a number: 1 and the next one is not a.', 
     cleaned='The following character is a number:  and the next one is not a.', 
     tokens=[
-        Token(original='The', cleaned='the', lemma=None, stem=None, embedded=None), 
-        Token(original='following', cleaned='following', lemma=None, stem=None, embedded=None), 
-        Token(original='character', cleaned='character', lemma=None, stem=None, embedded=None), 
-        Token(original='is', cleaned='is', lemma=None, stem=None, embedded=None), 
-        Token(original='a', cleaned='a', lemma=None, stem=None, embedded=None), 
-        Token(original='number:', cleaned='number:', lemma=None, stem=None, embedded=None), 
-        Token(original='and', cleaned='and', lemma=None, stem=None, embedded=None), 
+        Token(original='The', cleaned='the', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='following', cleaned='following', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='character', cleaned='character', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='a', cleaned='a', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='number:', cleaned='number:', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='and', cleaned='and', lemma=None, stem=None, ner=None, embedded=None), 
         Token(original='the', cleaned='the', lemma=None, stem=None, embedded=None), 
-        Token(original='next', cleaned='next', lemma=None, stem=None, embedded=None), 
-        Token(original='one', cleaned='one', lemma=None, stem=None, embedded=None), 
-        Token(original='is', cleaned='is', lemma=None, stem=None, embedded=None), 
-        Token(original='not', cleaned='not', lemma=None, stem=None, embedded=None), 
-        Token(original='a.', cleaned='a.', lemma=None, stem=None, embedded=None)
+        Token(original='next', cleaned='next', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='one', cleaned='one', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='not', cleaned='not', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='a.', cleaned='a.', lemma=None, stem=None, ner=None, embedded=None)
     ],
     embedded=None,
     steps=['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"]
@@ -129,8 +129,9 @@ Document attributes:
 `token`:
 - `original`: original token.
 - `cleaned`: original token at initiation, then modified according with `Normalizers`.
-- `lemma`: token lemma (need to use a normalizer to obtain).
+- `lemma`: token lemma (need to use a normalizer or tokenizer to obtain).
 - `stem`: token stem (need to use a normalizer to obtain).
+- `ner`: token entity (need to use a normalizer or tokenizer to obtain).
 - `embedded`: token embedding.
 
 #### Compose
@@ -162,19 +163,19 @@ Document(
     original='The following character is a number: 1 and the next one is not a.', 
     cleaned='The following character is a number:  and the next one is not a.', 
     tokens=[
-        Token(original='The', cleaned='the', lemma=None, stem=None, embedded=None), 
-        Token(original='following', cleaned='following', lemma=None, stem=None, embedded=None), 
-        Token(original='character', cleaned='character', lemma=None, stem=None, embedded=None), 
-        Token(original='is', cleaned='is', lemma=None, stem=None, embedded=None), 
-        Token(original='a', cleaned='a', lemma=None, stem=None, embedded=None), 
-        Token(original='number:', cleaned='number:', lemma=None, stem=None, embedded=None), 
-        Token(original='and', cleaned='and', lemma=None, stem=None, embedded=None), 
-        Token(original='the', cleaned='the', lemma=None, stem=None, embedded=None), 
-        Token(original='next', cleaned='next', lemma=None, stem=None, embedded=None), 
-        Token(original='one', cleaned='one', lemma=None, stem=None, embedded=None), 
-        Token(original='is', cleaned='is', lemma=None, stem=None, embedded=None), 
-        Token(original='not', cleaned='not', lemma=None, stem=None, embedded=None), 
-        Token(original='a.', cleaned='a.', lemma=None, stem=None, embedded=None)
+        Token(original='The', cleaned='the', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='following', cleaned='following', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='character', cleaned='character', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='a', cleaned='a', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='number:', cleaned='number:', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='and', cleaned='and', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='the', cleaned='the', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='next', cleaned='next', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='one', cleaned='one', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='is', cleaned='is', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='not', cleaned='not', lemma=None, stem=None, ner=None, embedded=None), 
+        Token(original='a.', cleaned='a.', lemma=None, stem=None, ner=None, embedded=None)
     ],
     embedded=None,
     steps=['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"]
