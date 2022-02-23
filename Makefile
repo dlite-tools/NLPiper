@@ -7,7 +7,7 @@ all: static-tests coverage
 
 style:
 		###### Running style analysis ######
-		poetry run flake8 $(PACKAGE)
+		poetry run flake8 $(PACKAGE) $(UNIT_TESTS)
 
 typecheck:
 		###### Running static type analysis ######
@@ -25,7 +25,7 @@ unit-tests:
 
 coverage:
 		###### Running coverage analysis with JUnit xml export ######
-		poetry run pytest -v --cov-report term-missing --cov $(PACKAGE)
+		poetry run pytest --cov-report term-missing --cov-report xml --cov $(PACKAGE)
 
 coverage-html:
 		###### Running coverage analysis with html export ######

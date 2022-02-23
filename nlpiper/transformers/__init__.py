@@ -1,7 +1,7 @@
 """Transformers Module."""
 from enum import Enum, auto
 
-from nlpiper.core.document import Document
+from nlpiper.core import Document
 from nlpiper.logger import log
 
 
@@ -29,6 +29,7 @@ class TransformersType(Enum):
     CLEANERS = auto()
     TOKENIZERS = auto()
     NORMALIZERS = auto()
+    EMBEDDINGS = auto()
 
 
 # Decorators
@@ -50,11 +51,17 @@ def validate(transformer_type: TransformersType):
                     raise RuntimeError(
                         f"{transformer_type.name.title()} transformer can not be applied on documents with tokens"
                     )
-            else:  # transformer_type == TransformersType.NORMALIZERS
+            elif transformer_type in (TransformersType.NORMALIZERS, TransformersType.EMBEDDINGS):
                 if doc.tokens is None:
                     raise RuntimeError(
                         f"{transformer_type.name.title()} transformer can not be applied on documents without tokens"
                     )
+                elif doc.embedded is not None:
+                    raise RuntimeError(
+                        f"{transformer_type.name.title()} transformer can not be applied on documents with embeddings"
+                    )
+            else:
+                raise RuntimeError("TransformerType behavior not implemented")
 
             return func(*args, **kwargs)
         return wrapper

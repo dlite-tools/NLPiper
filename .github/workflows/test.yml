@@ -1,4 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
 
 name: Test
 
@@ -38,3 +38,12 @@ jobs:
       run: |
         poetry install -E all
         make unit-tests
+    - name: Run Coverage
+      run: make coverage
+      if: ${{ matrix.python-version == '3.8' }}
+    - name: Upload Coverage
+      uses: codecov/codecov-action@v1
+      if: ${{ matrix.python-version == '3.8' }}
+      with:
+        files: ./coverage.xml
+        fail_ci_if_error: true

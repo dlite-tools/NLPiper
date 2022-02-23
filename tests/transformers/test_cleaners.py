@@ -1,5 +1,3 @@
-import builtins
-
 import pytest
 
 from nlpiper.transformers.cleaners import (
@@ -15,18 +13,6 @@ from nlpiper.core.document import (
     Document,
     Token
 )
-
-
-@pytest.fixture
-def hide_available_pkg(monkeypatch):
-    import_orig = builtins.__import__
-
-    def mocked_import(name, *args, **kwargs):
-        if name in ('bs4'):
-            raise ModuleNotFoundError()
-        return import_orig(name, *args, **kwargs)
-
-    monkeypatch.setattr(builtins, '__import__', mocked_import)
 
 
 class TestCleanersValidations:
@@ -47,8 +33,8 @@ class TestCleanersValidations:
         with pytest.raises(RuntimeError):
             c(doc)
 
-    @pytest.mark.usefixtures('hide_available_pkg')
-    def test_if_no_package(self):
+    @pytest.mark.parametrize('hide_available_pkg', ['bs4'], indirect=['hide_available_pkg'])
+    def test_if_no_package(self, hide_available_pkg):  # noqa: F811
         with pytest.raises(ModuleNotFoundError):
             CleanMarkup()
 
