@@ -12,6 +12,7 @@ from nlpiper.logger import log
 from nlpiper.transformers.cleaners import *  # noqa: F401, F403 (flake8 ignore)
 from nlpiper.transformers.normalizers import *  # noqa: F401, F403 (flake8 ignore)
 from nlpiper.transformers.tokenizers import *  # noqa: F401, F403 (flake8 ignore)
+from nlpiper.transformers.embeddings import *  # noqa: F401, F403 (flake8 ignore)
 
 
 class Compose:

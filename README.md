@@ -28,7 +28,7 @@ For all transforms be available:
 ### Define a Pipeline:
 
 ```python
->>> from nlpiper.core.composition import Compose
+>>> from nlpiper.core import Compose
 >>> from nlpiper.transformers import cleaners, normalizers, tokenizers
 >>> pipeline = Compose([
 ...                    cleaners.CleanNumber(),
