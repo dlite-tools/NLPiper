@@ -27,7 +27,25 @@ __all__ = [
 
 
 class CleanURL(BaseTransformer):
-    """Remove URLs."""
+    """Remove URLs from a document.
+
+    Callable arguments:
+
+    Args:
+        doc (Document): document to be cleaned.
+        inplace (bool, default False): if False will return a new document object,
+                        otherwise will change the object passed as parameter and return None.
+
+    Returns:
+        Document without URLs or None if `inplace=True`.
+
+    Example:
+        >>> doc = Document("URL: www.web.com")
+        >>> cleaner = CleanURL()
+        >>> out = cleaner(doc)
+        >>> out.cleaned
+        ... "URL: "
+    """
 
     @validate(TransformersType.CLEANERS)
     @add_step
@@ -50,7 +68,25 @@ class CleanURL(BaseTransformer):
 
 
 class CleanEmail(BaseTransformer):
-    """Remove Emails."""
+    """Remove emails from a document.
+
+    Callable arguments:
+
+    Args:
+        doc (Document): document to be cleaned.
+        inplace (bool, default False): if False will return a new document object,
+                        otherwise will change the object passed as parameter and return None.
+
+    Returns:
+        Document without emails or None if `inplace=True`.
+
+    Example:
+        >>> doc = Document("Email: test@test.com")
+        >>> cleaner = CleanEmail()
+        >>> out = cleaner(doc)
+        >>> out.cleaned
+        ... "Email: "
+    """
 
     @validate(TransformersType.CLEANERS)
     @add_step
@@ -73,7 +109,25 @@ class CleanEmail(BaseTransformer):
 
 
 class CleanNumber(BaseTransformer):
-    """Remove Numbers."""
+    """Remove numbers from a document.
+
+    Callable arguments:
+
+    Args:
+        doc (Document): document to be cleaned.
+        inplace (bool, default False): if False will return a new document object,
+                        otherwise will change the object passed as parameter and return None.
+
+    Returns:
+        Document without numbers or None if `inplace=True`.
+
+    Example:
+        >>> doc = Document("Number 12")
+        >>> cleaner = CleanNumber()
+        >>> out = cleaner(doc)
+        >>> out.cleaned
+        ... "Number "
+    """
 
     @validate(TransformersType.CLEANERS)
     @add_step
@@ -95,7 +149,25 @@ class CleanNumber(BaseTransformer):
 
 
 class CleanPunctuation(BaseTransformer):
-    """Remove Punctuation."""
+    """Remove punctuation from a document.
+
+    Callable arguments:
+
+    Args:
+        doc (Document): document to be cleaned.
+        inplace (bool, default False): if False will return a new document object,
+                        otherwise will change the object passed as parameter and return None.
+
+    Returns:
+        Document without punctuation or None if `inplace=True`.
+
+    Example:
+        >>> doc = Document("Document without punctuation!")
+        >>> cleaner = CleanPunctuation()
+        >>> out = cleaner(doc)
+        >>> out.cleaned
+        ... "Document without punctuation"
+    """
 
     @validate(TransformersType.CLEANERS)
     @add_step
@@ -117,7 +189,25 @@ class CleanPunctuation(BaseTransformer):
 
 
 class CleanEOF(BaseTransformer):
-    """Remove End of Line."""
+    """Remove end of line from a document.
+
+    Callable arguments:
+
+    Args:
+        doc (Document): document to be cleaned.
+        inplace (bool, default False): if False will return a new document object,
+                        otherwise will change the object passed as parameter and return None.
+
+    Returns:
+        Document without end of line or None if `inplace=True`.
+
+    Example:
+        >>> doc = Document("Line 1\\nLine 2")
+        >>> cleaner = CleanEOF()
+        >>> out = cleaner(doc)
+        >>> out.cleaned
+        ... "Line 1 Line 2"
+    """
 
     @validate(TransformersType.CLEANERS)
     @add_step
@@ -139,13 +229,31 @@ class CleanEOF(BaseTransformer):
 
 
 class CleanMarkup(BaseTransformer):
-    """Remove HTML and XML using BeautifulSoup4."""
+    """Remove HTML and XML from a document using BeautifulSoup4 package.
+
+    Callable arguments:
+
+    Args:
+        doc (Document): document to be cleaned.
+        inplace (bool, default False): if False will return a new document object,
+                        otherwise will change the object passed as parameter and return None.
+
+    Returns:
+        Document without HTML and XML or None if `inplace=True`.
+
+    Example:
+        >>> doc = Document("<html><title>Title 1</title>")
+        >>> cleaner = CleanMarkup()
+        >>> out = cleaner(doc)
+        >>> out.cleaned
+        ... "Title 1"
+    """
 
     def __init__(self, features: str = "html.parser", *args, **kwargs):
         """Remove HTML and XML.
 
         Args:
-            features (str): Parser used to remove HTML and XML, which could be used the following parsers:
+            features (str, default `html.parser`): Parser used to remove HTML and XML, which could be used the following parsers:
                 ``"html.parser"``, ``"lxml"``, ``"lxml-xml"``, ``"xml"``,  ``"html5lib"``.
                 For more information about the parser
                 go to `BeautifulSoup4 parsers documentation <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser>`_.
@@ -185,15 +293,33 @@ class CleanMarkup(BaseTransformer):
 
 
 class CleanAccents(BaseTransformer):
-    """Strip accents and perform character normalization."""
+    """Strip accents and perform character normalization from a document.
+
+    Callable arguments:
+
+    Args:
+        doc (Document): document to be cleaned.
+        inplace (bool, default False): if False will return a new document object,
+                        otherwise will change the object passed as parameter and return None.
+
+    Returns:
+        Document without accents or None if `inplace=True`.
+
+    Example:
+        >>> doc = Document("This is à test")
+        >>> cleaner = CleanAccents()
+        >>> out = cleaner(doc)
+        >>> out.cleaned
+        ... "This is a test"
+    """
 
     def __init__(self, mode: str = "unicode"):
         """Strip accents and perform character normalization from a document.
 
         Args:
-            mode (str): Available methods: `ascii` and `unicode`. The first method is faster and only works for
-            characters that have an direct ASCII mapping. The second is sightly slower but works in any characters.
-            (Default: `unicode`)
+            mode (str, default `unicode`): Available methods: `ascii` and `unicode`.The first method is faster and only works for
+                                           characters that have an direct ASCII mapping.
+                                           The second is sightly slower but works in any characters.
 
         Warning: mode `ascii` is only suited for languages that have a direct transliteration to ASCII symbols.
         """
