@@ -5,7 +5,12 @@ Welcome to NLPiper Documentation
    :maxdepth: 1
    :caption: Contents:
 
+   introduction.rst
    transformers.cleaners.rst
+   transformers.embeddings.rst
+   transformers.normalizers.rst
+   transformers.tokenizers.rst
+
 
 Indices and tables
 ==================
