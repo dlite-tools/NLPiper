@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nlpiper"
-version = "0.1.0"
+version = "0.2.0"
 description = "NLPiper, a lightweight package integrated with a universe of frameworks to pre-process documents."
 authors = ["Tomás Osório"]
 maintainers = ["Carlos Alves, Daniel Ferrari, Tomás Osório"]

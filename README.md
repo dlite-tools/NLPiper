@@ -56,7 +56,7 @@ For all transforms be available:
 ### Define a Pipeline:
 
 ```python
->>> from nlpiper.core.composition import Compose
+>>> from nlpiper.core import Compose
 >>> from nlpiper.transformers import cleaners, normalizers, tokenizers
 >>> pipeline = Compose([
 ...                    cleaners.CleanNumber(),
@@ -157,8 +157,9 @@ Document attributes:
 `token`:
 - `original`: original token.
 - `cleaned`: original token at initiation, then modified according with `Normalizers`.
-- `lemma`: token lemma (need to use a normalizer to obtain).
+- `lemma`: token lemma (need to use a normalizer or tokenizer to obtain).
 - `stem`: token stem (need to use a normalizer to obtain).
+- `ner`: token entity (need to use a normalizer or tokenizer to obtain).
 - `embedded`: token embedding.
 
 #### Compose
