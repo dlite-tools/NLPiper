@@ -77,4 +77,4 @@ requires = ["poetry_core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.nlpiper]
-copyright = "2021, Tomás Osório"
+copyright = "2021, Carlos Alves, Daniel Ferrari and Tomás Osório."
