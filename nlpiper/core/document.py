@@ -1,7 +1,7 @@
 from copy import deepcopy
 from typing import Any, List, Optional
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, Extra
 
 from nlpiper.logger import log
 
@@ -36,6 +36,7 @@ class Token(BaseModel):
 
     class Config:
         validate_assignment = True
+        extra = Extra.allow
 
 
 class Document(BaseModel):
@@ -57,3 +58,4 @@ class Document(BaseModel):
 
     class Config:
         validate_assignment = True
+        extra = Extra.allow
