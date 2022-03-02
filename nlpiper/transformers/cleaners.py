@@ -253,10 +253,12 @@ class CleanMarkup(BaseTransformer):
         """Remove HTML and XML.
 
         Args:
-            features (str, default `html.parser`): Parser used to remove HTML and XML, which could be used the following parsers:
-                ``"html.parser"``, ``"lxml"``, ``"lxml-xml"``, ``"xml"``,  ``"html5lib"``.
+            features (str, default `html.parser`): Parser used to remove HTML and XML, which could be used
+                the following parsers: ``"html.parser"``, ``"lxml"``, ``"lxml-xml"``, ``"xml"``,  ``"html5lib"``.
                 For more information about the parser
-                go to `BeautifulSoup4 parsers documentation <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser>`_.
+                go to
+                `BeautifulSoup4 parsers documentation
+                <https://www.crummy.com/software/BeautifulSoup/bs4/doc/#installing-a-parser>`_.
             *args: See the docs at https://www.crummy.com/software/BeautifulSoup/bs4/doc/ for more information.
             **kwargs: See the docs at https://www.crummy.com/software/BeautifulSoup/bs4/doc/ for more information.
         """
@@ -317,8 +319,8 @@ class CleanAccents(BaseTransformer):
         """Strip accents and perform character normalization from a document.
 
         Args:
-            mode (str, default `unicode`): Available methods: `ascii` and `unicode`.The first method is faster and only works for
-                                           characters that have an direct ASCII mapping.
+            mode (str, default `unicode`): Available methods: `ascii` and `unicode`. The first method is faster
+                                           and only works for characters that have an direct ASCII mapping.
                                            The second is sightly slower but works in any characters.
 
         Warning: mode `ascii` is only suited for languages that have a direct transliteration to ASCII symbols.
