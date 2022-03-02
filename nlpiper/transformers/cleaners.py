@@ -44,7 +44,7 @@ class CleanURL(BaseTransformer):
         >>> cleaner = CleanURL()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        ... "URL: "
+            "URL: "
     """
 
     @validate(TransformersType.CLEANERS)
@@ -85,7 +85,7 @@ class CleanEmail(BaseTransformer):
         >>> cleaner = CleanEmail()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        ... "Email: "
+            "Email: "
     """
 
     @validate(TransformersType.CLEANERS)
@@ -126,7 +126,7 @@ class CleanNumber(BaseTransformer):
         >>> cleaner = CleanNumber()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        ... "Number "
+            "Number "
     """
 
     @validate(TransformersType.CLEANERS)
@@ -166,7 +166,7 @@ class CleanPunctuation(BaseTransformer):
         >>> cleaner = CleanPunctuation()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        ... "Document without punctuation"
+            "Document without punctuation"
     """
 
     @validate(TransformersType.CLEANERS)
@@ -206,7 +206,7 @@ class CleanEOF(BaseTransformer):
         >>> cleaner = CleanEOF()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        ... "Line 1 Line 2"
+            "Line 1 Line 2"
     """
 
     @validate(TransformersType.CLEANERS)
@@ -246,7 +246,7 @@ class CleanMarkup(BaseTransformer):
         >>> cleaner = CleanMarkup()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        ... "Title 1"
+            "Title 1"
     """
 
     def __init__(self, features: str = "html.parser", *args, **kwargs):
@@ -310,7 +310,7 @@ class CleanAccents(BaseTransformer):
         >>> cleaner = CleanAccents()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        ... "This is a test"
+            "This is a test"
     """
 
     def __init__(self, mode: str = "unicode"):
