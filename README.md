@@ -14,7 +14,35 @@ NLPiper is a package that agglomerates different NLP tools and applies their tra
 Lightweight package integrated with a universe of frameworks to pre-process documents.
 
 ---
-## Install
+## Installation
+
+You can install NLPiper from PyPi with `pip` or your favorite package manager:
+
+    pip install nlpiper
+
+---
+
+## Optional Dependencies
+
+Some **transformations** require the installation of additional packages.
+The following table explains the optional dependencies that can be installed:
+
+| Package                                                                                                   | Description
+|---                                                                                                        |---
+| <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/" target="_blank"><code>bs4</code></a>     | Used in **CleanMarkup** to remove HTML and XML from the document.
+| <a href="https://www.nltk.org/install.html" target="_blank"><code>nltk</code></a>                         | Used in **RemoveStopWords** to remove stop words from the document.
+| <a href="https://github.com/alvations/sacremoses" target="_blank"><code>sacremoses</code></a>             | Used in **MosesTokenizer** to tokenize the document using Sacremoses.
+
+To install the optional dependency needed for your purpose you can run:
+
+
+    pip install nlpiper[<package>]
+
+
+You can install all of these dependencies at once with:
+
+
+    pip install nlpiper[all]
 
 The package can be installed using `pip`:
 
@@ -45,8 +73,8 @@ Compose([CleanNumber(), BasicTokenizer(), CaseTokens(mode='lower')])
 >>> doc = Document("The following character is a number: 1 and the next one is not a.")
 >>> doc
 Document(
-    original='The following character is a number: 1 and the next one is not a.', 
-    cleaned='The following character is a number: 1 and the next one is not a.', 
+    original='The following character is a number: 1 and the next one is not a.',
+    cleaned='The following character is a number: 1 and the next one is not a.',
     tokens=None,
     embedded=None,
     steps=[]
@@ -58,22 +86,22 @@ Document(
 >>> doc = pipeline(doc)
 >>> doc
 Document(
-    original='The following character is a number: 1 and the next one is not a.', 
-    cleaned='The following character is a number:  and the next one is not a.', 
+    original='The following character is a number: 1 and the next one is not a.',
+    cleaned='The following character is a number:  and the next one is not a.',
     tokens=[
-        Token(original='The', cleaned='the', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='following', cleaned='following', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='character', cleaned='character', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='is', cleaned='is', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='a', cleaned='a', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='number:', cleaned='number:', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='and', cleaned='and', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='the', cleaned='the', lemma=None, stem=None, embedded=None), 
-        Token(original='next', cleaned='next', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='one', cleaned='one', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='is', cleaned='is', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='not', cleaned='not', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='a.', cleaned='a.', lemma=None, stem=None, ner=None, embedded=None)
+        Token(original='The', cleaned='the', lemma=None, stem=None, embedded=None),
+        Token(original='following', cleaned='following', lemma=None, stem=None, embedded=None),
+        Token(original='character', cleaned='character', lemma=None, stem=None, embedded=None),
+        Token(original='is', cleaned='is', lemma=None, stem=None, embedded=None),
+        Token(original='a', cleaned='a', lemma=None, stem=None, embedded=None),
+        Token(original='number:', cleaned='number:', lemma=None, stem=None, embedded=None),
+        Token(original='and', cleaned='and', lemma=None, stem=None, embedded=None),
+        Token(original='the', cleaned='the', lemma=None, stem=None, embedded=None),
+        Token(original='next', cleaned='next', lemma=None, stem=None, embedded=None),
+        Token(original='one', cleaned='one', lemma=None, stem=None, embedded=None),
+        Token(original='is', cleaned='is', lemma=None, stem=None, embedded=None),
+        Token(original='not', cleaned='not', lemma=None, stem=None, embedded=None),
+        Token(original='a.', cleaned='a.', lemma=None, stem=None, embedded=None)
     ],
     embedded=None,
     steps=['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"]
@@ -152,30 +180,30 @@ It is also possible to rollback the steps applied to a document:
 >>> new_doc = Compose.rollback_document(doc, 2)
 >>> new_doc
 Document(
-    original='The following character is a number: 1 and the next one is not a.', 
-    cleaned='The following character is a number:  and the next one is not a.', 
+    original='The following character is a number: 1 and the next one is not a.',
+    cleaned='The following character is a number:  and the next one is not a.',
     tokens=None,
     embedded=None,
     steps=['CleanNumber()']
 )
 >>> doc
 Document(
-    original='The following character is a number: 1 and the next one is not a.', 
-    cleaned='The following character is a number:  and the next one is not a.', 
+    original='The following character is a number: 1 and the next one is not a.',
+    cleaned='The following character is a number:  and the next one is not a.',
     tokens=[
-        Token(original='The', cleaned='the', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='following', cleaned='following', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='character', cleaned='character', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='is', cleaned='is', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='a', cleaned='a', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='number:', cleaned='number:', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='and', cleaned='and', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='the', cleaned='the', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='next', cleaned='next', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='one', cleaned='one', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='is', cleaned='is', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='not', cleaned='not', lemma=None, stem=None, ner=None, embedded=None), 
-        Token(original='a.', cleaned='a.', lemma=None, stem=None, ner=None, embedded=None)
+        Token(original='The', cleaned='the', lemma=None, stem=None, embedded=None),
+        Token(original='following', cleaned='following', lemma=None, stem=None, embedded=None),
+        Token(original='character', cleaned='character', lemma=None, stem=None, embedded=None),
+        Token(original='is', cleaned='is', lemma=None, stem=None, embedded=None),
+        Token(original='a', cleaned='a', lemma=None, stem=None, embedded=None),
+        Token(original='number:', cleaned='number:', lemma=None, stem=None, embedded=None),
+        Token(original='and', cleaned='and', lemma=None, stem=None, embedded=None),
+        Token(original='the', cleaned='the', lemma=None, stem=None, embedded=None),
+        Token(original='next', cleaned='next', lemma=None, stem=None, embedded=None),
+        Token(original='one', cleaned='one', lemma=None, stem=None, embedded=None),
+        Token(original='is', cleaned='is', lemma=None, stem=None, embedded=None),
+        Token(original='not', cleaned='not', lemma=None, stem=None, embedded=None),
+        Token(original='a.', cleaned='a.', lemma=None, stem=None, embedded=None)
     ],
     embedded=None,
     steps=['CleanNumber()', 'BasicTokenizer()', "CaseTokens(mode='lower')"]
@@ -191,6 +219,18 @@ git clone https://github.com/tomassosorio/NLPiper.git
 cd NLPiper
 poetry install
 ```
+
+To install an [optional dependency](##Optional-Dependencies) you can run:
+
+
+    poetry install --extras <package>
+
+
+To install all the optional dependencies run:
+
+
+    poetry install --extras all
+
 
 ---
 
