@@ -7,7 +7,7 @@ from typing import (
 )
 
 from nlpiper.core import Document
-from nlpiper.transformers import (
+from nlpiper.transformers.base import (
     BaseTransformer,
     TransformersType,
     add_step,

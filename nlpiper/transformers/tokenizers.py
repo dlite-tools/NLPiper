@@ -6,7 +6,7 @@ from nlpiper.core.document import (
     Token
 )
 from nlpiper.logger import log
-from nlpiper.transformers import (
+from nlpiper.transformers.base import (
     BaseTransformer,
     TransformersType,
     add_step,

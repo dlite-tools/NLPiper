@@ -3,7 +3,7 @@
 from typing import Any, Optional
 
 from nlpiper.core.document import Document
-from nlpiper.transformers import (
+from nlpiper.transformers.base import (
     BaseTransformer,
     TransformersType,
     add_step,

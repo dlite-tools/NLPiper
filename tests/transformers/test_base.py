@@ -1,6 +1,6 @@
 import pytest
 
-from nlpiper.transformers import (
+from nlpiper.transformers.base import (
     BaseTransformer,
     validate
 )
