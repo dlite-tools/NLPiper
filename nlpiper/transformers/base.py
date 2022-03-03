@@ -1,3 +1,5 @@
+"""Base Transformer Module."""
+
 from enum import Enum, auto
 
 from nlpiper.core import Document
