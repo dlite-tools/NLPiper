@@ -5,7 +5,7 @@ from typing import (
 )
 
 from nlpiper.core import Document
-from nlpiper.transformers import BaseTransformer
+from nlpiper.transformers.base import BaseTransformer
 from nlpiper.logger import log
 
 # Needed for create_from_steps method (eval instruction)
