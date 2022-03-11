@@ -12,8 +12,8 @@ packages = [
     { include = "nlpiper" }
 ]
 
-repository = "https://github.com/tomassosorio/NLPiper"
-documentation = "https://github.com/tomassosorio/NLPiper/README.md"
+repository = "https://github.com/dlite-tools/NLPiper"
+documentation = "https://github.com/dlite-tools/NLPiper/README.md"
 
 keywords = ["NLP", "CL", "natural language processing", "computational linguistics", "parsing", "tokenizing",
     "linguistics", "language", "natural language", "text analytics", "deep-learning "]
