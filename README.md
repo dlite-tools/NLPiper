@@ -143,7 +143,7 @@ word is not correctly spelt then will be replaced by an empty string.
 Applies on the token level, converting words by embeddings
 
 - `GensimEmbeddings`: Use Gensim word embeddings.
-- `TorchTextEmbeddings`: Use Torchtext word embeddings.
+- `TorchTextEmbeddings`: Applies word embeddings using torchtext models `Glove`, `CharNGram` and `FastText`.
 
 #### Document
 `Document` is a dataclass that contains all the information used during text preprocessing.
