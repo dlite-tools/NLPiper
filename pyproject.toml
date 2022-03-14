@@ -62,6 +62,7 @@ all = [
     "stanza",
     "gensim",
     "numpy",
+    "torchtext"
 ]
 
 [tool.poetry.dev-dependencies]
