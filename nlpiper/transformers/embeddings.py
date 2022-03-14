@@ -47,6 +47,7 @@ class GensimEmbeddings(BaseTransformer):
         t(doc, inplace=True)
 
         e = GensimEmbeddings(glove_vectors, True)
+        e(doc)
 
     """
 
@@ -115,7 +116,7 @@ class TorchTextEmbeddings(BaseTransformer):
     Callable arguments:
 
     Args:
-        vectors (Any): Torchtext embedding model. Available models: [`Glove`, `CharNGram`, `FastText`].
+        model (Any): Torchtext embedding model. Available models: [`Glove`, `CharNGram`, `FastText`].
             Check further info here: https://pytorch.org/text/stable/vocab.html#pretrained-word-embeddings
         apply_doc (str): Mode to calculate the embeddings vector for the document,
             which could be `"mean"` or `"sum"` of the tokens.
@@ -137,6 +138,7 @@ class TorchTextEmbeddings(BaseTransformer):
 
         model = CharNGram()
         e = TorchTextEmbeddings(model, True)
+        e(doc)
 
     """
 
@@ -144,7 +146,7 @@ class TorchTextEmbeddings(BaseTransformer):
         """Torch Embeddings extraction.
 
         Args:
-            vectors (Any): Torchtext embedding model. Available models: [`Glove`, `CharNGram`, `FastText`].
+            model (Any): Torchtext embedding model. Available models: [`Glove`, `CharNGram`, `FastText`].
                 Check further info here: https://pytorch.org/text/stable/vocab.html#pretrained-word-embeddings
             apply_doc (str): Mode to calculate the embeddings vector for the document,
                 which could be `"mean"` or `"sum"` of the tokens.
