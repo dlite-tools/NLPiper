@@ -190,11 +190,11 @@ class TorchTextEmbeddings(BaseTransformer):
         d = doc if inplace else doc._deepcopy()
 
         for token in d.tokens:
-            token.embedded = self.model \ 
+            token.embedded = self.model \
                 .get_vecs_by_tokens(token.cleaned) \
-                .reshape(-1) \ 
-                .to('cpu') \ 
-                .detach() \ 
+                .reshape(-1) \
+                .to('cpu') \
+                .detach() \
                 .numpy()
 
         d.embedded = (getattr(self.np, self.apply_doc)([token.embedded for token in d.tokens], axis=0)
