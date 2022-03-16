@@ -34,20 +34,20 @@ class GensimEmbeddings(BaseTransformer):
     Returns: Document
 
     Example:
-        import gensim.downloader
+        >>> import gensim.downloader
 
-        from nlpiper.transformers.embeddings import GensimEmbeddings
-        from nlpiper.core.document import Document
-        from nlpiper.transformers.tokenizers import BasicTokenizer
+        >>> from nlpiper.transformers.embeddings import GensimEmbeddings
+        >>> from nlpiper.core.document import Document
+        >>> from nlpiper.transformers.tokenizers import BasicTokenizer
 
-        glove_vectors = gensim.downloader.load('glove-twitter-25')
-        doc = Document('Test random stuff.')
+        >>> glove_vectors = gensim.downloader.load('glove-twitter-25')
+        >>> doc = Document('Test random stuff.')
 
-        t = BasicTokenizer()
-        t(doc, inplace=True)
+        >>> t = BasicTokenizer()
+        >>> t(doc, inplace=True)
 
-        e = GensimEmbeddings(glove_vectors, True)
-        e(doc)
+        >>> e = GensimEmbeddings(glove_vectors, True)
+        >>> e(doc)
 
     """
 
@@ -125,20 +125,20 @@ class TorchTextEmbeddings(BaseTransformer):
 
      Example:
 
-        from torchtext.vocab import CharNGram
+        >>> from torchtext.vocab import CharNGram
 
-        from nlpiper.transformers.embeddings import TorchTextEmbeddings
-        from nlpiper.core.document import Document
-        from nlpiper.transformers.tokenizers import BasicTokenizer
+        >>> from nlpiper.transformers.embeddings import TorchTextEmbeddings
+        >>> from nlpiper.core.document import Document
+        >>> from nlpiper.transformers.tokenizers import BasicTokenizer
 
-        doc = Document('Test random stuff.')
+        >>> doc = Document('Test random stuff.')
 
-        t = BasicTokenizer()
-        t(doc, inplace=True)
+        >>> t = BasicTokenizer()
+        >>> t(doc, inplace=True)
 
-        model = CharNGram()
-        e = TorchTextEmbeddings(model, True)
-        e(doc)
+        >>> model = CharNGram()
+        >>> e = TorchTextEmbeddings(model, True)
+        >>> e(doc)
 
     """
 
