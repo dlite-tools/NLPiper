@@ -31,7 +31,8 @@ class GensimEmbeddings(BaseTransformer):
             apply_doc (str): Mode to calculate the embeddings vector for the document,
                 which could be `"mean"` or `"sum"` of the tokens.
 
-    Returns: Document
+    Returns:
+                Document with Gensim Embedding or None if `inplace=True`.
 
     Example:
         >>> import gensim.downloader
