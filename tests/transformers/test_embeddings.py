@@ -93,6 +93,7 @@ class TestGensimEmbeddings:
 
 class TestTorchTextEmbeddings:
     pytest.importorskip('numpy')
+    pytest.importorskip('torchtext')
     import numpy as np
 
     @pytest.mark.parametrize('apply_doc', ['sum', 'mean'])
