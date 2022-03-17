@@ -26,13 +26,13 @@ class GensimEmbeddings(BaseTransformer):
     Callable arguments:
 
     Args:
-            keyed_vectors (Any): Gensim model based on keyedVectors,
-                see more in: https://radimrehurek.com/gensim/models/keyedvectors.html
-            apply_doc (str): Mode to calculate the embeddings vector for the document,
-                which could be `"mean"` or `"sum"` of the tokens.
+        keyed_vectors (Any): Gensim model based on keyedVectors,
+            see more in: https://radimrehurek.com/gensim/models/keyedvectors.html
+        apply_doc (str): Mode to calculate the embeddings vector for the document,
+            which could be `"mean"` or `"sum"` of the tokens.
 
     Returns:
-                Document with Gensim Embedding or None if `inplace=True`.
+        Document with Gensim Embedding or None if `inplace=True`.
 
     Example:
         >>> import gensim.downloader
@@ -112,7 +112,7 @@ class GensimEmbeddings(BaseTransformer):
 
 
 class TorchTextEmbeddings(BaseTransformer):
-    """Torch Embeddings extraction.
+    """Torchtext Embeddings extraction.
 
     Callable arguments:
 
@@ -122,7 +122,8 @@ class TorchTextEmbeddings(BaseTransformer):
         apply_doc (str): Mode to calculate the embeddings vector for the document,
             which could be `"mean"` or `"sum"` of the tokens.
 
-    Returns: Document
+    Returns:
+        Document with Torchtext Embedding or None if `inplace=True`.
 
      Example:
 
@@ -144,7 +145,7 @@ class TorchTextEmbeddings(BaseTransformer):
     """
 
     def __init__(self, model: Any, apply_doc: str = 'mean', **kwargs):
-        """Torch Embeddings extraction.
+        """Torchtext Embeddings extraction.
 
         Args:
             model (Any): Torchtext embedding model. Available models: [`Glove`, `CharNGram`, `FastText`].
@@ -179,7 +180,7 @@ class TorchTextEmbeddings(BaseTransformer):
     @validate(TransformersType.EMBEDDINGS)
     @add_step
     def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
-        """Torch Embeddings extraction.
+        """Torchtext Embeddings extraction.
 
         Args:
             doc (Document): Document to be normalized.
