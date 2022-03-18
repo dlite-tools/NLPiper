@@ -26,10 +26,9 @@ class GensimEmbeddings(BaseTransformer):
     Callable arguments:
 
     Args:
-        keyed_vectors (Any): Gensim model based on keyedVectors,
-            see more in: https://radimrehurek.com/gensim/models/keyedvectors.html
-        apply_doc (str): Mode to calculate the embeddings vector for the document,
-            which could be `"mean"` or `"sum"` of the tokens.
+        doc (Document): Document to be normalized.
+        inplace (bool): if False will return a new doc object,
+            otherwise will change the object passed as parameter.
 
     Returns:
         Document with Gensim Embedding or None if `inplace=True`.
@@ -116,11 +115,10 @@ class TorchTextEmbeddings(BaseTransformer):
 
     Callable arguments:
 
-    Args:
-        model (Any): Torchtext embedding model. Available models: [`Glove`, `CharNGram`, `FastText`].
-            Check further info here: https://pytorch.org/text/stable/vocab.html#pretrained-word-embeddings
-        apply_doc (str): Mode to calculate the embeddings vector for the document,
-            which could be `"mean"` or `"sum"` of the tokens.
+     Args:
+        doc (Document): Document to be normalized.
+        inplace (bool): if False will return a new doc object,
+            otherwise will change the object passed as parameter.
 
     Returns:
         Document with Torchtext Embedding or None if `inplace=True`.
@@ -185,7 +183,7 @@ class TorchTextEmbeddings(BaseTransformer):
         Args:
             doc (Document): Document to be normalized.
             inplace (bool): if False will return a new doc object,
-                            otherwise will change the object passed as parameter.
+                otherwise will change the object passed as parameter.
 
         Returns: Document
         """
