@@ -116,7 +116,7 @@ class TorchTextEmbeddings(BaseTransformer):
     Callable arguments:
 
      Args:
-        doc (Document): Document to be normalized.
+        doc (Document): Document to extract embeddings.
         inplace (bool): if False will return a new doc object,
             otherwise will change the object passed as parameter.
 
