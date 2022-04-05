@@ -161,6 +161,7 @@ class SpacyTokenizer(BaseTransformer):
         Document and respective Tokens or None if `inplace=True`.
 
     Example:
+        >>> from nlpiper.core import Document
         >>> doc = Document("NLPiper is fun.")
         >>> tokenizer = SpacyTokenizer()
         >>> out = tokenizer(doc)

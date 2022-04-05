@@ -1,7 +1,7 @@
 PACKAGE=nlpiper
 UNIT_TESTS=tests
 
-all: static-tests coverage
+all: static-tests coverage doc-tests
 
 .PHONY: all
 
@@ -22,6 +22,10 @@ static-tests: style typecheck doccheck
 unit-tests:
 		###### Running unit tests ######
 		poetry run pytest -v $(UNIT_TESTS)
+
+doc-tests:
+  		###### Running doc tests ######
+		poetry run pytest --doctest-modules -v $(PACKAGE)
 
 coverage:
 		###### Running coverage analysis with JUnit xml export ######
