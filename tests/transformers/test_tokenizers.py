@@ -177,6 +177,10 @@ class TestStanzaTokenizer:
 
 
 class TestSpacyTokenizer:
+    pytest.importorskip('spacy')
+    import spacy
+    spacy.cli.download('en_core_web_sm')
+
     @pytest.mark.parametrize('inputs,lemma,ner,ner_iob,tag,results,kwargs', [
         ('Test to this test',
          ['test', 'to', 'this', 'test'],  # lemma
@@ -206,8 +210,6 @@ class TestSpacyTokenizer:
          ),
     ])
     def test_tokenizer(self, inputs, lemma, ner, ner_iob, tag, results, kwargs):
-        pytest.importorskip('spacy')
-
         doc = Document(inputs)
         t = SpacyTokenizer(name='en_core_web_sm', **kwargs)
 
@@ -229,6 +231,5 @@ class TestSpacyTokenizer:
         assert out is None
 
     def test_wrong_processor(self):
-        pytest.importorskip('spacy')
         with pytest.raises(IOError):
             SpacyTokenizer(name='random_model')
