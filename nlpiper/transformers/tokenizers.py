@@ -177,7 +177,7 @@ class SpacyTokenizer(BaseTransformer):
         super().__init__(name=name, *args, **kwargs)
         try:
             import spacy
-            self.nlp = spacy.load(name)
+            self.nlp = spacy.load(name, *args, **kwargs)
 
         except ImportError:
             log.error("Please install Spacy. "
@@ -204,8 +204,8 @@ class SpacyTokenizer(BaseTransformer):
 
             token.lemma = t.lemma_
             token.ner = t.ent_type_
-            token.ner_iob = t.ent_iob_
-            token.tag = t.tag_
+            token.ner_iob = t.ent_iob_  # type: ignore
+            token.tag = t.tag_  # type: ignore
 
             tokens.append(token)
         d.tokens = tokens

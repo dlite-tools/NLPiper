@@ -3,7 +3,8 @@ import pytest
 from nlpiper.transformers.tokenizers import (
     BasicTokenizer,
     MosesTokenizer,
-    StanzaTokenizer
+    StanzaTokenizer,
+    SpacyTokenizer,
 )
 from nlpiper.core.document import (
     Document,
@@ -32,7 +33,8 @@ class TestTokenizersValidations:
             t(doc)
 
     @pytest.mark.parametrize('hide_available_pkg,package', [('sacremoses', MosesTokenizer),
-                                                            ('stanza', StanzaTokenizer)],
+                                                            ('stanza', StanzaTokenizer),
+                                                            ('spacy', SpacyTokenizer), ],
                              indirect=['hide_available_pkg'])
     def test_if_no_package(self, hide_available_pkg, package):  # noqa: F811
         with pytest.raises(ModuleNotFoundError):
@@ -172,3 +174,61 @@ class TestStanzaTokenizer:
         pytest.importorskip('stanza')
         with pytest.raises(AssertionError):
             StanzaTokenizer(processors='ner')
+
+
+class TestSpacyTokenizer:
+    @pytest.mark.parametrize('inputs,lemma,ner,ner_iob,tag,results,kwargs', [
+        ('Test to this test',
+         ['test', 'to', 'this', 'test'],  # lemma
+         ['', '', '', ''],  # ner
+         ['O', 'O', 'O', 'O'],  # ner_iob
+         ['VB', 'IN', 'DT', 'NN'],  # tag
+         ['Test', 'to', 'this', 'test'],  # results
+         {}
+         ),
+
+        ('Test to this test',
+         ['', '', '', ''],  # lemma
+         ['', '', '', ''],  # ner
+         ['O', 'O', 'O', 'O'],  # ner_iob
+         ['VB', 'IN', 'DT', 'NN'],  # tag
+         ['Test', 'to', 'this', 'test'],  # results
+         {'disable': ['lemmatizer']}
+         ),
+
+        ('numbers 123 and symbols "#$%',
+         ['number', '123', 'and', 'symbol', '"', '#', '$', '%'],  # lemma
+         ['', 'CARDINAL', '', '', '', 'MONEY', 'MONEY', 'MONEY'],  # ner
+         ['O', 'B', 'O', 'O', 'O', 'B', 'I', 'I'],  # ner_iob
+         ['NNS', 'CD', 'CC', 'NNS', '``', '$', '$', 'NN'],  # tag
+         ['numbers', '123', 'and', 'symbols', '"', '#', '$', '%'],  # results
+         {}
+         ),
+    ])
+    def test_tokenizer(self, inputs, lemma, ner, ner_iob, tag, results, kwargs):
+        pytest.importorskip('spacy')
+
+        doc = Document(inputs)
+        t = SpacyTokenizer(name='en_core_web_sm', **kwargs)
+
+        # Inplace False
+        out = t(doc)
+
+        assert out.tokens == [Token(original=token, lemma=lem, ner=n, ner_iob=n_iob, tag=t)
+                              for lem, n, n_iob, t, token in zip(lemma, ner, ner_iob, tag, results)]
+        assert out.steps == [repr(t)]
+        assert doc.tokens is None
+        assert doc.steps == []
+
+        # Inplace True
+        out = t(doc, True)
+
+        assert doc.tokens == [Token(original=token, lemma=lem, ner=n, ner_iob=n_iob, tag=t)
+                              for lem, n, n_iob, t, token in zip(lemma, ner, ner_iob, tag, results)]
+        assert doc.steps == [repr(t)]
+        assert out is None
+
+    def test_wrong_processor(self):
+        pytest.importorskip('spacy')
+        with pytest.raises(IOError):
+            SpacyTokenizer(name='random_model')
