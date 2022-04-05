@@ -143,3 +143,70 @@ class StanzaTokenizer(BaseTransformer):
         d.tokens = tokens
 
         return None if inplace else d
+
+
+class SpacyTokenizer(BaseTransformer):
+    """Spacy tokenizer.
+
+    Transformer to tokenize a Document using spacy, https://spacy.io
+
+    Callable arguments:
+
+    Args:
+        doc (Document): Document to be tokenized.
+        inplace (bool, default False): if False will return a new document object,
+                        otherwise will change the object passed as parameter and return None.
+
+    Returns:
+        Document and respective Tokens or None if `inplace=True`.
+
+    Example:
+        >>> doc = Document("NLPiper is fun.")
+        >>> tokenizer = SpacyTokenizer()
+        >>> out = tokenizer(doc)
+        >>> out.tokens
+        [Token(original='NLPiper', cleaned='NLPiper', lemma='nlpiper', stem=None, ner='ORG', embedded=None, ner_iob='B', tag='NN'), Token(original='is', cleaned='is', lemma='be', stem=None, ner='', embedded=None, ner_iob='O', tag='VBZ'), Token(original='fun', cleaned='fun', lemma='fun', stem=None, ner='', embedded=None, ner_iob='O', tag='JJ'), Token(original='.', cleaned='.', lemma='.', stem=None, ner='', embedded=None, ner_iob='O', tag='.')]
+    """  # noqa: E501
+    def __init__(self, name: str = 'en_core_web_sm', *args, **kwargs):
+        """Spacy tokenizer.
+
+        Args:
+            name (str): Package name or model path.
+        """
+        super().__init__(name=name, *args, **kwargs)
+        try:
+            import spacy
+            self.nlp = spacy.load(name)
+
+        except ImportError:
+            log.error("Please install Spacy. "
+                      "See the docs at https://spacy.io/usage for more information.")
+            raise
+
+    @validate(TransformersType.TOKENIZERS)
+    @add_step
+    def __call__(self, doc: Document, inplace: bool = False) -> Optional[Document]:
+        """Tokenize the document in a list of tokens.
+
+        Args:
+            doc (Document): Document to be tokenized.
+            inplace (bool, default False): if False will return a new document object,
+                        otherwise will change the object passed as parameter and return None.
+
+        Returns: Document
+        """
+        d = doc if inplace else doc._deepcopy()
+
+        tokens = []
+        for t in self.nlp(doc.cleaned):
+            token = Token(t.text)
+
+            token.lemma = t.lemma_
+            token.ner = t.ent_type_
+            token.ner_iob = t.ent_iob_
+            token.tag = t.tag_
+
+            tokens.append(token)
+        d.tokens = tokens
+
+        return None if inplace else d
