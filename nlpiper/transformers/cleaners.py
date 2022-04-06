@@ -40,11 +40,12 @@ class CleanURL(BaseTransformer):
         Document without URLs or None if `inplace=True`.
 
     Example:
+        >>> from nlpiper.core import Document
         >>> doc = Document("URL: www.web.com")
         >>> cleaner = CleanURL()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        "URL: "
+        'URL: '
     """
 
     @validate(TransformersType.CLEANERS)
@@ -81,11 +82,12 @@ class CleanEmail(BaseTransformer):
         Document without emails or None if `inplace=True`.
 
     Example:
+        >>> from nlpiper.core import Document
         >>> doc = Document("Email: test@test.com")
         >>> cleaner = CleanEmail()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        "Email: "
+        'Email: '
     """
 
     @validate(TransformersType.CLEANERS)
@@ -122,11 +124,12 @@ class CleanNumber(BaseTransformer):
         Document without numbers or None if `inplace=True`.
 
     Example:
+        >>> from nlpiper.core import Document
         >>> doc = Document("Number 12")
         >>> cleaner = CleanNumber()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        "Number "
+        'Number '
     """
 
     @validate(TransformersType.CLEANERS)
@@ -162,11 +165,12 @@ class CleanPunctuation(BaseTransformer):
         Document without punctuation or None if `inplace=True`.
 
     Example:
+        >>> from nlpiper.core import Document
         >>> doc = Document("Document without punctuation!")
         >>> cleaner = CleanPunctuation()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        "Document without punctuation"
+        'Document without punctuation'
     """
 
     @validate(TransformersType.CLEANERS)
@@ -202,11 +206,12 @@ class CleanEOF(BaseTransformer):
         Document without end of line or None if `inplace=True`.
 
     Example:
+        >>> from nlpiper.core import Document
         >>> doc = Document("Line 1\\nLine 2")
         >>> cleaner = CleanEOF()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        "Line 1 Line 2"
+        'Line 1 Line 2'
     """
 
     @validate(TransformersType.CLEANERS)
@@ -242,11 +247,12 @@ class CleanMarkup(BaseTransformer):
         Document without HTML and XML or None if `inplace=True`.
 
     Example:
+        >>> from nlpiper.core import Document
         >>> doc = Document("<html><title>Title 1</title>")
         >>> cleaner = CleanMarkup()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        "Title 1"
+        'Title 1'
     """
 
     def __init__(self, features: str = "html.parser", *args, **kwargs):
@@ -308,11 +314,12 @@ class CleanAccents(BaseTransformer):
         Document without accents or None if `inplace=True`.
 
     Example:
+        >>> from nlpiper.core import Document
         >>> doc = Document("This is à test")
         >>> cleaner = CleanAccents()
         >>> out = cleaner(doc)
         >>> out.cleaned
-        "This is a test"
+        'This is a test'
     """
 
     def __init__(self, mode: str = "unicode"):

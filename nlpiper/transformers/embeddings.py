@@ -35,20 +35,16 @@ class GensimEmbeddings(BaseTransformer):
 
     Example:
         >>> import gensim.downloader
-
         >>> from nlpiper.transformers.embeddings import GensimEmbeddings
         >>> from nlpiper.core.document import Document
         >>> from nlpiper.transformers.tokenizers import BasicTokenizer
-
         >>> glove_vectors = gensim.downloader.load('glove-twitter-25')
         >>> doc = Document('Test random stuff.')
-
         >>> t = BasicTokenizer()
         >>> t(doc, inplace=True)
-
-        >>> e = GensimEmbeddings(glove_vectors, True)
-        >>> e(doc)
-
+        >>> e = GensimEmbeddings(glove_vectors)
+        >>> type(e(doc).embedded)
+        <class 'numpy.ndarray'>
     """
 
     def __init__(self, keyed_vectors: Any, apply_doc: str = 'mean'):
@@ -126,19 +122,16 @@ class TorchTextEmbeddings(BaseTransformer):
      Example:
 
         >>> from torchtext.vocab import CharNGram
-
         >>> from nlpiper.transformers.embeddings import TorchTextEmbeddings
         >>> from nlpiper.core.document import Document
         >>> from nlpiper.transformers.tokenizers import BasicTokenizer
-
         >>> doc = Document('Test random stuff.')
-
         >>> t = BasicTokenizer()
         >>> t(doc, inplace=True)
-
         >>> model = CharNGram()
-        >>> e = TorchTextEmbeddings(model, True)
-        >>> e(doc)
+        >>> e = TorchTextEmbeddings(model)
+        >>> type(e(doc).embedded)
+        <class 'numpy.ndarray'>
 
     """
 
