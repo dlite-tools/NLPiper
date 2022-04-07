@@ -48,7 +48,7 @@ class GensimEmbeddings(BaseTransformer):
     """
 
     def __init__(self, keyed_vectors: Any, apply_doc: str = 'mean'):
-        """ Gensim Embedding extraction.
+        """Gensim Embedding extraction.
 
         Args:
             keyed_vectors (Any): Gensim model based on keyedVectors,
