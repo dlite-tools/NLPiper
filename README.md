@@ -31,7 +31,7 @@ The following table explains the optional dependencies that can be installed:
 |---                                                                                                        |---
 | <a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/" target="_blank"><code>bs4</code></a>     | Used in **CleanMarkup** to remove HTML and XML from the document.
 | <a href="https://github.com/RaRe-Technologies/gensim" target="_blank"><code>gensim</code></a>             | Used in **GensimEmbeddings** for document embedding extraction.
-| <a href="https://github.com/hunspell/hunspell" target="_blank"><code>hunspell</code></a>                  | Used in **Stemmer** and **SpellCheck** to normalize the document.
+| <a href="https://github.com/MSeal/cython_hunspell" target="_blank"><code>hunspell</code></a>                  | Used in **Stemmer** and **SpellCheck** to normalize the document.
 | <a href="https://www.nltk.org/install.html" target="_blank"><code>nltk</code></a>                         | Used in **RemoveStopWords** to remove stop words from the document.
 | <a href="https://github.com/numpy/numpy" target="_blank"><code>numpy</code></a>                           | Used in some document's transformations.
 | <a href="https://github.com/alvations/sacremoses" target="_blank"><code>sacremoses</code></a>             | Used in **MosesTokenizer** to tokenize the document.
