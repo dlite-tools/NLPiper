@@ -36,7 +36,7 @@ The following table explains the optional dependencies that can be installed:
 | <a href="https://github.com/numpy/numpy" target="_blank"><code>numpy</code></a>                           | Used in some document's transformations.
 | <a href="https://github.com/alvations/sacremoses" target="_blank"><code>sacremoses</code></a>             | Used in **MosesTokenizer** to tokenize the document.
 | <a href="https://github.com/explosion/spaCy" target="_blank"><code>spacy</code></a>                       | Used in **SpacyTokenizer** to tokenize the document and could also be used for extracting entities, tags, etc..
-| <a href="https://github.com/stanfordnlp/stanza" target="_blank"><code>stanza</code></a>                   | Used in **StanzaTokenizer** to tokenize the document.
+| <a href="https://github.com/stanfordnlp/stanza" target="_blank"><code>stanza</code></a>                   | Used in **StanzaTokenizer** to tokenize the document and could also be used for extracting entities, tags, etc.
 | <a href="https://github.com/pytorch/text" target="_blank"><code>torchtext</code></a>                      | Used in **TorchTextEmbeddings** for document embedding extraction.
 
 To install the optional dependency needed for your purpose you can run:
