@@ -2,11 +2,14 @@
   <img src="https://raw.githubusercontent.com/dlite-tools/NLPiper/main/docs/imgs/nlpiper.png" />
 </p>
 
+<center>
+
 [![Test](https://github.com/dlite-tools/NLPiper/actions/workflows/test.yml/badge.svg)](https://github.com/dlite-tools/NLPiper/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![codecov](https://codecov.io/gh/dlite-tools/NLPiper/branch/main/graph/badge.svg?token=PK513BHBVC)](https://codecov.io/gh/dlite-tools/NLPiper)
 ![Package Version](https://img.shields.io/pypi/v/NLPiper)
 ![Python Version](https://img.shields.io/pypi/pyversions/NLPiper)
+</center>
 
 NLPiper is a package that agglomerates different NLP tools and applies their transformations in the target document.
 
